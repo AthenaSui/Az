@@ -67,6 +67,8 @@ public:
 
         uint32 entry = quest->GetQuestId();
 
+        std::string questTitle = quest->GetTitle();
+
         // check item starting quest (it can work incorrectly if added without item in inventory)
         ItemTemplateContainer const* itc = sObjectMgr->GetItemTemplateStore();
         ItemTemplateContainer::const_iterator result = find_if(itc->begin(), itc->end(), Finder<uint32, ItemTemplate>(entry, &ItemTemplate::StartQuest));
@@ -79,6 +81,7 @@ public:
 
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
             if (player->IsActiveQuest(entry))
             {
                 handler->SendErrorMessage(LANG_COMMAND_QUEST_ACTIVE, quest->GetTitle().c_str(), entry);
@@ -93,6 +96,7 @@ public:
         }
         else
         {
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
             ObjectGuid::LowType guid = playerTarget->GetGUID().GetCounter();
             QueryResult result = CharacterDatabase.Query("SELECT 1 FROM character_queststatus WHERE guid = {} AND quest = {}", guid, entry);
 
@@ -146,14 +150,18 @@ public:
 
         uint32 entry = quest->GetQuestId();
 
+
         if (!quest)
         {
             handler->SendErrorMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
             return false;
         }
 
+        std::string questTitle = quest->GetTitle();
+
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
             // remove all quest entries for 'entry' from quest log
             for (uint8 slot = 0; slot < MAX_QUEST_LOG_SIZE; ++slot)
             {
@@ -178,6 +186,7 @@ public:
         }
         else
         {
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
             ObjectGuid::LowType guid = playerTarget->GetGUID().GetCounter();
             CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
@@ -236,8 +245,11 @@ public:
 
         uint32 entry = quest->GetQuestId();
 
+        std::string questTitle = quest->GetTitle();
+
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
             // If player doesn't have the quest
             if (player->GetQuestStatus(entry) == QUEST_STATUS_NONE)
             {
@@ -339,6 +351,7 @@ public:
         }
         else
         {
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
             ObjectGuid::LowType guid = playerTarget->GetGUID().GetCounter();
             QueryResult result = CharacterDatabase.Query("SELECT 1 FROM character_queststatus WHERE guid = {} AND quest = {}", guid, entry);
 
@@ -502,8 +515,11 @@ public:
 
         uint32 entry = quest->GetQuestId();
 
+        std::string questTitle = quest->GetTitle();
+
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
             // If player doesn't have the quest
             if (player->GetQuestStatus(entry) != QUEST_STATUS_COMPLETE)
             {
@@ -515,6 +531,7 @@ public:
         }
         else
         {
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
             // Achievement criteria updates correctly the next time a quest is rewarded.
             // Titles are already awarded correctly the next time they login (only one quest awards title - 11549).
             // Rewarded talent points (Death Knights) and spells (e.g Druid forms) are also granted on login.
@@ -602,7 +619,7 @@ public:
             {
                 MailSender sender(MAIL_NORMAL, guid, MAIL_STATIONERY_GM);
                 // fill mail
-                MailDraft draft(quest->GetTitle(), "This quest has been manually rewarded to you. This mail contains your quest rewards.");
+                MailDraft draft(quest->GetTitle(), "这个任务已被手动奖励给你。这封邮件包含你的任务奖励。");
 
                 for (auto const& itr : questRewardItems)
                 {

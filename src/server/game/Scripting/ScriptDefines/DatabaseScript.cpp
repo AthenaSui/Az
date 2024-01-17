@@ -19,6 +19,21 @@
 #include "ScriptMgr.h"
 #include "ScriptMgrMacros.h"
 
+bool ScriptMgr::OnDatabasesLoading()
+{
+    auto ret = IsValidBoolScript<DatabaseScript>([&](DatabaseScript* script)
+    {
+        return !script->OnDatabasesLoading();
+    });
+
+    if (ret && *ret)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void ScriptMgr::OnAfterDatabasesLoaded(uint32 updateFlags)
 {
     ExecuteScript<DatabaseScript>([&](DatabaseScript* script)
@@ -32,6 +47,46 @@ void ScriptMgr::OnAfterDatabaseLoadCreatureTemplates(std::vector<CreatureTemplat
     ExecuteScript<DatabaseScript>([&](DatabaseScript* script)
     {
         script->OnAfterDatabaseLoadCreatureTemplates(creatureTemplates);
+    });
+}
+
+void ScriptMgr::OnDatabasesKeepAlive()
+{
+    ExecuteScript<DatabaseScript>([&](DatabaseScript* script)
+    {
+        script->OnDatabasesKeepAlive();
+    });
+}
+
+void ScriptMgr::OnDatabasesClosing()
+{
+    ExecuteScript<DatabaseScript>([&](DatabaseScript* script)
+    {
+        script->OnDatabasesClosing();
+    });
+}
+
+void ScriptMgr::OnDatabaseWarnAboutSyncQueries(bool apply)
+{
+    ExecuteScript<DatabaseScript>([&](DatabaseScript* script)
+    {
+        script->OnDatabaseWarnAboutSyncQueries(apply);
+    });
+}
+
+void ScriptMgr::OnDatabaseSelectIndexLogout(Player* player, uint32& statementIndex, uint32& statementParam)
+{
+    ExecuteScript<DatabaseScript>([&](DatabaseScript* script)
+    {
+        script->OnDatabaseSelectIndexLogout(player, statementIndex, statementParam);
+    });
+}
+
+void ScriptMgr::OnDatabaseGetDBRevision(std::string& revision)
+{
+    ExecuteScript<DatabaseScript>([&](DatabaseScript* script)
+    {
+        script->OnDatabaseGetDBRevision(revision);
     });
 }
 
