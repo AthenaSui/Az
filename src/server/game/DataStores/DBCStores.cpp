@@ -149,6 +149,7 @@ DBCStorage <ScalingStatValuesEntry> sScalingStatValuesStore(ScalingStatValuesfmt
 
 DBCStorage <SkillLineEntry> sSkillLineStore(SkillLinefmt);
 DBCStorage <SkillLineAbilityEntry> sSkillLineAbilityStore(SkillLineAbilityfmt);
+SkillLineAbilityIndexBySkillLine sSkillLineAbilityIndexBySkillLine;
 DBCStorage <SkillRaceClassInfoEntry> sSkillRaceClassInfoStore(SkillRaceClassInfofmt);
 SkillRaceClassInfoMap SkillRaceClassInfoBySkill;
 DBCStorage <SkillTiersEntry> sSkillTiersStore(SkillTiersfmt);
@@ -472,6 +473,9 @@ void LoadDBCStores(const std::string& dataPath)
             }
         }
     }
+
+    for (SkillLineAbilityEntry const* skillLine : sSkillLineAbilityStore)
+        sSkillLineAbilityIndexBySkillLine[skillLine->SkillLine].push_back(skillLine);
 
     // Create Spelldifficulty searcher
     for (SpellDifficultyEntry const* spellDiff : sSpellDifficultyStore)
@@ -938,6 +942,17 @@ SkillRaceClassInfoEntry const* GetSkillRaceClassInfo(uint32 skill, uint8 race, u
     }
 
     return nullptr;
+}
+
+const std::vector<SkillLineAbilityEntry const*>& GetSkillLineAbilitiesBySkillLine(uint32 skillLine)
+{
+    auto it = sSkillLineAbilityIndexBySkillLine.find(skillLine);
+    if (it == sSkillLineAbilityIndexBySkillLine.end())
+    {
+        static const std::vector<SkillLineAbilityEntry const*> emptyVector;
+        return emptyVector;
+    }
+    return it->second;
 }
 
 EmotesTextSoundEntry const* FindTextSoundEmoteFor(uint32 emote, uint32 race, uint32 gender)
