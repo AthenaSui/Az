@@ -207,9 +207,7 @@ GraveyardStruct const* Graveyard::GetClosestGraveyard(uint32 mapId, float x, flo
             GRAVEYARD_ARCHERUS  = 1405
         };
 
-
         if (!isDeathKnight && (graveyardLink.safeLocId == GRAVEYARD_EBON_HOLD || graveyardLink.safeLocId == GRAVEYARD_ARCHERUS))
-
         {
             continue;
         }
