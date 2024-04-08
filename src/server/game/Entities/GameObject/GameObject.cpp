@@ -2739,7 +2739,7 @@ GameObject* GameObject::GetLinkedTrap()
     return ObjectAccessor::GetGameObject(*this, m_linkedTrap);
 }
 
-void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target) const
+void GameObject::BuildValuesUpdate(uint8 updateType, ByteBuffer* data, Player* target)
 {
     if (!target)
         return;
