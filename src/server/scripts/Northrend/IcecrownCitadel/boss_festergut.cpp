@@ -158,6 +158,7 @@ public:
             ScriptedAI::EnterEvadeMode(why);
             if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PROFESSOR_PUTRICIDE)))
                 professor->AI()->EnterEvadeMode(why);
+            instance->SetBossState(DATA_FESTERGUT, FAIL);//增加烂肠灭团检测
         }
 
         void KilledUnit(Unit* victim) override

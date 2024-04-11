@@ -300,6 +300,7 @@ public:
         {
             summons.DespawnAll();
             me->StopMoving();
+            me->SetDisableGravity(true);
             if (m_pInstance)
                 m_pInstance->SetData(TYPE_KOLOGARN, DONE);
 
@@ -465,9 +466,21 @@ public:
                 {
                     events.ScheduleEvent(EVENT_FOCUSED_EYEBEAM, 20s);
 
-                    if ((eyebeamTarget = SelectTarget(SelectTargetMethod::MinDistance, 0, 0, true)))
+                    if ((eyebeamTarget = ScriptedAI::SelectTargetFromPlayerList(120.0f, 62055, false)))
                     {
-                        me->CastSpell(eyebeamTarget, SPELL_FOCUSED_EYEBEAM_SUMMON, false);
+                        if (!eyebeamTarget)
+                            break;
+
+                        if (Creature* eye = me->SummonCreature(NPC_EYE_LEFT, eyebeamTarget->GetPositionX(), eyebeamTarget->GetPositionY() - 6, eyebeamTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000))
+                        {
+                            eye->GetMotionMaster()->MoveFollow(eyebeamTarget, 0.01f, M_PI * 3 / 2, MOTION_SLOT_CONTROLLED);
+                            eye->CastSpell(me, SPELL_FOCUSED_EYEBEAM_LEFT, true);
+                        }
+                        if (Creature* eye2 = me->SummonCreature(NPC_EYE_RIGHT, eyebeamTarget->GetPositionX(), eyebeamTarget->GetPositionY() + 6, eyebeamTarget->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000))
+                        {
+                            eye2->GetMotionMaster()->MoveFollow(eyebeamTarget, 0.01f, M_PI / 2, MOTION_SLOT_CONTROLLED);
+                            eye2->CastSpell(me, SPELL_FOCUSED_EYEBEAM_RIGHT, true);
+                        }
                     }
 
                     Talk(EMOTE_EYES);
@@ -643,11 +656,6 @@ public:
         {
             if (justSpawned)
             {
-                me->DespawnOrUnsummon(10000);
-                if (Creature* cr = ObjectAccessor::GetCreature(*me, m_pInstance->GetGuidData(TYPE_KOLOGARN)))
-                {
-                    me->CastSpell(cr, me->GetEntry() == NPC_EYE_LEFT ? SPELL_FOCUSED_EYEBEAM_LEFT : SPELL_FOCUSED_EYEBEAM_RIGHT, true);
-                }
                 me->CastSpell(me, SPELL_FOCUSED_EYEBEAM, true);
                 justSpawned = false;
             }

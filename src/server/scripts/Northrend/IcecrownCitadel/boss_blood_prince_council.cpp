@@ -142,6 +142,7 @@ enum Actions
     ACTION_REMOVE_INVOCATION    = 3,
     ACTION_FLAME_BALL_CHASE     = 4,
     ACTION_KINETIC_BOMB_JUMP    = 5,
+    ACTION_DIE                  = 6,
 };
 
 enum Points
@@ -240,10 +241,19 @@ public:
             bool valid = true;
             if (Creature* keleseth = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_KELESETH_GUID)))
                 if (!keleseth->IsAlive() || keleseth->IsInEvadeMode())
+                {
                     valid = false;
+                    if (!keleseth->IsAlive())
+                        keleseth->Respawn();
+                }
+
             if (Creature* taldaram = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_TALDARAM_GUID)))
                 if (!taldaram->IsAlive() || taldaram->IsInEvadeMode())
+                {
                     valid = false;
+                    if (!taldaram->IsAlive())
+                        taldaram->Respawn();
+                }
             if (Creature* valanar = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_VALANAR_GUID)))
                 if (!valanar->IsAlive() || valanar->IsInEvadeMode())
                     valid = false;
@@ -305,10 +315,10 @@ public:
             Talk(SAY_KELESETH_DEATH);
             if (Creature* taldaram = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PRINCE_TALDARAM_GUID)))
                 if (taldaram->IsAlive())
-                    Unit::Kill(taldaram, taldaram);
+                    taldaram->AI()->DoAction(ACTION_DIE);
             if (Creature* valanar = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PRINCE_VALANAR_GUID)))
                 if (valanar->IsAlive())
-                    Unit::Kill(valanar, valanar);
+                    valanar->AI()->DoAction(ACTION_DIE);
         }
 
         void JustRespawned() override
@@ -366,6 +376,12 @@ public:
         {
             switch (action)
             {
+                //增加击杀Action防止卡BUG
+                case ACTION_DIE:
+                    _canDie = true;
+                    if (me->IsAlive())
+                        Unit::Kill(me, me, false);
+                    break;
                 case ACTION_STAND_UP:
                     summons.DespawnEntry(WORLD_TRIGGER);
                     me->RemoveUnitFlag(UNIT_FLAG_PREVENT_EMOTES_FROM_CHAT_TEXT | UNIT_FLAG_NOT_SELECTABLE);
@@ -500,10 +516,19 @@ public:
             bool valid = true;
             if (Creature* keleseth = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_KELESETH_GUID)))
                 if (!keleseth->IsAlive() || keleseth->IsInEvadeMode())
+                {
                     valid = false;
+                    if (!keleseth->IsAlive())
+                        keleseth->Respawn();
+                }
+
             if (Creature* taldaram = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_TALDARAM_GUID)))
                 if (!taldaram->IsAlive() || taldaram->IsInEvadeMode())
+                {
                     valid = false;
+                    if (!taldaram->IsAlive())
+                        taldaram->Respawn();
+                }
             if (Creature* valanar = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_VALANAR_GUID)))
                 if (!valanar->IsAlive() || valanar->IsInEvadeMode())
                     valid = false;
@@ -560,10 +585,10 @@ public:
             Talk(EMOTE_TALDARAM_DEATH);
             if (Creature* keleseth = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PRINCE_KELESETH_GUID)))
                 if (keleseth->IsAlive())
-                    Unit::Kill(keleseth, keleseth);
+                    keleseth->AI()->DoAction(ACTION_DIE);
             if (Creature* valanar = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PRINCE_VALANAR_GUID)))
                 if (valanar->IsAlive())
-                    Unit::Kill(valanar, valanar);
+                    valanar->AI()->DoAction(ACTION_DIE);
         }
 
         void JustRespawned() override
@@ -636,6 +661,12 @@ public:
         {
             switch (action)
             {
+                //增加击杀Action防止卡BUG
+                case ACTION_DIE:
+                    _canDie = true;
+                    if (me->IsAlive())
+                        Unit::Kill(me, me, false);
+                    break;
                 case ACTION_STAND_UP:
                     summons.DespawnEntry(WORLD_TRIGGER);
                     me->RemoveUnitFlag(UNIT_FLAG_PREVENT_EMOTES_FROM_CHAT_TEXT | UNIT_FLAG_NOT_SELECTABLE);
@@ -785,10 +816,19 @@ public:
             bool valid = true;
             if (Creature* keleseth = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_KELESETH_GUID)))
                 if (!keleseth->IsAlive() || keleseth->IsInEvadeMode())
+                {
                     valid = false;
+                    if (!keleseth->IsAlive())
+                        keleseth->Respawn();
+                }
+
             if (Creature* taldaram = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_TALDARAM_GUID)))
                 if (!taldaram->IsAlive() || taldaram->IsInEvadeMode())
+                {
                     valid = false;
+                    if (!taldaram->IsAlive())
+                        taldaram->Respawn();
+                }
             if (Creature* valanar = instance->instance->GetCreature(instance->GetGuidData(DATA_PRINCE_VALANAR_GUID)))
                 if (!valanar->IsAlive() || valanar->IsInEvadeMode())
                     valid = false;
@@ -854,12 +894,13 @@ public:
 
             Talk(SAY_VALANAR_DEATH);
             instance->SetBossState(DATA_BLOOD_PRINCE_COUNCIL, DONE);
+            instance->SaveToDB();//增加保存选项
             if (Creature* keleseth = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PRINCE_KELESETH_GUID)))
                 if (keleseth->IsAlive())
-                    Unit::Kill(keleseth, keleseth);
+                    keleseth->AI()->DoAction(ACTION_DIE);
             if (Creature* taldaram = ObjectAccessor::GetCreature(*me, instance->GetGuidData(DATA_PRINCE_TALDARAM_GUID)))
                 if (taldaram->IsAlive())
-                    Unit::Kill(taldaram, taldaram);
+                    taldaram->AI()->DoAction(ACTION_DIE);
         }
 
         void JustRespawned() override
@@ -930,6 +971,12 @@ public:
         {
             switch (action)
             {
+                //增加击杀Action防止卡BUG
+                case ACTION_DIE:
+                    _canDie = true;
+                    if (me->IsAlive())
+                        Unit::Kill(me, me, false);
+                    break;
                 case ACTION_STAND_UP:
                     summons.DespawnEntry(WORLD_TRIGGER);
                     me->RemoveUnitFlag(UNIT_FLAG_PREVENT_EMOTES_FROM_CHAT_TEXT | UNIT_FLAG_NOT_SELECTABLE);
@@ -1409,7 +1456,7 @@ public:
                 {
                     me->GetMotionMaster()->MovementExpired(false);
                     me->StopMoving();
-                    me->GetMotionMaster()->MoveCharge(_x, _y, me->GetPositionZ() + 60.0f, me->GetSpeed(MOVE_RUN));
+                    me->GetMotionMaster()->MoveCharge(_x, _y, _groundZ + 30.0f, me->GetSpeed(MOVE_RUN));
                 }
                 _events.RescheduleEvent(EVENT_CONTINUE_FALLING, 3s);
             }

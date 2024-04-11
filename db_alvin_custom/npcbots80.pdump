@@ -1,0 +1,483 @@
+IMPORTANT NOTE: THIS DUMPFILE IS MADE FOR USE WITH THE 'NPCBOT DUMP' COMMAND ONLY - EITHER THROUGH INGAME CHAT OR ON CONSOLE!
+IMPORTANT NOTE: DO NOT apply it directly - it will irreversibly DAMAGE and CORRUPT your database! You have been warned!
+
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70014','0','4','1','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110549','70014','1','1','1','16252.299805','16304.200195','20.843901','3.049980','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70019','0','4','1','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110550','70019','1','1','1','16252.099609','16301.799805','20.843901','3.049980','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70025','0','4','3','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110548','70025','1','1','1','16252.500000','16306.000000','20.843901','3.049980','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70028','0','4','3','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110577','70028','1','1','1','16231.500000','16316.000000','29.262100','4.729260','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70030','0','7','3','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110519','70030','1','1','1','16227.200195','16315.900391','29.262100','4.792090','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70031','0','4','2','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110576','70031','1','1','1','16229.500000','16316.000000','29.262100','4.729260','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70037','0','4','3','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110575','70037','1','1','1','16228.200195','16316.000000','29.262100','4.729260','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70038','0','16325','1','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110520','70038','1','1','1','16252.700195','16308.099609','20.843901','2.963590','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70053','0','12','6','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110580','70053','1','1','1','16225.200195','16310.000000','29.261499','6.255770','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70058','0','12','5','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110579','70058','1','1','1','16225.500000','16311.400391','29.261499','6.255770','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70060','0','32716','6','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110521','70060','1','1','1','16225.599609','16313.700195','29.261499','0.078607','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70063','0','32716','6','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110541','70063','1','1','1','16255.500000','16305.799805','20.845200','3.061760','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70065','0','31757','6','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110522','70065','1','1','1','16255.700195','16307.700195','20.845200','3.061760','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70066','0','12','5','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110546','70066','1','1','1','16255.200195','16301.700195','20.845200','3.061760','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70071','0','12','5','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110595','70071','1','1','1','16223.500000','16295.900391','30.770100','6.230670','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70073','0','12','4','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110545','70073','1','1','1','16255.400391','16303.799805','20.845200','3.061760','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70074','0','12','5','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110578','70074','1','1','1','16225.500000','16312.500000','29.261499','6.255770','12600','3994');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70101','0','20','7','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110523','70101','1','1','1','16225.000000','16308.299805','29.262300','6.267690','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70102','0','20','9','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110524','70102','1','1','1','16250.200195','16308.200195','20.843599','3.015700','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70114','0','20','9','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110553','70114','1','1','1','16249.400391','16302.200195','20.846701','3.015700','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70115','0','20','9','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110582','70115','1','1','1','16224.799805','16304.599609','29.262300','6.232350','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70120','0','20','8','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110583','70120','1','1','1','16224.799805','16302.799805','29.262300','6.232350','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70133','0','20','7','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110552','70133','1','1','1','16249.599609','16304.000000','20.865999','3.015700','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70134','0','20','9','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110551','70134','1','1','1','16249.900391','16305.900391','20.843599','3.015700','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70138','0','20','8','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110581','70138','1','1','1','16225.000000','16306.500000','29.262300','6.232350','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70157','0','4','12','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110525','70157','1','1','1','16237.700195','16292.099609','22.930700','1.602600','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70159','0','4','11','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110556','70159','1','1','1','16239.700195','16291.799805','22.931601','1.594740','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70166','0','4','11','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110586','70166','1','1','1','16232.500000','16307.000000','29.262300','3.058260','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70169','0','4','11','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110555','70169','1','1','1','16241.299805','16291.900391','22.931601','1.594740','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70172','0','4','10','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110585','70172','1','1','1','16232.700195','16308.799805','29.262300','3.058260','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70174','0','4','12','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110526','70174','1','1','1','16232.799805','16310.200195','29.262300','3.058260','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70176','0','4','12','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110584','70176','1','1','1','16232.900391','16311.900391','29.262300','3.066110','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70180','0','4','12','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110554','70180','1','1','1','16242.799805','16291.599609','22.931601','1.594740','12600','0');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70204','0','28','14','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110527','70204','1','1','1','16231.799805','16298.599609','29.262300','3.058260','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70219','0','28','13','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110558','70219','1','1','1','16239.799805','16294.099609','22.341101','1.516190','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70224','0','28','15','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110589','70224','1','1','1','16232.000000','16300.799805','29.262300','3.058260','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70226','0','28','13','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110528','70226','1','1','1','16241.400391','16294.000000','22.307899','1.516190','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70229','0','28','14','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110588','70229','1','1','1','16232.200195','16302.700195','29.262300','3.058260','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70231','0','28','13','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110559','70231','1','1','1','16237.500000','16294.200195','22.387699','1.516190','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70236','0','28','14','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110557','70236','1','1','1','16242.799805','16293.900391','22.278700','1.516190','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70238','0','28','14','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110587','70238','1','1','1','16232.299805','16304.799805','29.262300','3.058260','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70257','0','28','19','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110564','70257','1','1','1','16240.099609','16307.099609','20.845699','6.191950','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70258','0','28','21','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110565','70258','1','1','1','16240.299805','16309.200195','20.845699','6.191950','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70260','0','28','20','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110563','70260','1','1','1','16239.900391','16304.799805','20.845699','6.191950','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70261','0','28','20','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110529','70261','1','1','1','16239.799805','16302.900391','20.845699','6.231220','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70265','0','28','19','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110530','70265','1','1','1','16224.799805','16300.799805','29.262100','0.085679','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70267','0','28','20','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110594','70267','1','1','1','16224.299805','16297.400391','30.017099','0.073898','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70268','0','28','19','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110593','70268','1','1','1','16224.599609','16299.200195','29.262100','0.073898','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70301','0','20','22','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110598','70301','1','1','1','16223.599609','16289.400391','31.430799','0.261616','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70306','0','20','23','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110567','70306','1','1','1','16237.599609','16304.900391','20.845400','6.248770','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70314','0','20','22','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110531','70314','1','1','1','16223.200195','16293.799805','31.429501','6.281720','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70316','0','20','23','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110596','70316','1','1','1','16223.200195','16292.099609','31.429399','6.281720','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70320','0','20','23','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110532','70320','1','1','1','16237.799805','16309.500000','20.845400','6.227290','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70324','0','20','23','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110566','70324','1','1','1','16237.700195','16307.200195','20.845400','6.227290','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70335','0','20','22','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110597','70335','1','1','1','16223.599609','16290.700195','31.430799','0.316594','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70336','0','20','24','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110568','70336','1','1','1','16237.500000','16302.900391','20.845400','6.248770','10080','8814');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70351','0','20','27','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110609','70351','1','1','1','16227.700195','16301.000000','29.261999','4.618370','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70352','0','20','27','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110610','70352','1','1','1','16229.799805','16300.799805','29.261999','4.618370','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70356','0','20','26','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110533','70356','1','1','1','16235.299805','16303.299805','20.845400','0.016623','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70360','0','20','27','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110571','70360','1','1','1','16235.599609','16309.700195','20.845400','0.016623','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70369','0','20','25','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110608','70369','1','1','1','16227.500000','16298.700195','29.261999','4.618370','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70374','0','20','25','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110569','70374','1','1','1','16235.200195','16305.400391','20.845400','0.016623','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70375','0','20','26','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110570','70375','1','1','1','16235.200195','16307.500000','20.845400','0.016623','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70377','0','20','27','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110534','70377','1','1','1','16229.200195','16298.500000','29.261999','4.618370','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70401','0','28','28','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110574','70401','1','1','1','16243.200195','16301.099609','20.844500','1.473790','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70402','0','28','30','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110573','70402','1','1','1','16245.099609','16300.799805','20.844500','1.580890','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70408','0','28','30','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110600','70408','1','1','1','16226.299805','16286.599609','31.431400','0.744634','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70412','0','28','30','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110535','70412','1','1','1','16228.099609','16285.900391','31.431200','1.700630','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70414','0','28','29','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110536','70414','1','1','1','16244.099609','16308.700195','20.844000','4.635600','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70415','0','28','29','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110599','70415','1','1','1','16224.900391','16288.099609','31.431400','1.290490','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70417','0','28','29','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110572','70417','1','1','1','16246.400391','16308.599609','20.844000','4.635600','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70418','0','28','29','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110601','70418','1','1','1','16229.700195','16287.099609','31.431601','2.391780','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70451','0','4','17','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110537','70451','1','1','1','16231.799805','16296.099609','30.280399','3.034710','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70455','0','4','17','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110590','70455','1','1','1','16231.700195','16294.799805','30.885500','3.034710','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70456','0','4','16','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110538','70456','1','1','1','16237.799805','16297.000000','20.844900','1.391620','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70458','0','4','17','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110591','70458','1','1','1','16231.500000','16293.099609','31.427000','3.034710','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70462','0','4','18','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110562','70462','1','1','1','16239.400391','16296.400391','20.964399','1.552620','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70463','0','4','17','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110561','70463','1','1','1','16241.799805','16296.400391','20.844900','1.491150','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70464','0','4','17','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110560','70464','1','1','1','16243.599609','16296.299805','20.844900','1.585400','2','2');
+INSERT INTO `characters_npcbot` 
+(`entry`,`owner`,`roles`,`spec`,`faction`,`spells_disabled`,`equipMhEx`,`equipOhEx`,`equipRhEx`,`equipHead`,`equipShoulders`,`equipChest`,`equipWaist`,`equipLegs`,`equipFeet`,`equipWrist`,`equipHands`,`equipBack`,`equipBody`,`equipFinger1`,`equipFinger2`,`equipTrinket1`,`equipTrinket2`,`equipNeck`) VALUES 
+('70465','0','4','18','35','NULL','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0');
+INSERT INTO `creature` 
+(`guid`,`id1`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`curhealth`,`curmana`) VALUES 
+('3110592','70465','1','1','1','16230.799805','16291.400391','31.427700','3.359580','2','2');

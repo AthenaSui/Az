@@ -666,6 +666,8 @@ public:
             if (!me->IsInCombat() && me->GetExactDist2d(&p) > 10.0f)
                 me->GetMotionMaster()->MoveCharge(tablePos.GetPositionX(), tablePos.GetPositionY(), tablePos.GetPositionZ(), 15.0f, POINT_TABLE);
             BossAI::EnterEvadeMode(why);
+            if (bEnteredCombat)
+                instance->SetBossState(DATA_PROFESSOR_PUTRICIDE, FAIL);//增加教授灭团检测
         }
 
         void ChangePhase()

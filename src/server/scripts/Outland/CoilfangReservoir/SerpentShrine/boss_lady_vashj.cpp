@@ -314,6 +314,36 @@ class spell_lady_vashj_summon_sporebat : public SpellScript
     }
 };
 
+class spell_lady_vashj_paralyze : public SpellScriptLoader
+{
+public:
+    spell_lady_vashj_paralyze() : SpellScriptLoader("spell_lady_vashj_paralyze") { }
+
+    class spell_lady_vashj_paralyze_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_lady_vashj_paralyze_SpellScript)
+
+        SpellCastResult CheckRequirement()
+        {
+            Player* playerCaster = GetCaster()->ToPlayer();
+            if (playerCaster->GetMap()->GetPlayers().getSize() == 1)
+                return SPELL_FAILED_DONT_REPORT;
+            else
+                return SPELL_CAST_OK;
+        }
+
+        void Register() override
+        {
+            OnCheckCast += SpellCheckCastFn(spell_lady_vashj_paralyze_SpellScript::CheckRequirement);
+        }
+    };
+
+    SpellScript* GetSpellScript() const override
+    {
+        return new spell_lady_vashj_paralyze_SpellScript();
+    }
+};
+
 class spell_lady_vashj_spore_drop_effect : public SpellScript
 {
     PrepareSpellScript(spell_lady_vashj_spore_drop_effect);
@@ -408,5 +438,6 @@ void AddSC_boss_lady_vashj()
     RegisterSpellScript(spell_lady_vashj_summon_sporebat);
     RegisterSpellScript(spell_lady_vashj_spore_drop_effect);
     RegisterSpellScript(spell_lady_vashj_summons);
+    new spell_lady_vashj_paralyze();
 }
 

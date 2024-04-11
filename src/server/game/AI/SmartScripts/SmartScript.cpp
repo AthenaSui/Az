@@ -154,6 +154,9 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                         talkTarget = target->ToCreature();
                     }
                     else
+                    //npcbot: prevent using bots as talkers
+                    if (!target->IsNPCBotOrPet() && !target->IsNPCBotTotemOrSummon())
+                    //end npcbot
                         talker = target->ToCreature();
                     break;
                 }
@@ -1599,7 +1602,7 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
             {
                 for (WorldObject* target : targets)
                 {
-                    if (IsCreature(target))
+                    if (IsCreature(target) && !target->IsNPCBotOrPet() && !target->IsNPCBotTotemOrSummon())
                     {
                         if (SmartAI* ai = CAST_AI(SmartAI, target->ToCreature()->AI()))
                             ai->GetScript()->StoreCounter(e.action.setCounter.counterId, e.action.setCounter.value, e.action.setCounter.reset, e.action.setCounter.subtract);

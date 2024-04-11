@@ -143,6 +143,25 @@ Quest::Quest(Field* questRecord)
     }
 }
 
+std::string const& Quest::GetLocalizeTitle(LocaleConstant loc) const
+{
+    QuestLocale const* questInfo = sObjectMgr->GetQuestLocale(GetQuestId());
+    if (questInfo){
+        std::wstring wnamepart;
+        if (questInfo->Title.size() > loc && !questInfo->Title[loc].empty())
+        {
+            if (Utf8FitTo(questInfo->Title[loc], wnamepart))
+                return questInfo->Title[loc];
+        }
+    }
+    return GetTitle();
+}
+
+void Quest::GetLocalizeTitle(std::string &questTitle, LocaleConstant loc) const
+{
+    questTitle = GetLocalizeTitle(loc);
+}
+
 void Quest::LoadQuestDetails(Field* fields)
 {
     for (int i = 0; i < QUEST_EMOTE_COUNT; ++i)

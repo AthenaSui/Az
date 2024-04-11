@@ -565,7 +565,10 @@ public:
         void JustReachedHome() override
         {
             if (instance->GetBossState(DATA_VALITHRIA_DREAMWALKER) != DONE)
+            {
                 DoAction(ACTION_DEATH); // setActive(false) in ValithriaDespawner
+                instance->SetBossState(DATA_VALITHRIA_DREAMWALKER, FAIL);
+            }
             else
                 _JustReachedHome();
         }

@@ -21,6 +21,7 @@
 #include "SpellScriptLoader.h"
 #include "WorldSession.h"
 #include "sunwell_plateau.h"
+#include "botmgr.h"
 
 enum Yells
 {
@@ -318,7 +319,8 @@ public:
                     events.ScheduleEvent(EVENT_WILD_MAGIC, 20000);
                     break;
                 case EVENT_SPECTRAL_BLAST:
-                    me->CastSpell(me, SPELL_SPECTRAL_BLAST, false);
+                    if (me->GetMap()->GetPlayers().getSize() > 1)
+                        me->CastSpell(me, SPELL_SPECTRAL_BLAST, false);
                     events.ScheduleEvent(EVENT_SPECTRAL_BLAST, urand(15000, 25000));
                     break;
                 case EVENT_CHECK_POS:
@@ -406,6 +408,12 @@ public:
 
         void DamageTaken(Unit* who, uint32& damage, DamageEffectType, SpellSchoolMask) override
         {
+            if (me->GetMap()->GetPlayers().getSize() == 1){
+                Player* player = me->GetMap()->GetPlayers().getFirst()->GetSource();
+                if (player->GetPositionZ() > 50.0f && player->IsAlive())
+                    damage = 0;
+            }
+
             if (!who || who->GetEntry() != NPC_SATHROVARR)
                 damage = 0;
         }
@@ -611,6 +619,33 @@ public:
                         DoAction(ACTION_BANISH);
                         break;
                     }
+                    if (me->GetMap()->GetPlayers().getSize() == 1)
+                    {
+                        if (Creature* kalecgos = ObjectAccessor::GetCreature(*me, instance->GetGuidData(NPC_KALECGOS)))
+                        {
+                            if (kalecgos->HasAura(SPELL_BANISH))
+                            {
+                                if (kalecgos->GetReactState() != REACT_PASSIVE)
+                                    kalecgos->SetReactState(REACT_PASSIVE);
+                                Player* player = me->GetMap()->GetPlayers().getFirst()->GetSource();
+                                if (player->GetPositionZ() > 50.0f && player->IsAlive())
+                                {
+                                    player->CastSpell(player, SPELL_SPECTRAL_BLAST_PORTAL, true);
+                                    player->CastSpell(player, SPELL_SPECTRAL_BLAST_AA, true);
+                                    player->CastSpell(player, SPELL_TELEPORT_SPECTRAL, true);
+                                }
+                                if (player->HaveBot())
+                                {
+                                    BotMap* bot_map = player->GetBotMgr()->GetBotMap();
+                                    for (auto & itr : *bot_map)
+                                    {
+                                        if (itr.second->GetPositionZ() > 50.0f && itr.second->IsAlive())
+                                            itr.second->CastSpell(itr.second, SPELL_TELEPORT_SPECTRAL, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     events.ScheduleEvent(EVENT_CHECK_HEALTH2, 1000);
                     break;
             }
@@ -754,7 +789,8 @@ public:
 
         void OnRemove(AuraEffect const*  /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_SPECTRAL_EXHAUSTION, true);
+            if (GetUnitOwner()->GetMap()->GetPlayers().getSize() > 1)
+                GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_SPECTRAL_EXHAUSTION, true);
             GetUnitOwner()->CastSpell(GetUnitOwner(), SPELL_TELEPORT_NORMAL_REALM, true);
         }
 

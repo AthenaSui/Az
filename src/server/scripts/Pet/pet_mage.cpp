@@ -130,6 +130,8 @@ struct npc_pet_mage_mirror_image : CasterAI
             }
 
         me->m_Events.AddEvent(new DeathEvent(*me), me->m_Events.CalculateTime(29500));
+        //选择第一目标
+        MySelectNextTarget();
     }
 
     // Do not reload Creature templates on evade mode enter - prevent visual lost
@@ -158,11 +160,11 @@ struct npc_pet_mage_mirror_image : CasterAI
             _ebonGargoyleGUID.Clear();
         }
         Unit* owner = me->GetOwner();
-        if (owner && owner->GetTypeId() == TYPEID_PLAYER)
+        if (owner && owner->GetTypeId() == TYPEID_PLAYER && (!me->GetVictim() || (me->GetVictim()->IsImmunedToSpell(sSpellMgr->GetSpellInfo(59637)) && me->GetVictim()->IsImmunedToSpell(sSpellMgr->GetSpellInfo(59638)) ) || !me->IsValidAttackTarget(me->GetVictim()) ))
         {
             Unit* selection = owner->ToPlayer()->GetSelectedUnit();
 
-            if (selection)
+            if (selection && selection != me->GetVictim() && me->IsValidAttackTarget(selection))
             {
                 me->GetThreatMgr().ResetAllThreat();
                 me->AddThreat(selection, 1000000.0f);
@@ -171,9 +173,25 @@ struct npc_pet_mage_mirror_image : CasterAI
                     AttackStart(selection);
             }
 
-            if (!owner->IsInCombat() && !me->GetVictim())
+            else if ((!owner->IsInCombat() && !me->GetVictim()) )
                 EnterEvadeMode(EVADE_REASON_OTHER);
         }
+        //npcbot: allow mirror images to attack creature owner's target
+        else if (owner)
+        {
+            if (Unit* mytar = owner->GetVictim())
+            {
+                if (mytar != me->GetVictim() && me->IsValidAttackTarget(mytar) && CanAIAttack(mytar))
+                {
+                    me->GetThreatMgr().ResetAllThreat();
+                    me->AddThreat(mytar, 1000000.0f);
+                    AttackStart(mytar);
+                }
+            }
+            else
+                EnterEvadeMode(EVADE_REASON_NO_HOSTILES);
+        }
+        //end npcbot
     }
 
     void Reset() override

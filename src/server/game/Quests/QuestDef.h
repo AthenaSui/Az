@@ -256,6 +256,8 @@ public:
     [[nodiscard]] uint32 GetSrcItemCount() const { return StartItemCount; }
     [[nodiscard]] uint32 GetSrcSpell() const { return SourceSpellid; }
     [[nodiscard]] std::string const& GetTitle() const { return Title; }
+    [[nodiscard]] std::string const& GetLocalizeTitle(LocaleConstant loc) const;
+    void GetLocalizeTitle(std::string &questTitle, LocaleConstant loc) const;
     [[nodiscard]] std::string const& GetDetails() const { return Details; }
     [[nodiscard]] std::string const& GetObjectives() const { return Objectives; }
     [[nodiscard]] std::string const& GetOfferRewardText() const { return OfferRewardText; }

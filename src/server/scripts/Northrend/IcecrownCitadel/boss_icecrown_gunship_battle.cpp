@@ -28,6 +28,10 @@
 #include "Vehicle.h"
 #include "icecrown_citadel.h"
 
+//npcbot
+#include "botmgr.h"
+//end npcbot
+
 enum Texts
 {
     // High Overlord Saurfang
@@ -605,6 +609,15 @@ public:
                         continue;
                     (*itr)->ToCreature()->CastSpell((*itr)->ToCreature(), explosionSpell, true);
                 }
+
+                //npcbot: kill bots
+                Transport::PassengerSet const& allpassengers = t->GetPassengers();
+                for (Transport::PassengerSet::const_iterator citr = allpassengers.begin(); citr != allpassengers.end(); ++citr)
+                {
+                    if ((*citr)->GetTypeId() == TYPEID_PLAYER && (*citr)->ToPlayer()->HaveBot())
+                        (*citr)->ToPlayer()->GetBotMgr()->KillAllBots();
+                }
+                //end npcbot
             }
 
             uint32 cannonEntry = _teamIdInInstance == TEAM_HORDE ? NPC_HORDE_GUNSHIP_CANNON : NPC_ALLIANCE_GUNSHIP_CANNON;
@@ -879,6 +892,7 @@ public:
         {
             if (_instance->GetBossState(DATA_ICECROWN_GUNSHIP_BATTLE) == IN_PROGRESS)
             {
+                me->RemoveNpcFlag(UNIT_NPC_FLAG_GOSSIP);//禁止战斗中对话
                 if (me->GetVictim())
                 {
                     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
@@ -1215,6 +1229,7 @@ public:
         {
             if (_instance->GetBossState(DATA_ICECROWN_GUNSHIP_BATTLE) == IN_PROGRESS)
             {
+                me->RemoveNpcFlag(UNIT_NPC_FLAG_GOSSIP);//禁止战斗中对话
                 if (me->GetVictim())
                 {
                     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE)
@@ -1617,6 +1632,7 @@ struct npc_gunship_boarding_addAI : public ScriptedAI
             Map::PlayerList const& pl = me->GetMap()->GetPlayers();
             for (Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr)
                 if (Player* p = itr->GetSource())
+                {
                     if (CanAIAttack(p) && me->IsValidAttackTarget(p))
                     {
                         anyValid = true;
@@ -1624,6 +1640,23 @@ struct npc_gunship_boarding_addAI : public ScriptedAI
                         p->SetInCombatWith(me);
                         me->AddThreat(p, 0.0f);
                     }
+                    //npcbot: check bots
+                    else if (p->HaveBot())
+                    {
+                        BotMap const* bmap = p->GetBotMgr()->GetBotMap();
+                        for (BotMap::const_iterator citr = bmap->begin(); citr != bmap->end(); ++citr)
+                        {
+                            if (citr->second && CanAIAttack(citr->second) && me->IsValidAttackTarget(citr->second))
+                            {
+                                anyValid = true;
+                                me->SetInCombatWith(citr->second);
+                                citr->second->SetInCombatWith(me);
+                                me->AddThreat(citr->second, 0.0f);
+                            }
+                        }
+                    }
+                    //end npcbot
+                }
         }
         else
             checkTimer -= diff;
@@ -1859,6 +1892,7 @@ public:
                 Map::PlayerList const& pl = me->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr)
                     if (Player* p = itr->GetSource())
+                    {
                         if (CanAIAttack(p) && me->IsValidAttackTarget(p))
                         {
                             anyValid = true;
@@ -1866,6 +1900,23 @@ public:
                             p->SetInCombatWith(me);
                             me->AddThreat(p, 0.0f);
                         }
+                        //npcbot: check bots
+                        else if (p->HaveBot())
+                        {
+                            BotMap const* bmap = p->GetBotMgr()->GetBotMap();
+                            for (BotMap::const_iterator citr = bmap->begin(); citr != bmap->end(); ++citr)
+                            {
+                                if (citr->second && CanAIAttack(citr->second) && me->IsValidAttackTarget(citr->second))
+                                {
+                                    anyValid = true;
+                                    me->SetInCombatWith(citr->second);
+                                    citr->second->SetInCombatWith(me);
+                                    me->AddThreat(citr->second, 0.0f);
+                                }
+                            }
+                        }
+                        //end npcbot
+                    }
             }
             else
                 checkTimer -= diff;
@@ -1907,7 +1958,13 @@ public:
     {
         npc_gunship_rocketeerAI(Creature* creature) : gunship_npc_AI(creature)
         {
+            checkTimer = 1000;
             creature->m_CombatDistance = 150.0f;
+        }
+
+        void AttackStart(Unit* target) override
+        {
+            me->Attack(target, false);
         }
 
         void MovementInform(uint32 type, uint32 pointId) override
@@ -1917,30 +1974,73 @@ public:
                 me->SetControlled(true, UNIT_STATE_ROOT);
         }
 
-        void UpdateAI(uint32 /*diff*/) override
+        void UpdateAI(uint32 diff) override
         {
             if (Instance->GetBossState(DATA_ICECROWN_GUNSHIP_BATTLE) != IN_PROGRESS)
                 return;
             if (me->GetReactState() == REACT_PASSIVE)
                 return;
 
-            UpdateVictim();
+            //UpdateVictim();
+            if (checkTimer <= diff)
+            {
+                checkTimer = 1000;
+                Map::PlayerList const& pl = me->GetMap()->GetPlayers();
+                for (Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr)
+                    if (Player* p = itr->GetSource())
+                        if (CanAIAttack(p) && me->IsValidAttackTarget(p))
+                        {
+                            me->SetInCombatWith(p);
+                            p->SetInCombatWith(me);
+                            me->AddThreat(p, 0.0f);
+                        }
+            }
+            else
+                checkTimer -= diff;
+
 
             if (me->HasUnitState(UNIT_STATE_CASTING))
                 return;
 
-            uint32 spellId = me->GetEntry() == NPC_SKYBREAKER_MORTAR_SOLDIER ? SPELL_ROCKET_ARTILLERY_A : SPELL_ROCKET_ARTILLERY_H;
+            //uint32 spellId = me->GetEntry() == NPC_SKYBREAKER_MORTAR_SOLDIER ? SPELL_ROCKET_ARTILLERY_A : SPELL_ROCKET_ARTILLERY_H;
+            uint32 spellId = 69679;
+
             if (me->HasSpellCooldown(spellId))
                 return;
 
-            me->CastSpell((Unit*)nullptr, spellId, true);
-            me->_AddCreatureSpellCooldown(spellId, 0, 9000);
+
+            TeamId teamId = TEAM_HORDE;
+            if (InstanceScript* instance = me->GetInstanceScript())
+                teamId = TeamId(instance->GetData(DATA_TEAMID_IN_INSTANCE));
+            uint32 _entry =(teamId == TEAM_HORDE ? GO_ORGRIMS_HAMMER_H : GO_THE_SKYBREAKER_A);
+
+            //if (Player* plr = ScriptedAI::SelectTargetFromPlayerList(100.0f, 0, true))
+            if (Unit* plr = SelectTarget(SelectTargetMethod::Random, 0, -50.0f, true))//只攻击50码外玩家(50码能打到BUG玩家)
+            {
+                if (CanAIAttack(plr) && me->IsValidAttackTarget(plr))
+                {
+                    //if (plr->GetTypeId() != TYPEID_PLAYER || plr->GetPositionZ() > 478.0f || !plr->GetTransport() || plr->GetTransport()->GetEntry() != _entry
+                        //|| plr->GetMapHeight(plr->GetPhaseMask(), plr->GetPositionX(), plr->GetPositionY(), plr->GetPositionZ()) < 465.0f)
+                        //return;
+
+                    me->CastSpell(plr, spellId, true);
+                    me->_AddCreatureSpellCooldown(spellId, 0, 9000);
+                }
+            }
+
+
+            //me->CastSpell((Unit*)nullptr, spellId, true);
+
+            
         }
 
         bool CanAIAttack(Unit const*  /*target*/) const override
         {
             return Instance->GetBossState(DATA_ICECROWN_GUNSHIP_BATTLE) == IN_PROGRESS;
         }
+
+    protected:
+        uint16 checkTimer;
     };
 
     CreatureAI* GetAI(Creature* creature) const override

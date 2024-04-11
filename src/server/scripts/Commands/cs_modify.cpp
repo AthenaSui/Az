@@ -31,6 +31,7 @@ EndScriptData */
 #include "Player.h"
 #include "ReputationMgr.h"
 #include "StringConvert.h"
+#include "botmgr.h"
 
 using namespace Acore::ChatCommands;
 
@@ -428,6 +429,25 @@ public:
             target->SetSpeed(MOVE_RUN, allSpeed);
             target->SetSpeed(MOVE_SWIM, allSpeed);
             target->SetSpeed(MOVE_FLIGHT, allSpeed);
+
+            BotMgr* mgr = target->GetBotMgr();
+            if (!mgr)
+                mgr = new BotMgr(target);
+            BotMap const* map = mgr->GetBotMap();
+            for (auto itr = map->begin(); itr != map->end(); ++itr)
+            {
+                if (Creature* cre = itr->second)
+                {
+                    if (cre->IsAlive())
+                    {
+                        cre->SetSpeed(MOVE_WALK, allSpeed * 1.01f);
+                        cre->SetSpeed(MOVE_RUN, allSpeed * 1.01f);
+                        cre->SetSpeed(MOVE_SWIM, allSpeed * 1.01f);
+                        cre->SetSpeed(MOVE_FLIGHT, allSpeed * 1.01f);
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -442,6 +462,22 @@ public:
         {
             NotifyModification(handler, target, LANG_YOU_CHANGE_SPEED, LANG_YOURS_SPEED_CHANGED, speed);
             target->SetSpeedRate(MOVE_RUN, speed);
+
+            BotMgr* mgr = target->GetBotMgr();
+            if (!mgr)
+                mgr = new BotMgr(target);
+            BotMap const* map = mgr->GetBotMap();
+            for (auto itr = map->begin(); itr != map->end(); ++itr)
+            {
+                if (Creature* cre = itr->second)
+                {
+                    if (cre->IsAlive())
+                    {
+                        cre->SetSpeed(MOVE_RUN, speed * 1.01f);
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -456,6 +492,22 @@ public:
         {
             NotifyModification(handler, target, LANG_YOU_CHANGE_SWIM_SPEED, LANG_YOURS_SWIM_SPEED_CHANGED, swimSpeed);
             target->SetSpeedRate(MOVE_SWIM, swimSpeed);
+
+            BotMgr* mgr = target->GetBotMgr();
+            if (!mgr)
+                mgr = new BotMgr(target);
+            BotMap const* map = mgr->GetBotMap();
+            for (auto itr = map->begin(); itr != map->end(); ++itr)
+            {
+                if (Creature* cre = itr->second)
+                {
+                    if (cre->IsAlive())
+                    {
+                        cre->SetSpeed(MOVE_SWIM, swimSpeed * 1.01f);
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -470,6 +522,22 @@ public:
         {
             NotifyModification(handler, target, LANG_YOU_CHANGE_BACK_SPEED, LANG_YOURS_BACK_SPEED_CHANGED, backSpeed);
             target->SetSpeedRate(MOVE_RUN_BACK, backSpeed);
+
+            BotMgr* mgr = target->GetBotMgr();
+            if (!mgr)
+                mgr = new BotMgr(target);
+            BotMap const* map = mgr->GetBotMap();
+            for (auto itr = map->begin(); itr != map->end(); ++itr)
+            {
+                if (Creature* cre = itr->second)
+                {
+                    if (cre->IsAlive())
+                    {
+                        cre->SetSpeed(MOVE_RUN_BACK, backSpeed * 1.01f);
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -484,6 +552,22 @@ public:
         {
             NotifyModification(handler, target, LANG_YOU_CHANGE_FLY_SPEED, LANG_YOURS_FLY_SPEED_CHANGED, flySpeed);
             target->SetSpeedRate(MOVE_FLIGHT, flySpeed);
+
+            BotMgr* mgr = target->GetBotMgr();
+            if (!mgr)
+                mgr = new BotMgr(target);
+            BotMap const* map = mgr->GetBotMap();
+            for (auto itr = map->begin(); itr != map->end(); ++itr)
+            {
+                if (Creature* cre = itr->second)
+                {
+                    if (cre->IsAlive())
+                    {
+                        cre->SetSpeed(MOVE_FLIGHT, flySpeed * 1.01f);
+                    }
+                }
+            }
+
             return true;
         }
 

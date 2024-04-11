@@ -214,13 +214,6 @@ public:
 
         void JustDied(Unit*  /*killer*/) override
         {
-            _JustDied();
-            Talk(SAY_DEATH);
-
-            if (Is25ManRaid() && me->HasAura(SPELL_SHADOWS_FATE))
-                DoCastAOE(SPELL_BLOOD_INFUSION_CREDIT, true);
-
-            CleanAuras();
 
             if (_creditBloodQuickening)
             {
@@ -228,8 +221,8 @@ public:
                 Map::PlayerList const& pl = me->GetMap()->GetPlayers();
                 for (Map::PlayerList::const_iterator itr = pl.begin(); itr != pl.end(); ++itr)
                     if (Player* p = itr->GetSource())
-                        p->KilledMonsterCredit(RAID_MODE(NPC_INFILTRATOR_MINCHAR_BQ, NPC_BLOOD_QUICKENING_CREDIT_25));
-                if (Creature* minchar = me->FindNearestCreature(NPC_INFILTRATOR_MINCHAR_BQ, 200.0f))
+                        p->KilledMonsterCredit((Is25ManRaid() ? NPC_BLOOD_QUICKENING_CREDIT_25 : NPC_INFILTRATOR_MINCHAR_BQ));
+                if (Creature* minchar = me->FindNearestCreature((Is25ManRaid() ? NPC_BLOOD_QUICKENING_CREDIT_25 : NPC_INFILTRATOR_MINCHAR_BQ), 200.0f))
                 {
                     minchar->SetUInt32Value(UNIT_NPC_EMOTESTATE, 0);
                     minchar->SetCanFly(false);
@@ -238,6 +231,17 @@ public:
                     minchar->GetMotionMaster()->MoveCharge(4629.3711f, 2782.6089f, 401.5301f, SPEED_CHARGE / 3.0f);
                 }
             }
+
+            me->SetCanFly(false);//修复上天阶段死亡无掉落
+            me->SetDisableGravity(false);//修复上天阶段死亡无掉落
+            if (me->GetPositionZ() > 402.0f)//修复上天阶段死亡无掉落
+                me->GetMotionMaster()->MoveLand(POINT_GROUND, centerPos, 0.642857f * 7.0f);//修复上天阶段死亡无掉落
+
+            _JustDied();
+            Talk(SAY_DEATH);
+            if (Is25ManRaid() && me->HasAura(SPELL_SHADOWS_FATE))
+                DoCastAOE(SPELL_BLOOD_INFUSION_CREDIT, true);
+            CleanAuras();
         }
 
         void GoToMinchar()
@@ -570,6 +574,7 @@ public:
             }
 
             BossAI::EnterEvadeMode();
+            instance->SetBossState(DATA_BLOOD_QUEEN_LANA_THEL, FAIL);//增加女王灭团检测
         }
 
         bool CanAIAttack(Unit const*  /*target*/) const override

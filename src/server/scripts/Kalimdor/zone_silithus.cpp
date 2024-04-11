@@ -583,7 +583,7 @@ public:
                         break;
                     case 61:
                         me->GetMotionMaster()->MoveCharge(-8057.1f, 1470.32f, 2.61f, 6);
-                        if (player->IsInRange(me, 0, 15))
+                        if (player->IsInRange(me, 0, 50))
                             player->GroupEventHappens(QUEST_A_PAWN_ON_THE_ETERNAL_BOARD, me);
                         break;
                     case 62:
@@ -829,7 +829,7 @@ public:
             if (Group* EventGroup = player->GetGroup())
             {
                 uint8 GroupMemberCount = 0;
-                uint8 DeadMemberCount = 0;
+//                uint8 DeadMemberCount = 0;
                 uint8 FailedMemberCount = 0;
 
                 Group::MemberSlotList const& members = EventGroup->GetMemberSlots();
@@ -846,8 +846,8 @@ public:
                     }
                     ++GroupMemberCount;
 
-                    if (groupMember->isDead())
-                        ++DeadMemberCount;
+//                    if (groupMember->isDead())
+//                        ++DeadMemberCount;
                 }
 
                 if (GroupMemberCount == FailedMemberCount || !player->IsWithinDistInMap(me, EVENT_AREA_RADIUS))
