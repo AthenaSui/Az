@@ -350,7 +350,7 @@ public:
         if (go->FindNearestCreature(NPC_AHUNE, 200.0f, true))
             return true;
 
-        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Disturb the stone and summon Lord Ahune.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1337);
+        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "用这块石头召唤埃霍恩大人。", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1337);
         SendGossipMenuFor(player, GOSSIP_TEXT_ID, go->GetGUID());
         return true;
     }
