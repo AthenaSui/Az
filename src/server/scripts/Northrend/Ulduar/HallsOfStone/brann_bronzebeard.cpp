@@ -24,10 +24,10 @@
 #include "SpellScriptLoader.h"
 #include "halls_of_stone.h"
 
-#define GOSSIP_ITEM_1       "Brann, it would be our honor!"
-#define GOSSIP_ITEM_2       "Let's move Brann, enough of the history lessons!"
-#define GOSSIP_ITEM_3       "We dont have time for this right now, we have to keep going."
-#define GOSSIP_ITEM_4       "We're with you Brann! Open it!"
+#define GOSSIP_ITEM_1       "布莱恩，为了我们的荣耀！"
+#define GOSSIP_ITEM_2       "让我们移动布莱恩，历史课够多了！"
+#define GOSSIP_ITEM_3       "我们现在没有时间做这个，我们必须继续前进。"
+#define GOSSIP_ITEM_4       "来吧，布莱恩！打开它！"
 #define TEXT_ID_START       13100
 
 enum NPCs
