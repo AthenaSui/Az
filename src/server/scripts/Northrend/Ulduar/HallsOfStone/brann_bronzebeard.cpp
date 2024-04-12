@@ -358,12 +358,12 @@ public:
                     break;
                 case ACTION_START_SJONNIR_FIGHT:
                     me->SetFaction(FACTION_FRIENDLY);
-                    me->Yell("Don't worry! Ol' Brann's got yer back! Keep that metal monstrosity busy, and I'll see if I can't sweet talk this machine into helping ye!", LANG_UNIVERSAL);
+                    me->Yell("嘿！别担心！老布莱恩在后面给你们加油呢！把这些该死的金属疙瘩给我挡住，让我来好好跟这台可爱的大机器谈谈，让它帮帮你们！", LANG_UNIVERSAL);
                     me->PlayDirectSound(14274);
                     SetEscortPaused(false);
                     break;
                 case ACTION_SJONNIR_DEAD:
-                    me->Yell("Loken? That's downright bothersome... We might've neutralized the iron dwarves, but I'd lay odds there's another machine somewhere else churnin' out a whole mess o' these iron vrykul!", LANG_UNIVERSAL);
+                    me->Yell("洛肯？！这下我们碰到大麻烦了……虽然铁矮人已经被全部摆平了，但我敢打赌不知道什么鬼地方还有台机器，正不停向外吐着铁维库人！", LANG_UNIVERSAL);
                     me->PlayDirectSound(14278);
                     events.ScheduleEvent(EVENT_END, 14000);
                     break;
@@ -539,7 +539,7 @@ public:
                             pInstance->SetData(BRANN_BRONZEBEARD, 6);
 
                         me->ReplaceAllNpcFlags(UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-                        me->Yell("I'll use the forge to make batches o' earthen to stand guard... But our greatest challenge still remains: find and stop Loken!", LANG_UNIVERSAL);
+                        me->Yell("我会用熔炉来制造一些土灵，让他们保卫这里……但现在最大的挑战是：找到并阻止洛肯！", LANG_UNIVERSAL);
                         me->PlayDirectSound(14279);
                         break;
                     }
