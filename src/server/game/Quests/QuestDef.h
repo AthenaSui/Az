@@ -373,7 +373,6 @@ protected:
     float RewardKillHonor;
     int32  RewardMoney;
     uint32 RewardMoneyDifficulty;
-    uint32 RewardBonusMoney;
     uint32 RewardDisplaySpell;
     int32  RewardSpell;
     uint32 POIContinent;

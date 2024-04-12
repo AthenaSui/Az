@@ -37,7 +37,8 @@ enum Yells
 {
     SAY_AGGRO                                   = 0,
     SAY_DEATH                                   = 1,
-    SAY_FAIL                                    = 2
+    SAY_FAIL                                    = 2,
+    SAY_THANKS                                  = 0
 };
 
 class boss_infinite_corruptor : public CreatureScript
@@ -98,7 +99,7 @@ public:
                     {
                         cr->DespawnOrUnsummon(5000);
                         cr->RemoveAllAuras();
-                        cr->Say("感谢你在这个时间线中拯救了我的存在。现在我必须向上级汇报。他们必须立即知道我刚刚经历了什么。", LANG_UNIVERSAL);
+                        cr->AI()->Talk(SAY_THANKS);
                     }
                 }
             }
