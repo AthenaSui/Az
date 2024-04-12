@@ -4071,13 +4071,6 @@ bool Creature::IsNPCBotOrPet() const
     return GetCreatureTemplate()->IsNPCBotOrPet();
 }
 
-bool Creature::IsNPCBotTotemOrSummon() const
-{
-    auto owner = GetOwner();
-    Creature* creator = ObjectAccessor::GetCreature(*this, GetCreatorGUID());
-    return !GetCreatureTemplate()->IsNPCBotOrPet() && ((owner && owner->IsNPCBot()) || (IsTotem() && creator && creator->IsNPCBot()));
-}
-
 bool Creature::IsFreeBot() const
 {
     return bot_AI ? bot_AI->IAmFree() : bot_pet_AI ? bot_pet_AI->IAmFree() : false;

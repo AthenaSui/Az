@@ -2404,7 +2404,7 @@ void Player::RemoveFromGroup(Group* group, ObjectGuid guid, RemoveMethod method 
         else if (guid.IsPlayer())
         {
             std::vector<ObjectGuid> botguids;
-            botguids.reserve(BotMgr::GetMaxNpcBots() / 2 + 1);
+            botguids.reserve(BotMgr::GetMaxNpcBots(DEFAULT_MAX_LEVEL) / 2 + 1);
             BotDataMgr::GetNPCBotGuidsByOwner(botguids, guid);
             for (std::vector<ObjectGuid>::const_iterator ci = botguids.begin(); ci != botguids.end(); ++ci)
             {
@@ -2477,6 +2477,9 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate, bool isLFGReward)
 
     if (victim && victim->GetTypeId() == TYPEID_UNIT && !victim->ToCreature()->hasLootRecipient())
     {
+    //npcbot
+        if (!(victim->IsNPCBot() && victim->FindMap() && victim->GetMap()->IsBattleground()))
+    //end npcbot
         return;
     }
 

@@ -551,6 +551,52 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                                     damage += combo * 40;
                             }
                         }
+                        //npcbot: Envenom support
+                        else if (m_caster->IsNPCBot())
+                        {
+                            // consume from stack dozes not more that have combo-points
+                            if (uint8 combo = m_caster->ToCreature()->GetCreatureComboPoints())
+                            {
+                                // Lookup for Deadly poison (only attacker applied)
+                                if (AuraEffect const* aurEff = unitTarget->GetAuraEffect(SPELL_AURA_PERIODIC_DAMAGE, SPELLFAMILY_ROGUE, 0x00010000, 0, 0, m_caster->GetGUID()))
+                                {
+                                    // count consumed deadly poison doses at target
+                                    bool needConsume = true;
+                                    uint32 spellId = aurEff->GetId();
+
+                                    uint32 doses = aurEff->GetBase()->GetStackAmount();
+                                    if (doses > combo)
+                                        doses = combo;
+
+                                    // Master Poisoner
+                                    Unit::AuraEffectList const& auraList = m_caster->GetAuraEffectsByType(SPELL_AURA_MOD_AURA_DURATION_BY_DISPEL_NOT_STACK);
+                                    for (Unit::AuraEffectList::const_iterator iter = auraList.begin(); iter != auraList.end(); ++iter)
+                                    {
+                                        if ((*iter)->GetSpellInfo()->SpellFamilyName == SPELLFAMILY_ROGUE && (*iter)->GetSpellInfo()->SpellIconID == 1960)
+                                        {
+                                            uint32 chance = (*iter)->GetSpellInfo()->GetEffect(EFFECT_2).CalcValue(m_caster);
+
+                                            if (chance && roll_chance_i(chance))
+                                                needConsume = false;
+
+                                            break;
+                                        }
+                                    }
+
+                                    if (needConsume)
+                                        for (uint32 i = 0; i < doses; ++i)
+                                            unitTarget->RemoveAuraFromStack(spellId, m_caster->GetGUID());
+
+                                    damage *= doses;
+                                    damage += int32(m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.09f * combo);
+                                }
+
+                                // Eviscerate and Envenom Bonus Damage (item set effect)
+                                if (m_caster->HasAura(37169))
+                                    damage += combo * 40;
+                            }
+                        }
+                        //end npcbot
                     }
                     //npcbot: Envenom support
                     else if (m_caster->IsNPCBot())
@@ -2276,6 +2322,11 @@ void Spell::EffectOpenLock(SpellEffIndex effIndex)
                     bg->EventBotClickedOnFlag(bot, gameObjTarget);
                 return;
             }
+        }
+        else if (botGoInfo->type == GAMEOBJECT_TYPE_TRAP)
+        {
+            gameObjTarget->SetLootState(GO_ACTIVATED);
+            return;
         }
 
         return;

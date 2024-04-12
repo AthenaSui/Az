@@ -2623,6 +2623,11 @@ public:
     void ClearReactive(ReactiveType reactive);
     //end npcbot
 
+    //npcbot
+    bool HasReactive(ReactiveType reactive) const { return m_reactiveTimer[reactive] > 0; }
+    void ClearReactive(ReactiveType reactive);
+    //end npcbot
+
     [[nodiscard]] uint32 GetOldFactionId() const { return _oldFactionId; }
 
 protected:

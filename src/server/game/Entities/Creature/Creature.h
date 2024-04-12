@@ -443,7 +443,6 @@ public:
     bool IsNPCBot() const override;
     bool IsNPCBotPet() const override;
     bool IsNPCBotOrPet() const override;
-    bool IsNPCBotTotemOrSummon() const override;
     bool IsFreeBot() const;
     bool IsWandererBot() const;
         Group* GetBotGroup() const;

@@ -8446,21 +8446,8 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                     || (attType == OFF_ATTACK && procFlag & PROC_FLAG_DONE_MAINHAND_ATTACK))
                                      return false;
 
-                                uint32 chance = 20;
-                                if (getLevel() >= 30)
-                                    chance += 2;
-
-                                Item const* addWeapon = bot->GetBotEquips(attType == BASE_ATTACK ? 1/*BOT_SLOT_OFFHAND*/ : 0/*BOT_SLOT_MAINHAND*/);
-                                uint32 enchant_id_add = addWeapon ? addWeapon->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT) : 0;
-                                SpellItemEnchantmentEntry const* pEnchant = sSpellItemEnchantmentStore.LookupEntry(enchant_id_add);
-                                if (pEnchant && pEnchant->spellid[0] == dummySpell->Id)
-                                    chance += 14;
-
-                                if (!roll_chance_i(chance))
-                                    return false;
-
                                 uint32 spellId;
-                                switch (castItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT))
+                                switch (castItem->GetEnchantmentId(EnchantmentSlot(TEMP_ENCHANTMENT_SLOT)))
                                 {
                                     case 283: spellId =  8232; break;   // 1 Rank
                                     case 284: spellId =  8235; break;   // 2 Rank
@@ -8490,9 +8477,9 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                                 triggered_spell_id = (procFlag & PROC_FLAG_DONE_MAINHAND_ATTACK) ? 25504 : 33750;
 
                                 if (cooldown)
-                                    bot->AddBotSpellCooldown(dummySpell->Id, cooldown * IN_MILLISECONDS);
+                                    bot->AddBotSpellCooldown(dummySpell->Id, cooldown);
 
-                                for (uint32 i = 0; i != 2; ++i)
+                                for (uint8 i = 0; i != 2; ++i)
                                     CastCustomSpell(victim, triggered_spell_id, &basepoints0, nullptr, nullptr, true, castItem, triggeredByAura);
 
                                 return true;
@@ -10412,6 +10399,9 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             return false;
 
         AddSpellCooldown(triggerEntry->Id, 0, cooldown);
+
+        if (IsNPCBot() && triggeredByAura->GetBase()->GetCastItemGUID() != ObjectGuid::Empty)
+            ToCreature()->AddBotSpellCooldown(triggerEntry->Id, cooldown);
     }
 
     if(basepoints0)
@@ -15338,7 +15328,10 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced)
         && !IsPet()
         && !(IsControlledByPlayer() && IsVehicle())
         && !(creature->HasMechanicTemplateImmunity(MECHANIC_SNARE))
-        && !(creature->IsDungeonBoss()))
+        && !(creature->IsDungeonBoss())
+        //npcbots: prevent slowing due to health percentage
+        && !creature->IsNPCBot())
+        //end npcbot
     {
         // 1.6% for each % under 30.
         // use min(0, health-30) so that we don't boost mobs above 30.
@@ -19238,6 +19231,11 @@ void Unit::Kill(Unit* killer, Unit* victim, bool durabilityLoss, WeaponAttackTyp
         player->RewardPlayerAndGroupAtKill(victim, false);
     }
 
+    //npcbot: spawn wandering bot kill reward
+    if (creature && creature->IsNPCBot())
+        BotMgr::OnBotKilled(creature, killer);
+    //end npcbot
+
     // Do KILL and KILLED procs. KILL proc is called only for the unit who landed the killing blow (and its owner - for pets and totems) regardless of who tapped the victim
     if (killer && (killer->IsPet() || killer->IsTotem()))
         if (Unit* owner = killer->GetOwner())
@@ -22777,6 +22775,17 @@ void Unit::PatchValuesUpdate(ByteBuffer& valuesUpdateBuf, BuildValuesCachePosPoi
         {
                 valuesUpdateBuf.put(posPointers.UnitFieldBytes2Pos, (m_uint32Values[UNIT_FIELD_BYTES_2] & 0xFFFFF2FF)); // clear UNIT_BYTE2_FLAG_PVP, UNIT_BYTE2_FLAG_FFA_PVP, UNIT_BYTE2_FLAG_SANCTUARY
         }
+        //npcbot
+        else if (IsNPCBotOrPet() && IsInRaidWith(target))
+        {
+            FactionTemplateEntry const* ft1 = GetFactionTemplateEntry();
+            FactionTemplateEntry const* ft2 = target->GetFactionTemplateEntry();
+            if (ft1 && ft2 && !ft1->IsFriendlyTo(*ft2))
+                valuesUpdateBuf.put(posPointers.UnitFieldBytes2Pos, (m_uint32Values[UNIT_FIELD_BYTES_2] & ((UNIT_BYTE2_FLAG_SANCTUARY /*| UNIT_BYTE2_FLAG_AURAS | UNIT_BYTE2_FLAG_UNK5*/) << 8))); // this flag is at uint8 offset 1 !!
+            else
+                valuesUpdateBuf.put(posPointers.UnitFieldBytes2Pos, m_uint32Values[UNIT_FIELD_BYTES_2]);
+        }
+        //end npcbot
     }
 
     // UNIT_FIELD_FACTIONTEMPLATE
@@ -22795,6 +22804,15 @@ void Unit::PatchValuesUpdate(ByteBuffer& valuesUpdateBuf, BuildValuesCachePosPoi
         {
             valuesUpdateBuf.put(posPointers.UnitFieldFactionTemplatePos, uint32(target->GetFaction()));
         }
+        //npcbot
+        else if (IsNPCBotOrPet() && IsInRaidWith(target))
+        {
+            FactionTemplateEntry const* ft1 = GetFactionTemplateEntry();
+            FactionTemplateEntry const* ft2 = target->GetFactionTemplateEntry();
+            if (ft1 && ft2 && !ft1->IsFriendlyTo(*ft2))
+                valuesUpdateBuf.put(posPointers.UnitFieldBytes2Pos, uint32(target->GetFaction()));
+        }
+        //end npcbot
     }
 
     sScriptMgr->OnPatchValuesUpdate(this, valuesUpdateBuf, posPointers, target);
