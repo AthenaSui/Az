@@ -30,7 +30,7 @@
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "GossipDef.h"
-#include "QueryHolder.h"
+#include "QueryHolder.h"//<-playerbot
 #include "Packet.h"
 #include "SharedDefines.h"
 #include "World.h"
@@ -224,7 +224,7 @@ enum CharterTypes
     ARENA_TEAM_CHARTER_3v3_TYPE                   = 3,
     ARENA_TEAM_CHARTER_5v5_TYPE                   = 5
 };
-
+//playerbot->
 class LoginQueryHolder : public CharacterDatabaseQueryHolder
 {
     private:
@@ -238,7 +238,7 @@ class LoginQueryHolder : public CharacterDatabaseQueryHolder
         uint32 GetAccountId() const { return m_accountId; }
         bool Initialize();
 };
-
+//<-playerbot
 //class to deal with packet processing
 //allows to determine if next packet is safe to be processed
 class PacketFilter
@@ -282,12 +282,12 @@ class CharacterCreateInfo
 {
     friend class WorldSession;
     friend class Player;
-
+//playerbot->
 public:
     CharacterCreateInfo(std::string const name = "", uint8 _race = 0, uint8 _class = 0, uint8 gender = 0, uint8 skin = 0, uint8 face = 0,
         uint8 hairStyle = 0, uint8 hairColor = 0, uint8 facialHair = 0)
         : Name(name), Race(_race), Class(_class), Gender(gender), Skin(skin), Face(face), HairStyle(hairStyle), HairColor(hairColor), FacialHair(facialHair) { }
-
+//<-playerbot
 protected:
     /// User specified variables
     std::string Name;
@@ -348,8 +348,8 @@ struct PacketCounter
 class WorldSession
 {
 public:
-    WorldSession(uint32 id, std::string&& name, std::shared_ptr<WorldSocket> sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale,
-        uint32 recruiter, bool isARecruiter, bool skipQueue, uint32 TotalTime, bool isBot = false);
+    WorldSession(uint32 id, std::string&& name, std::shared_ptr<WorldSocket> sock, AccountTypes sec, uint8 expansion, time_t mute_time, LocaleConstant locale,//<-playerbot
+        uint32 recruiter, bool isARecruiter, bool skipQueue, uint32 TotalTime, bool isBot = false);//<-playerbot
     ~WorldSession();
 
     bool IsGMAccount() const;
@@ -516,8 +516,8 @@ public:
     time_t m_muteTime;
 
     // Locales
-    LocaleConstant GetSessionDbcLocale() const { return _isBot? LOCALE_enUS : m_sessionDbcLocale; }
-    LocaleConstant GetSessionDbLocaleIndex() const { return _isBot? LOCALE_enUS : m_sessionDbLocaleIndex; }
+    LocaleConstant GetSessionDbcLocale() const { return _isBot? LOCALE_enUS : m_sessionDbcLocale; }//<-playerbot
+    LocaleConstant GetSessionDbLocaleIndex() const { return _isBot? LOCALE_enUS : m_sessionDbLocaleIndex; }//<-playerbot
     char const* GetAcoreString(uint32 entry) const;
 
     uint32 GetLatency() const { return m_latency; }
@@ -1092,7 +1092,7 @@ public:                                                 // opcodes handlers
     void SetKicked(bool val) { _kicked = val; }
     bool IsSocketClosed() const;
 
-    void SetAddress(std::string const& address) { m_Address = address; }
+    void SetAddress(std::string const& address) { m_Address = address; }//<-playerbot
 
     /*
      * CALLBACKS
@@ -1104,14 +1104,14 @@ public:                                                 // opcodes handlers
 
     void InitializeSession();
     void InitializeSessionCallback(CharacterDatabaseQueryHolder const& realmHolder, uint32 clientCacheVersion);
-
+//playerbot->
     LockedQueue<WorldPacket*>& GetPacketQueue();
 
     [[nodiscard]] bool IsBot() const
     {
         return _isBot;
     }
-
+//<-playerbot
 private:
     void ProcessQueryCallbacks();
 
@@ -1222,7 +1222,7 @@ private:
     uint32 _timeSyncNextCounter;
     uint32 _timeSyncTimer;
 
-    bool _isBot;
+    bool _isBot;//<-playerbot
 
     WorldSession(WorldSession const& right) = delete;
     WorldSession& operator=(WorldSession const& right) = delete;

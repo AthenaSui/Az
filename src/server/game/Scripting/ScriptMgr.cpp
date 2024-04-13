@@ -58,7 +58,7 @@ ScriptMgr* ScriptMgr::instance()
     static ScriptMgr instance;
     return &instance;
 }
-
+//playerbot->
 // Yunfan: refactor
 MetricScript::MetricScript(const char* name) : ScriptObject(name)
 {
@@ -69,7 +69,7 @@ PlayerbotScript::PlayerbotScript(const char* name) : ScriptObject(name)
 {
     ScriptRegistry<PlayerbotScript>::AddScript(this);
 }
-
+//<-playerbot
 void ScriptMgr::Initialize()
 {
     LOG_INFO("server.loading", "> Loading C++ scripts");
@@ -148,13 +148,13 @@ void ScriptMgr::Unload()
     SCR_CLEAR<ItemScript>();
     SCR_CLEAR<LootScript>();
     SCR_CLEAR<MailScript>();
-    SCR_CLEAR<MetricScript>();
+    SCR_CLEAR<MetricScript>();//<-playerbot
     SCR_CLEAR<MiscScript>();
     SCR_CLEAR<MovementHandlerScript>();
     SCR_CLEAR<OutdoorPvPScript>();
     SCR_CLEAR<PetScript>();
     SCR_CLEAR<PlayerScript>();
-    SCR_CLEAR<PlayerbotScript>();
+    SCR_CLEAR<PlayerbotScript>();//<-playerbot
     SCR_CLEAR<ServerScript>();
     SCR_CLEAR<SpellSC>();
     SCR_CLEAR<SpellScriptLoader>();
@@ -237,9 +237,9 @@ void ScriptMgr::CheckIfScriptsInDatabaseExist()
                 !ScriptRegistry<CommandSC>::GetScriptById(sid) &&
                 !ScriptRegistry<ArenaScript>::GetScriptById(sid) &&
                 !ScriptRegistry<GroupScript>::GetScriptById(sid) &&
-                !ScriptRegistry<DatabaseScript>::GetScriptById(sid) &&
-                !ScriptRegistry<MetricScript>::GetScriptById(sid) &&
-                !ScriptRegistry<PlayerbotScript>::GetScriptById(sid))
+                !ScriptRegistry<DatabaseScript>::GetScriptById(sid) &&//<-playerbot
+                !ScriptRegistry<MetricScript>::GetScriptById(sid) &&//<-playerbot
+                !ScriptRegistry<PlayerbotScript>::GetScriptById(sid))//<-playerbot
                 {
                     LOG_ERROR("sql.sql", "Script named '{}' is assigned in the database, but has no code!", scriptName);
                 }

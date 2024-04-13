@@ -241,8 +241,8 @@ enum GuildMemberFlags
 class EmblemInfo
 {
 public:
-    EmblemInfo(uint32 style = 0, uint32 color = 0, uint32 borderStyle = 0, uint32 borderColor = 0, uint32 backgroundColor = 0) :
-        m_style(0), m_color(0), m_borderStyle(0), m_borderColor(0), m_backgroundColor(0) { }
+    EmblemInfo(uint32 style = 0, uint32 color = 0, uint32 borderStyle = 0, uint32 borderColor = 0, uint32 backgroundColor = 0) ://<-playerbot
+        m_style(0), m_color(0), m_borderStyle(0), m_borderColor(0), m_backgroundColor(0) { }//<-playerbot
 
     void LoadFromDB(Field* fields);
     void SaveToDB(uint32 guildId) const;
@@ -700,13 +700,13 @@ public:
     void HandleQuery(WorldSession* session);
     void HandleSetMOTD(WorldSession* session, std::string_view motd);
     void HandleSetInfo(WorldSession* session, std::string_view info);
-    void HandleSetEmblem(WorldSession* session, EmblemInfo const& emblemInfo);
-    void HandleSetEmblem(EmblemInfo const& emblemInfo);
+    void HandleSetEmblem(WorldSession* session, EmblemInfo const& emblemInfo);//<-playerbot
+    void HandleSetEmblem(EmblemInfo const& emblemInfo);//<-playerbot
     void HandleSetLeader(WorldSession* session, std::string_view name);
     void HandleSetBankTabInfo(WorldSession* session, uint8 tabId, std::string_view name, std::string_view icon);
     void HandleSetMemberNote(WorldSession* session, std::string_view name, std::string_view note, bool officer);
     void HandleSetRankInfo(WorldSession* session, uint8 rankId, std::string_view name, uint32 rights, uint32 moneyPerDay, std::array<GuildBankRightsAndSlots, GUILD_BANK_MAX_TABS> const& rightsAndSlots);
-    void HandleSetRankInfo(uint8 rankId, uint32 rights = 0, std::string_view name = "", uint32 moneyPerDay = 0);
+    void HandleSetRankInfo(uint8 rankId, uint32 rights = 0, std::string_view name = "", uint32 moneyPerDay = 0);//<-playerbot
     void HandleBuyBankTab(WorldSession* session, uint8 tabId);
     void HandleInviteMember(WorldSession* session, std::string const& name);
     void HandleAcceptMember(WorldSession* session);
@@ -785,9 +785,9 @@ public:
     [[nodiscard]] bool ModifyBankMoney(CharacterDatabaseTransaction trans, const uint64& amount, bool add) { return _ModifyBankMoney(trans, amount, add); }
     [[nodiscard]] uint32 GetMemberSize() const { return m_members.size(); }
 
-    bool MemberHasTabRights(ObjectGuid guid, uint8 tabId, uint32 rights) const;
-    bool HasRankRight(Player* player, uint32 right) const;
-    uint32 GetRankRights(uint8 rankId) const;
+    bool MemberHasTabRights(ObjectGuid guid, uint8 tabId, uint32 rights) const;//<-playerbot
+    bool HasRankRight(Player* player, uint32 right) const;//<-playerbot
+    uint32 GetRankRights(uint8 rankId) const;//<-playerbot
 
 protected:
     uint32 m_id;

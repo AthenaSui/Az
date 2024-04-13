@@ -67,7 +67,7 @@ public:
 
         uint32 entry = quest->GetQuestId();
 
-        std::string questTitle = quest->GetTitle();
+        std::string questTitle = quest->GetTitle();//<-playerbot
 
         // check item starting quest (it can work incorrectly if added without item in inventory)
         ItemTemplateContainer const* itc = sObjectMgr->GetItemTemplateStore();
@@ -81,7 +81,7 @@ public:
 
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
-            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());//<-playerbot
             if (player->IsActiveQuest(entry))
             {
                 handler->SendErrorMessage(LANG_COMMAND_QUEST_ACTIVE, quest->GetTitle().c_str(), entry);
@@ -96,7 +96,7 @@ public:
         }
         else
         {
-            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);//<-playerbot
             ObjectGuid::LowType guid = playerTarget->GetGUID().GetCounter();
             QueryResult result = CharacterDatabase.Query("SELECT 1 FROM character_queststatus WHERE guid = {} AND quest = {}", guid, entry);
 
@@ -157,11 +157,11 @@ public:
             return false;
         }
 
-        std::string questTitle = quest->GetTitle();
+        std::string questTitle = quest->GetTitle();//<-playerbot
 
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
-            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());//<-playerbot
             // remove all quest entries for 'entry' from quest log
             for (uint8 slot = 0; slot < MAX_QUEST_LOG_SIZE; ++slot)
             {
@@ -186,7 +186,7 @@ public:
         }
         else
         {
-            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);//<-playerbot
             ObjectGuid::LowType guid = playerTarget->GetGUID().GetCounter();
             CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
 
@@ -245,11 +245,11 @@ public:
 
         uint32 entry = quest->GetQuestId();
 
-        std::string questTitle = quest->GetTitle();
+        std::string questTitle = quest->GetTitle();//<-playerbot
 
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
-            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());//<-playerbot
             // If player doesn't have the quest
             if (player->GetQuestStatus(entry) == QUEST_STATUS_NONE)
             {
@@ -351,7 +351,7 @@ public:
         }
         else
         {
-            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);//<-playerbot
             ObjectGuid::LowType guid = playerTarget->GetGUID().GetCounter();
             QueryResult result = CharacterDatabase.Query("SELECT 1 FROM character_queststatus WHERE guid = {} AND quest = {}", guid, entry);
 
@@ -515,11 +515,11 @@ public:
 
         uint32 entry = quest->GetQuestId();
 
-        std::string questTitle = quest->GetTitle();
+        std::string questTitle = quest->GetTitle();//<-playerbot
 
         if (Player* player = playerTarget->GetConnectedPlayer())
         {
-            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());
+            quest->GetLocalizeTitle(questTitle, player->GetSession()->GetSessionDbLocaleIndex());//<-playerbot
             // If player doesn't have the quest
             if (player->GetQuestStatus(entry) != QUEST_STATUS_COMPLETE)
             {
@@ -531,7 +531,7 @@ public:
         }
         else
         {
-            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);
+            quest->GetLocalizeTitle(questTitle, LOCALE_zhCN);//<-playerbot
             // Achievement criteria updates correctly the next time a quest is rewarded.
             // Titles are already awarded correctly the next time they login (only one quest awards title - 11549).
             // Rewarded talent points (Death Knights) and spells (e.g Druid forms) are also granted on login.
@@ -619,7 +619,7 @@ public:
             {
                 MailSender sender(MAIL_NORMAL, guid, MAIL_STATIONERY_GM);
                 // fill mail
-                MailDraft draft(quest->GetTitle(), "这个任务已被手动奖励给你。这封邮件包含你的任务奖励。");
+                MailDraft draft(quest->GetTitle(), "这个任务已被手动奖励给你。这封邮件包含你的任务奖励。");//<-playerbot
 
                 for (auto const& itr : questRewardItems)
                 {

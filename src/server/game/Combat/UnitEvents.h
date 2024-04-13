@@ -91,7 +91,7 @@ private:
         bool iBValue;
     };
     ThreatMgr* iThreatMgr;
-public:
+public://playerbot->
     ThreatRefStatusChangeEvent(uint32 pType) : UnitBaseEvent(pType), iFValue(0.f), iThreatMgr(nullptr)
     {
         iHostileReference = nullptr;
@@ -113,7 +113,7 @@ public:
         iHostileReference = pHostileReference;
         iBValue = pValue;
     }
-
+//<-playerbot
     [[nodiscard]] int32 getIValue() const { return iIValue; }
 
     [[nodiscard]] float getFValue() const { return iFValue; }

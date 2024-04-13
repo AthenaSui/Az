@@ -34,7 +34,7 @@ typedef std::map<uint32, uint32> AreaFlagByMapID;
 typedef std::tuple<int16, int8, int32> WMOAreaTableKey;
 typedef std::map<WMOAreaTableKey, WMOAreaTableEntry const*> WMOAreaInfoByTripple;
 
-typedef std::multimap<uint32, CharSectionsEntry const*> CharSectionsMap;
+typedef std::multimap<uint32, CharSectionsEntry const*> CharSectionsMap;//<-playerbot
 
 DBCStorage <AreaTableEntry> sAreaTableStore(AreaTableEntryfmt);
 DBCStorage <AreaGroupEntry> sAreaGroupStore(AreaGroupEntryfmt);
@@ -52,8 +52,8 @@ DBCStorage <BarberShopStyleEntry> sBarberShopStyleStore(BarberShopStyleEntryfmt)
 DBCStorage <CharStartOutfitEntry> sCharStartOutfitStore(CharStartOutfitEntryfmt);
 std::map<uint32, CharStartOutfitEntry const*> sCharStartOutfitMap;
 
-DBCStorage <CharSectionsEntry> sCharSectionsStore(CharSectionsEntryfmt);
-CharSectionsMap sCharSectionMap;
+DBCStorage <CharSectionsEntry> sCharSectionsStore(CharSectionsEntryfmt);//<-playerbot
+CharSectionsMap sCharSectionMap;//<-playerbot
 
 DBCStorage <CharTitlesEntry> sCharTitlesStore(CharTitlesEntryfmt);
 DBCStorage <ChatChannelsEntry> sChatChannelsStore(ChatChannelsEntryfmt);
@@ -77,9 +77,9 @@ DBCStorage <DurabilityCostsEntry> sDurabilityCostsStore(DurabilityCostsfmt);
 DBCStorage <EmotesEntry> sEmotesStore(EmotesEntryfmt);
 DBCStorage <EmotesTextEntry> sEmotesTextStore(EmotesTextEntryfmt);
 
-typedef std::tuple<uint32, uint32, uint32> EmotesTextSoundKey;
-static std::map<EmotesTextSoundKey, EmotesTextSoundEntry const*> sEmotesTextSoundMap;
-DBCStorage <EmotesTextSoundEntry> sEmotesTextSoundStore(EmotesTextSoundEntryfmt);
+typedef std::tuple<uint32, uint32, uint32> EmotesTextSoundKey;//<-playerbot
+static std::map<EmotesTextSoundKey, EmotesTextSoundEntry const*> sEmotesTextSoundMap;//<-playerbot
+DBCStorage <EmotesTextSoundEntry> sEmotesTextSoundStore(EmotesTextSoundEntryfmt);//<-playerbot
 
 typedef std::map<uint32, SimpleFactionsList> FactionTeamMap;
 static FactionTeamMap sFactionTeamMap;
@@ -290,7 +290,7 @@ void LoadDBCStores(const std::string& dataPath)
     LOAD_DBC(sBattlemasterListStore,                "BattlemasterList.dbc",                 "battlemasterlist_dbc");
     LOAD_DBC(sBarberShopStyleStore,                 "BarberShopStyle.dbc",                  "barbershopstyle_dbc");
     LOAD_DBC(sCharStartOutfitStore,                 "CharStartOutfit.dbc",                  "charstartoutfit_dbc");
-    LOAD_DBC(sCharSectionsStore,                    "CharSections.dbc",                     "charsections_dbc");
+    LOAD_DBC(sCharSectionsStore,                    "CharSections.dbc",                     "charsections_dbc");//<-playerbot
     LOAD_DBC(sCharTitlesStore,                      "CharTitles.dbc",                       "chartitles_dbc");
     LOAD_DBC(sChatChannelsStore,                    "ChatChannels.dbc",                     "chatchannels_dbc");
     LOAD_DBC(sChrClassesStore,                      "ChrClasses.dbc",                       "chrclasses_dbc");
@@ -310,7 +310,7 @@ void LoadDBCStores(const std::string& dataPath)
     LOAD_DBC(sDurabilityQualityStore,               "DurabilityQuality.dbc",                "durabilityquality_dbc");
     LOAD_DBC(sEmotesStore,                          "Emotes.dbc",                           "emotes_dbc");
     LOAD_DBC(sEmotesTextStore,                      "EmotesText.dbc",                       "emotestext_dbc");
-    LOAD_DBC(sEmotesTextSoundStore,                 "EmotesTextSound.dbc",                  "emotetextsound_dbc");
+    LOAD_DBC(sEmotesTextSoundStore,                 "EmotesTextSound.dbc",                  "emotetextsound_dbc");//<-playerbot
     LOAD_DBC(sFactionStore,                         "Faction.dbc",                          "faction_dbc");
     LOAD_DBC(sFactionTemplateStore,                 "FactionTemplate.dbc",                  "factiontemplate_dbc");
     LOAD_DBC(sGameObjectArtKitStore,                "GameObjectArtKit.dbc",                 "gameobjectartkit_dbc");
@@ -398,11 +398,11 @@ void LoadDBCStores(const std::string& dataPath)
 
     for (CharStartOutfitEntry const* outfit : sCharStartOutfitStore)
         sCharStartOutfitMap[outfit->Race | (outfit->Class << 8) | (outfit->Gender << 16)] = outfit;
-
+//playerbot->
     for (CharSectionsEntry const* charSection : sCharSectionsStore)
         if (charSection->Race && ((1 << (charSection->Race - 1)) & RACEMASK_ALL_PLAYABLE) != 0) //ignore Nonplayable races
             sCharSectionMap.insert({ charSection->GenType | (charSection->Gender << 8) | (charSection->Race << 16), charSection });
-
+//<-playerbot
     for (FactionEntry const* faction : sFactionStore)
     {
         if (faction->team)
@@ -423,10 +423,10 @@ void LoadDBCStores(const std::string& dataPath)
         if (info->maxZ < info->minZ)
             std::swap(*(float*)(&info->maxZ), *(float*)(&info->minZ));
     }
-
+//playerbot->
     for (EmotesTextSoundEntry const* emoteTextSound : sEmotesTextSoundStore)
         sEmotesTextSoundMap[EmotesTextSoundKey(emoteTextSound->EmotesTextId, emoteTextSound->RaceId, emoteTextSound->SexId)] = emoteTextSound;
-
+//<-playerbot
     // fill data
     for (MapDifficultyEntry const* entry : sMapDifficultyStore)
         sMapDifficultyMap[MAKE_PAIR32(entry->MapId, entry->Difficulty)] = MapDifficulty(entry->resetTime, entry->maxPlayers, entry->areaTriggerText[0] != '\0');
@@ -866,7 +866,7 @@ CharStartOutfitEntry const* GetCharStartOutfitEntry(uint8 race, uint8 class_, ui
 
     return itr->second;
 }
-
+//playerbot->
 CharSectionsEntry const* GetCharSectionEntry(uint8 race, CharSectionType genType, uint8 gender, uint8 type, uint8 color)
 {
     std::pair<CharSectionsMap::const_iterator, CharSectionsMap::const_iterator> eqr = sCharSectionMap.equal_range(uint32(genType) | uint32(gender << 8) | uint32(race << 16));
@@ -878,7 +878,7 @@ CharSectionsEntry const* GetCharSectionEntry(uint8 race, CharSectionType genType
 
     return nullptr;
 }
-
+//<-playerbot
 /// Returns LFGDungeonEntry for a specific map and difficulty. Will return first found entry if multiple dungeons use the same map (such as Scarlet Monastery)
 LFGDungeonEntry const* GetLFGDungeon(uint32 mapId, Difficulty difficulty)
 {
@@ -954,9 +954,9 @@ const std::vector<SkillLineAbilityEntry const*>& GetSkillLineAbilitiesBySkillLin
     }
     return it->second;
 }
-
+//playerbot->
 EmotesTextSoundEntry const* FindTextSoundEmoteFor(uint32 emote, uint32 race, uint32 gender)
 {
     auto itr = sEmotesTextSoundMap.find(EmotesTextSoundKey(emote, race, gender));
     return itr != sEmotesTextSoundMap.end() ? itr->second : nullptr;
-}
+}//<-playerbot

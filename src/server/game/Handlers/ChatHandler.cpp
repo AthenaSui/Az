@@ -406,14 +406,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 // If player is a Gamemaster and doesn't accept whisper, we auto-whitelist every player that the Gamemaster is talking to
                 if (!senderIsPlayer && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID()))
                     sender->AddWhisperWhiteList(receiver->GetGUID());
-
+//playerbot->
                 if (!sScriptMgr->CanPlayerUseChat(GetPlayer(), type, lang, msg, receiver))
                 {
                     return;
                 }
 
                 sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, receiver);
-
+//<-playerbot
                 GetPlayer()->Whisper(msg, Language(lang), receiver);
             }
             break;
@@ -458,11 +458,11 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                         sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, guild);
 
                         guild->BroadcastToGuild(this, false, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
-                    }
+                    }//playerbot->
                     else
                     {
                         sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg);
-                    }
+                    }//<-playerbot
                 }
             }
             break;

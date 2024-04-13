@@ -31,9 +31,9 @@ if (WIN32)
 else()
   set(BOOST_REQUIRED_VERSION 1.67)
 endif()
-
+#playerbot->
 find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem program_options iostreams regex thread)
-
+#<-playerbot
 if(NOT Boost_FOUND)
   if(NOT DEFINED ENV{Boost_ROOT} AND NOT DEFINED Boost_DIR AND NOT DEFINED BOOST_ROOT AND NOT DEFINED BOOSTROOT)
     message(FATAL_ERROR "No Boost_ROOT environment variable could be found! Please make sure it is set and the points to your Boost installation.")

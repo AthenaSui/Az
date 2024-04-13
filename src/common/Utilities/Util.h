@@ -356,7 +356,7 @@ inline wchar_t wcharToLower(wchar_t wchar)
 
 void wstrToUpper(std::wstring& str);
 void wstrToLower(std::wstring& str);
-void strToLower(std::string& str);
+void strToLower(std::string& str); //<-playerbot
 
 std::wstring GetMainPartOfName(std::wstring const& wname, uint32 declension);
 

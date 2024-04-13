@@ -105,7 +105,7 @@ namespace Acore::ChatCommands
     ArenaTeamScript
 
 */
-
+//playerbot->
 // Yunfan: refactor
 class MetricScript : public ScriptObject
 {
@@ -137,7 +137,7 @@ public:
     virtual void OnPlayerbotLogout(Player* /*player*/) { }
     virtual void OnPlayerbotLogoutBots() { }
 };
-
+//<-playerbot
 class ScriptMgr
 {
     friend class ScriptObject;
@@ -190,7 +190,7 @@ public: /* ServerScript */
     void OnSocketOpen(std::shared_ptr<WorldSocket> socket);
     void OnSocketClose(std::shared_ptr<WorldSocket> socket);
     bool CanPacketReceive(WorldSession* session, WorldPacket const& packet);
-    void OnPacketReceived(WorldSession* session, WorldPacket const& packet);
+    void OnPacketReceived(WorldSession* session, WorldPacket const& packet);//<-playerbot
     bool CanPacketSend(WorldSession* session, WorldPacket const& packet);
 
 public: /* WorldScript */
@@ -328,7 +328,7 @@ public: /* AchievementCriteriaScript */
 public: /* PlayerScript */
     void OnBeforePlayerUpdate(Player* player, uint32 p_time);
     void OnPlayerUpdate(Player* player, uint32 p_time);
-    void OnAfterPlayerUpdate(Player* player, uint32 diff);
+    void OnAfterPlayerUpdate(Player* player, uint32 diff);//<-playerbot
     void OnSendInitialPacketsBeforeAddToMap(Player* player, WorldPacket& data);
     void OnPlayerJustDied(Player* player);
     void OnPlayerReleasedGhost(Player* player);
@@ -705,14 +705,14 @@ public: /* CommandSC */
 
 public: /* DatabaseScript */
 
-    bool OnDatabasesLoading();
+    bool OnDatabasesLoading();//<-playerbot
     void OnAfterDatabasesLoaded(uint32 updateFlags);
     void OnAfterDatabaseLoadCreatureTemplates(std::vector<CreatureTemplate*> creatureTemplateStore);
-    void OnDatabasesKeepAlive();
-    void OnDatabasesClosing();
-    void OnDatabaseWarnAboutSyncQueries(bool apply);
-    void OnDatabaseSelectIndexLogout(Player* player, uint32& statementIndex, uint32& statementParam);
-    void OnDatabaseGetDBRevision(std::string& revision);
+    void OnDatabasesKeepAlive();//<-playerbot
+    void OnDatabasesClosing();//<-playerbot
+    void OnDatabaseWarnAboutSyncQueries(bool apply);//<-playerbot
+    void OnDatabaseSelectIndexLogout(Player* player, uint32& statementIndex, uint32& statementParam);//<-playerbot
+    void OnDatabaseGetDBRevision(std::string& revision);//<-playerbot
 
 public: /* WorldObjectScript */
 
@@ -733,7 +733,7 @@ public: /* LootScript */
 public: /* MetricScript */
 
     void OnMetricLogging();
-
+//playerbot->
 public: /* PlayerbotScript */
     bool OnPlayerbotCheckLFGQueue(lfg::Lfg5Guids const& guidsList);
     void OnPlayerbotCheckKillTask(Player* player, Unit* victim);
@@ -744,7 +744,7 @@ public: /* PlayerbotScript */
     void OnPlayerbotUpdateSessions(Player* player);
     void OnPlayerbotLogout(Player* player);
     void OnPlayerbotLogoutBots();
-
+//<-playerbot
 private:
     uint32 _scriptCount;
 

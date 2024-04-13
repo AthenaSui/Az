@@ -37,7 +37,7 @@ set("AC_MODULE_LIST" "")
 set("AC_SCRIPTS_LIST" "")
 set(MOD_ELUNA_FOUND 0)
 set(MOD_ELUNA_PATH "")
-set(MOD_PLAYERBOTS_FOUND 0)
+set(MOD_PLAYERBOTS_FOUND 0) #<-playerbot
 
 foreach(include ${AC_ADD_SCRIPTS_INCLUDE})
   set("AC_SCRIPTS_INCLUDES" "#include \"${include}\"\n${AC_SCRIPTS_INCLUDES}")
@@ -81,7 +81,7 @@ foreach(SOURCE_MODULE ${MODULES_MODULE_LIST})
   if (SOURCE_MODULE MATCHES "mod-eluna")
     ConfigureElunaModule(${SOURCE_MODULE})
   endif()
-
+#playerbot->
   if (SOURCE_MODULE MATCHES "mod-playerbots")
     set(MOD_PLAYERBOTS_FOUND 1)
     target_compile_options(database
@@ -91,7 +91,7 @@ foreach(SOURCE_MODULE ${MODULES_MODULE_LIST})
       INTERFACE
         -DMOD_PLAYERBOTS)
   endif()
-
+#<-playerbot
   # Build the Graph values
   if(${MODULE_MODULE_VARIABLE} MATCHES "dynamic")
     GetProjectNameOfModuleName(${SOURCE_MODULE} MODULE_SOURCE_PROJECT_NAME)
@@ -291,7 +291,7 @@ add_library(modules STATIC
 target_link_libraries(modules
   PRIVATE
     acore-core-interface
-    mysql
+    mysql #<-playerbot
   PUBLIC
     game-interface)
 
@@ -364,13 +364,13 @@ target_compile_options(modules
 target_compile_options(modules
   INTERFACE
     -DCONFIG_FILE_LIST=$<1:"${CONFIG_LIST}">)
-
+#playerbot->
 if (MOD_PLAYERBOTS_FOUND)
   target_compile_options(modules
       PRIVATE
         -DMOD_PLAYERBOTS)
 endif()
-
+#<-playerbot
 if (MOD_ELUNA_FOUND)
   if (APPLE)
     target_compile_definitions(modules

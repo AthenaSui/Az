@@ -286,7 +286,7 @@ protected:
     uint32 BasesAssaulted = 0;
     uint32 BasesDefended = 0;
 };
-
+//playerbot->
 struct CaptureABPointInfo
 {
     CaptureABPointInfo() : _ownerTeamId(TEAM_NEUTRAL), _iconNone(0), _iconCapture(0), _state(BG_AB_NODE_STATE_NEUTRAL), _captured(false) {}
@@ -298,7 +298,7 @@ struct CaptureABPointInfo
 
     bool _captured;
 };
-
+//<-playerbot
 class AC_GAME_API BattlegroundAB : public Battleground
 {
 public:
@@ -324,7 +324,7 @@ public:
 
     TeamId GetPrematureWinner() override;
 
-    [[nodiscard]] CaptureABPointInfo const& GetCapturePointInfo(uint32 node) const { return _capturePointInfo[node]; }
+    [[nodiscard]] CaptureABPointInfo const& GetCapturePointInfo(uint32 node) const { return _capturePointInfo[node]; }//<-playerbot
 
 private:
     void PostUpdateImpl(uint32 diff) override;
@@ -336,7 +336,7 @@ private:
     void NodeDeoccupied(uint8 node);
     void ApplyPhaseMask();
 
-    CaptureABPointInfo _capturePointInfo[BG_AB_DYNAMIC_NODES_COUNT];
+    CaptureABPointInfo _capturePointInfo[BG_AB_DYNAMIC_NODES_COUNT];//<-playerbot
     EventMap _bgEvents;
     uint32 _honorTics;
     uint32 _reputationTics;

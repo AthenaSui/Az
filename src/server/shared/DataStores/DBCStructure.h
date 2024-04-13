@@ -627,7 +627,7 @@ struct CharStartOutfitEntry
     //int32 ItemDisplayId[MAX_OUTFIT_ITEMS];                // 29-52 not required at server side
     //int32 ItemInventorySlot[MAX_OUTFIT_ITEMS];            // 53-76 not required at server side
 };
-
+//playerbot->
 enum CharSectionFlags
 {
 	SECTION_FLAG_PLAYER         = 0x01,
@@ -654,7 +654,7 @@ struct CharSectionsEntry
 	uint32 Type;
 	uint32 Color;
 };
-
+//<-playerbot
 struct CharTitlesEntry
 {
     uint32  ID;                                             // 0, title ids, for example in Quest::GetCharTitleId()
@@ -920,7 +920,7 @@ struct EmotesTextEntry
     uint32  Id;
     uint32  textid;
 };
-
+//playerbot->
 struct EmotesTextSoundEntry
 {
 	uint32 Id;                                              // 0
@@ -929,7 +929,7 @@ struct EmotesTextSoundEntry
 	uint32 SexId;                                           // 3, 0 male / 1 female
 	uint32 SoundId;                                         // 4
 };
-
+//<-playerbot
 struct FactionEntry
 {
     uint32      ID;                                         // 0        m_ID

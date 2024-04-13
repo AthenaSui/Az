@@ -119,10 +119,10 @@ GraveyardStruct const* Graveyard::GetClosestGraveyard(Player* player, TeamId tea
     uint32 areaId = 0;
     player->GetZoneAndAreaId(zoneId, areaId);
 
-    return GetClosestGraveyard(mapId, x, y, z, teamId, areaId, zoneId, player->getClass() == CLASS_DEATH_KNIGHT);
+    return GetClosestGraveyard(mapId, x, y, z, teamId, areaId, zoneId, player->getClass() == CLASS_DEATH_KNIGHT);//<-playerbot
 }
 
-GraveyardStruct const* Graveyard::GetClosestGraveyard(uint32 mapId, float x, float y, float z, TeamId teamId, uint32 areaId, uint32 zoneId, bool isDeathKnight)
+GraveyardStruct const* Graveyard::GetClosestGraveyard(uint32 mapId, float x, float y, float z, TeamId teamId, uint32 areaId, uint32 zoneId, bool isDeathKnight)//<-playerbot
 {
     if (!zoneId && !areaId)
     {
@@ -207,7 +207,7 @@ GraveyardStruct const* Graveyard::GetClosestGraveyard(uint32 mapId, float x, flo
             GRAVEYARD_ARCHERUS  = 1405
         };
 
-        if (!isDeathKnight && (graveyardLink.safeLocId == GRAVEYARD_EBON_HOLD || graveyardLink.safeLocId == GRAVEYARD_ARCHERUS))
+        if (!isDeathKnight && (graveyardLink.safeLocId == GRAVEYARD_EBON_HOLD || graveyardLink.safeLocId == GRAVEYARD_ARCHERUS))//<-playerbot
         {
             continue;
         }

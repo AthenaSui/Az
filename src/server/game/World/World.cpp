@@ -67,7 +67,7 @@
 #include "ObjectMgr.h"
 #include "Opcodes.h"
 #include "OutdoorPvPMgr.h"
-#include "QueryHolder.h"
+#include "QueryHolder.h"//<-playerbot
 #include "PetitionMgr.h"
 #include "Player.h"
 #include "PlayerDump.h"
@@ -2315,7 +2315,7 @@ void World::Update(uint32 diff)
         ResetGuildCap();
     }
 
-    sScriptMgr->OnPlayerbotUpdate(diff);
+    sScriptMgr->OnPlayerbotUpdate(diff);//<-playerbot
 
     // pussywizard: handle auctions when the timer has passed
     if (_timers[WUPDATE_AUCTIONS].Passed())
@@ -2455,7 +2455,7 @@ void World::Update(uint32 diff)
         CharacterDatabase.KeepAlive();
         LoginDatabase.KeepAlive();
         WorldDatabase.KeepAlive();
-        sScriptMgr->OnDatabasesKeepAlive();
+        sScriptMgr->OnDatabasesKeepAlive();//<-playerbot
     }
 
     {
@@ -3258,12 +3258,12 @@ uint64 World::getWorldState(uint32 index) const
 void World::ProcessQueryCallbacks()
 {
     _queryProcessor.ProcessReadyCallbacks();
-    _queryHolderProcessor.ProcessReadyCallbacks();
+    _queryHolderProcessor.ProcessReadyCallbacks();//<-playerbot
 }
 
-SQLQueryHolderCallback& World::AddQueryHolderCallback(SQLQueryHolderCallback&& callback)
+SQLQueryHolderCallback& World::AddQueryHolderCallback(SQLQueryHolderCallback&& callback)//<-playerbot
 {
-    return _queryHolderProcessor.AddCallback(std::move(callback));
+    return _queryHolderProcessor.AddCallback(std::move(callback));//<-playerbot
 }
 
 void World::RemoveOldCorpses()

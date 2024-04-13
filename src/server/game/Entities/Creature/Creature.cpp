@@ -706,7 +706,7 @@ void Creature::Update(uint32 diff)
             }
 
             Unit* owner = GetCharmerOrOwner();
-            if (!isPossessedByPlayer() && IsCharmed() && !IsWithinDistInMap(owner, GetMap()->GetVisibilityRange(), true, false))
+            if (!isPossessedByPlayer() && IsCharmed() && !IsWithinDistInMap(owner, GetMap()->GetVisibilityRange(), true, false))//<-playerbot
             {
                 RemoveCharmAuras();
             }
@@ -1350,7 +1350,7 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         m_spawnId = sObjectMgr->GenerateCreatureSpawnId();
 
     CreatureData& data = sObjectMgr->NewOrExistCreatureData(m_spawnId);
-    data.spawnId = m_spawnId;
+    data.spawnId = m_spawnId;//<-playerbot
 
     uint32 displayId = GetNativeDisplayId();
     uint32 npcflag = GetNpcFlags();

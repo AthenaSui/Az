@@ -18,7 +18,7 @@
 #include "DatabaseScript.h"
 #include "ScriptMgr.h"
 #include "ScriptMgrMacros.h"
-
+//playerbot->
 bool ScriptMgr::OnDatabasesLoading()
 {
     auto ret = IsValidBoolScript<DatabaseScript>([&](DatabaseScript* script)
@@ -33,7 +33,7 @@ bool ScriptMgr::OnDatabasesLoading()
 
     return true;
 }
-
+//<-playerbot
 void ScriptMgr::OnAfterDatabasesLoaded(uint32 updateFlags)
 {
     CALL_ENABLED_HOOKS(DatabaseScript, DATABASEHOOK_ON_AFTER_DATABASES_LOADED, script->OnAfterDatabasesLoaded(updateFlags));

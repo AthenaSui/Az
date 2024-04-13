@@ -213,7 +213,7 @@ void ScriptMgr::OnPlayerUpdate(Player* player, uint32 p_time)
 {
     CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_BEFORE_UPDATE, script->OnUpdate(player, p_time));
 }
-
+//playerbot->
 void ScriptMgr::OnAfterPlayerUpdate(Player* player, uint32 diff)
 {
     ExecuteScript<PlayerScript>([&](PlayerScript* script)
@@ -221,7 +221,7 @@ void ScriptMgr::OnAfterPlayerUpdate(Player* player, uint32 diff)
         script->OnAfterUpdate(player, diff);
     });
 }
-
+//<-playerbot
 void ScriptMgr::OnPlayerLogin(Player* player)
 {
     CALL_ENABLED_HOOKS(PlayerScript, PLAYERHOOK_ON_LOGIN, script->OnLogin(player));

@@ -478,7 +478,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket& recvData)
             break;
         }
 
-    sScriptMgr->OnPlayerbotCheckPetitionAccount(_player, found);
+    sScriptMgr->OnPlayerbotCheckPetitionAccount(_player, found);//<-playerbot
 
     if (found)
     {

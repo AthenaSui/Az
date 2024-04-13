@@ -579,7 +579,7 @@ namespace lfg
         [[nodiscard]] bool IsTesting() const { return m_Testing; }
 
         void SetDungeon(ObjectGuid guid, uint32 dungeon);
-        LFGDungeonData const* GetLFGDungeon(uint32 id);
+        LFGDungeonData const* GetLFGDungeon(uint32 id);//<-playerbot
 
     private:
         TeamId GetTeam(ObjectGuid guid);

@@ -10235,10 +10235,10 @@ ReputationRank Unit::GetFactionReactionTo(FactionTemplateEntry const* factionTem
         }
     }
 
-    return GetFactionReactionTo(factionTemplateEntry, targetFactionTemplateEntry);
+    return GetFactionReactionTo(factionTemplateEntry, targetFactionTemplateEntry);//<-playerbot
 }
 
-ReputationRank Unit::GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, FactionTemplateEntry const* targetFactionTemplateEntry)
+ReputationRank Unit::GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, FactionTemplateEntry const* targetFactionTemplateEntry)//<-playerbot
 {
     // common faction based check
     if (factionTemplateEntry->IsHostileTo(*targetFactionTemplateEntry))
@@ -18241,7 +18241,7 @@ void Unit::Kill(Unit* killer, Unit* victim, bool durabilityLoss, WeaponAttackTyp
             }
         }
 
-        sScriptMgr->OnPlayerbotCheckKillTask(player, victim);
+        sScriptMgr->OnPlayerbotCheckKillTask(player, victim);//<-playerbot
 
         // Dungeon specific stuff, only applies to players killing creatures
         if (creature->GetInstanceId())
@@ -19195,7 +19195,7 @@ void Unit::SendPlaySpellVisual(uint32 id)
     data << uint32(id); // SpellVisualKit.dbc index
     SendMessageToSet(&data, true);
 }
-
+//playerbot->
 void Unit::SendPlaySpellVisual(ObjectGuid guid, uint32 id)
 {
     WorldPacket data(SMSG_PLAY_SPELL_VISUAL, 8 + 4);
@@ -19203,16 +19203,16 @@ void Unit::SendPlaySpellVisual(ObjectGuid guid, uint32 id)
     data << uint32(id); // SpellVisualKit.dbc index
     SendMessageToSet(&data, true);
 }
-
+//<-playerbot
 void Unit::SendPlaySpellImpact(ObjectGuid guid, uint32 id)
 {
     WorldPacket data(SMSG_PLAY_SPELL_IMPACT, 8 + 4);
     data << guid;       // target
     data << uint32(id); // SpellVisualKit.dbc index
-
+//playerbot->
     if (IsPlayer())
         ToPlayer()->SendDirectMessage(&data);
-    else
+    else//<-playerbot
     SendMessageToSet(&data, true);
 }
 
@@ -21673,7 +21673,7 @@ std::string Unit::GetDebugInfo() const
         << " Class: " << std::to_string(getClass());
     return sstr.str();
 }
-
+//playerbot->
 void Unit::SetCannotReachTargetUnit(bool cannotReach, bool isChase)
 {
     if (cannotReach == m_cannotReachTarget)
@@ -21687,4 +21687,4 @@ void Unit::SetCannotReachTargetUnit(bool cannotReach, bool isChase)
 bool Unit::CanNotReachTarget() const
 {
     return m_cannotReachTarget;
-}
+}//<-playerbot

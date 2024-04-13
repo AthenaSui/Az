@@ -372,7 +372,7 @@ protected:
     void CalendarDeleteOldEvents();
     void ResetGuildCap();
 
-    SQLQueryHolderCallback& AddQueryHolderCallback(SQLQueryHolderCallback&& callback) override;
+    SQLQueryHolderCallback& AddQueryHolderCallback(SQLQueryHolderCallback&& callback) override;//<-playerbot
 
 private:
     static std::atomic_long _stopEvent;
@@ -445,7 +445,7 @@ private:
 
     void ProcessQueryCallbacks();
     QueryCallbackProcessor _queryProcessor;
-    AsyncCallbackProcessor<SQLQueryHolderCallback> _queryHolderProcessor;
+    AsyncCallbackProcessor<SQLQueryHolderCallback> _queryHolderProcessor;//<-playerbot
 
     /**
      * @brief Executed when a World Session is being finalized. Be it from a normal login or via queue popping.
