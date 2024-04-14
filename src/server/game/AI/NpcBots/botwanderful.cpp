@@ -325,10 +325,10 @@ bool WanderNode::HasFlag(BotWPFlags flags) const
 std::string WanderNode::ToString() const
 {
     std::ostringstream wps;
-    wps << "WP " << _wpId << " '" << _name << "', " << uint32(_links.size()) << " link(s)" << ", Map " << _mapId
-        << ", Zone " << _zoneId << " (" << std::string(sAreaTableStore.LookupEntry(_zoneId)->area_name[0])
-        << "), Area " << _areaId << " (" << std::string(sAreaTableStore.LookupEntry(_areaId)->area_name[0])
-        << "), minLvl " << uint32(_minLevel) << ", maxLvl " << uint32(_maxLevel)
+    wps << "游荡点 " << _wpId << " '" << _name << "', " << uint32(_links.size()) << " 链接" << ", 地图 " << _mapId
+        << ", 地区 " << _zoneId << " (" << std::string(sAreaTableStore.LookupEntry(_zoneId)->area_name[0])
+        << "), 区域 " << _areaId << " (" << std::string(sAreaTableStore.LookupEntry(_areaId)->area_name[0])
+        << "), 最小等级 " << uint32(_minLevel) << ", 最大等级 " << uint32(_maxLevel)
         << " (" << static_cast<Position const*>(this)->ToString() << ')'
         << ", flags: 0x" << std::hex << std::setw(8) << std::setfill('0') << _flags << std::dec;
 

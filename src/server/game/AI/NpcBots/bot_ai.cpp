@@ -2217,7 +2217,7 @@ void bot_ai::_listAuras(Player const* player, Unit const* unit) const
         }
 
         auto scores = GetBotGearScores();
-        botstring << "\nGear score total: " << scores.first << ", avg: " << scores.second;
+        botstring << "\nGS总计：" << scores.first << ", 平均：" << scores.second;
 
         botstring << "\n" << LocalizedNpcText(player, BOT_TEXT_COMMAND_STATES) << "(" << GetBotCommandState() << "):";
         if (HasBotCommandState(BOT_COMMAND_FOLLOW))
@@ -10676,7 +10676,7 @@ bool bot_ai::OnGossipSelect(Player* player, Creature* creature/* == me*/, uint32
                 {
                     close = false;
                     ChatHandler ch(player->GetSession());
-                    ch.PSendSysMessage("%s's Roles:", me->GetName().c_str());
+                    ch.PSendSysMessage("%s的职责：", me->GetName().c_str());
                     for (uint32 i = BOT_MAX_ROLE; i != BOT_ROLE_NONE; i >>= 1)
                     {
                         if (_roleMask & i)
@@ -10716,7 +10716,7 @@ bool bot_ai::OnGossipSelect(Player* player, Creature* creature/* == me*/, uint32
                 {
                     close = false;
                     ChatHandler ch(player->GetSession());
-                    ch.PSendSysMessage("%s's Spells:", me->GetName().c_str());
+                    ch.PSendSysMessage("%s的法术：", me->GetName().c_str());
                     uint32 counter = 0;
                     SpellInfo const* spellInfo;
                     BotSpellMap const& myspells = GetSpellMap();
@@ -10732,7 +10732,7 @@ bool bot_ai::OnGossipSelect(Player* player, Creature* creature/* == me*/, uint32
                         sstr << " id: " <<  itr->second->spellId << ", base: " << itr->first
                             << ", cd: " << itr->second->cooldown << ", base: " << std::max<uint32>(spellInfo->RecoveryTime, spellInfo->CategoryRecoveryTime);
                         if (itr->second->enabled == false)
-                            sstr << " (disabled)";
+                            sstr << " (已禁用)";
                         ch.PSendSysMessage("%u) %s", counter, sstr.str().c_str());
                     }
                     break;
@@ -10745,9 +10745,9 @@ bool bot_ai::OnGossipSelect(Player* player, Creature* creature/* == me*/, uint32
                     LOG_INFO("misc", "Re-Loading config settings...");
                     sWorld->LoadConfigSettings(true);
                     sMapMgr->InitializeVisibilityDistanceInfo();
-                    ch.SendGlobalGMSysMessage("World config settings reloaded.");
+                    ch.SendGlobalGMSysMessage("World配置已重新加载。");
                     BotMgr::ReloadConfig();
-                    ch.SendGlobalGMSysMessage("NpcBot config settings reloaded.");
+                    ch.SendGlobalGMSysMessage("NPCBot配置已重新加载。");
 
                     break;
                 }
@@ -10767,26 +10767,26 @@ bool bot_ai::OnGossipSelect(Player* player, Creature* creature/* == me*/, uint32
 
             std::ostringstream ostr;
             std::string name;
-            ostr << "Bot: " << me->GetName()
-                << " (Id: " << me->GetEntry()
+            ostr << "Bot：" << me->GetName()
+                << " (Id：" << me->GetEntry()
                 << ", guidlow: " << me->GetGUID().GetCounter()
-                << ", spec: " << uint32(_spec) << '(' << LocalizedNpcText(player, TextForSpec(_spec)) << ')'
-                << ", faction: " << me->GetFaction()
-                << "). owner: ";
+                << ", 专精：" << uint32(_spec) << '(' << LocalizedNpcText(player, TextForSpec(_spec)) << ')'
+                << ", 阵营：" << me->GetFaction()
+                << "). 所有者：";
             if (_ownerGuid && sCharacterCache->GetCharacterNameByGuid(ObjectGuid(HighGuid::Player, _ownerGuid), name))
                 ostr << name << " (" << _ownerGuid << ')';
             else
-                ostr << "none";
+                ostr << "无";
 
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, ostr.str().c_str(), GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 0);
 
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<Reset Owner>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 1);
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<Reset Stats>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 2);
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<List Stats>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 3);
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<List Roles>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 4);
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<List Spells>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 5);
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<List Items>", GOSSIP_SENDER_EQUIPMENT_LIST, GOSSIP_ACTION_INFO_DEF + 1);
-            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<Reload Config>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 6);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<重置所有者>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 1);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<重置统计信息>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 2);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<列出统计信息>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 3);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<列出职责>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 4);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<列出法术>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 5);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<列出物品>", GOSSIP_SENDER_EQUIPMENT_LIST, GOSSIP_ACTION_INFO_DEF + 1);
+            AddGossipItemFor(player, GOSSIP_ICON_CHAT, "<重载配置>", GOSSIP_SENDER_DEBUG_ACTION, GOSSIP_ACTION_INFO_DEF + 6);
 
             AddGossipItemFor(player, GOSSIP_ICON_CHAT, LocalizedNpcText(player, BOT_TEXT_BACK), 1, GOSSIP_ACTION_INFO_DEF + 1);
             break;

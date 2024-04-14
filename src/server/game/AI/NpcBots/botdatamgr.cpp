@@ -1330,7 +1330,7 @@ void BotDataMgr::LoadWanderMap(bool reload)
                     if (i < sc_chain.size() - 1u)
                         ss << '-';
                 }
-                ss << " is isolated!";
+                ss << " 已被隔离！";
                 LOG_INFO("server.loading", ss.str().c_str());
             }
         }
