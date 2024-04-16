@@ -1310,7 +1310,7 @@ public:
         uint32 counter = 0;
         ss << "游荡点 " << wp->GetWPId() << " 已有 " << uint32(links.size()) << " 链接：";
         WanderNode::DoForContainerWPs(links, [&ss, &counter, wp = wp](WanderNode const* lwp) {
-            ss << "\n" << ++counter << ") " << lwp->ToString() << " (dist2d: " << wp->GetExactDist2d(lwp) << ")";
+            ss << "\n" << ++counter << ") " << lwp->ToString() << " (链接间距：" << wp->GetExactDist2d(lwp) << ")";
         });
 
         handler->SendSysMessage(ss.str().c_str());
