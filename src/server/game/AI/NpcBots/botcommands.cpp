@@ -671,7 +671,7 @@ private:
             case BOT_CLASS_SPELLBREAKER:bot_color_str = "ffcf3c1f"; bot_class_str = "破法者";              break;
             case BOT_CLASS_DARK_RANGER: bot_color_str = "ff3e255e"; bot_class_str = "黑暗游侠";            break;
             case BOT_CLASS_NECROMANCER: bot_color_str = "ff9900cc"; bot_class_str = "死灵法师";            break;
-            case BOT_CLASS_SEA_WITCH:   bot_color_str = "ff40d7a9"; bot_class_str = "海妖";                break;
+            case BOT_CLASS_SEA_WITCH:   bot_color_str = "ff40d7a9"; bot_class_str = "女海巫";                break;
             case BOT_CLASS_CRYPT_LORD:  bot_color_str = "ff19782b"; bot_class_str = "地穴领主";            break;
             default:                    bot_color_str = "ffffffff"; bot_class_str = "未知职业";            break;
         }
@@ -4150,7 +4150,7 @@ public:
             Creature const* bot = BotDataMgr::FindBot(guid.GetEntry());
             std::string ccolor, cname;
             GetBotClassNameAndColor(bot ? bot->GetBotClass() : uint8(BOT_CLASS_NONE), ccolor, cname);
-            handler->PSendSysMessage("%s (%s)", bot ? bot->GetName().c_str() : "未知", "|c" + ccolor + cname + "|r");
+            handler->PSendSysMessage("%s (%s)", bot ? bot->GetName().c_str() : "未知职业", "|c" + ccolor + cname + "|r");
         }
 
         return true;
