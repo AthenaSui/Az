@@ -146,7 +146,7 @@ public:
                             continue;
 
                         std::ostringstream bclass;
-                        bclass << bot_ai::LocalizedNpcText(player, textId) << " 现有" << npcbot_count_per_class[botclass] << "名" << " (" << BotMgr::GetNpcBotCostStr(player->GetLevel(), botclass) << ")";
+                        bclass << bot_ai::LocalizedNpcText(player, textId) << "：共" << npcbot_count_per_class[botclass] << "名" << " (" << BotMgr::GetNpcBotCostStr(player->GetLevel(), botclass) << ")";
 
                         AddGossipItemFor(player, GOSSIP_ICON_TALK, bclass.str(), HIRE_CLASS, GOSSIP_ACTION_INFO_DEF + botclass);
 
@@ -210,10 +210,10 @@ public:
                             case RACE_DRAENEI:      raceTextId = BOT_TEXT_RACE_DRAENEI; break;
                             default:                raceTextId = BOT_TEXT_RACE_UNKNOWN; break;
                         }
-                        info_ostr << bot->GetName() << " (" << bot_ai::LocalizedNpcText(player, raceTextId) << (
+                        info_ostr << bot->GetName() << "（" << bot_ai::LocalizedNpcText(player, raceTextId) << " " << (
                             bot->GetGender() == GENDER_MALE ? bot_ai::LocalizedNpcText(player, BOT_TEXT_GENDER_MALE) :
                             bot->GetGender() == GENDER_FEMALE ? bot_ai::LocalizedNpcText(player, BOT_TEXT_GENDER_FEMALE) :
-                            "") << ")";
+                            "") << "）";
 
                         player->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, GOSSIP_ICON_TALK, info_ostr.str(),
                             HIRE_ENTRY, GOSSIP_ACTION_INFO_DEF + bot->GetEntry(), message1.str(), cost, false);
