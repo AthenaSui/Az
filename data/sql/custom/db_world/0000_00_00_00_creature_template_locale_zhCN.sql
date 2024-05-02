@@ -1,6 +1,6 @@
 --
 SET @BOT_START = 70000;
-SET @BOT_END   = 70586;
+SET @BOT_END   = 70600;
 
 DELETE FROM `creature_template_locale` WHERE `entry` BETWEEN @BOT_START AND @BOT_END AND `entry` != 70100;
 
