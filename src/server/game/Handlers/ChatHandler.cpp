@@ -407,13 +407,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 if (!senderIsPlayer && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID()))
                     sender->AddWhisperWhiteList(receiver->GetGUID());
 //playerbot->
-                if (!sScriptMgr->CanPlayerUseChat(GetPlayer(), type, lang, msg, receiver))
+                if (lang != LANG_ADDON)
                 {
-                    return;
+                    if (!sScriptMgr->CanPlayerUseChat(GetPlayer(), type, lang, msg, receiver))
+                    {
+                        return;
+                    }
+                    sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, receiver);
                 }
-
-                sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg, receiver);
-//<-playerbot
+//<-playerbot/
                 GetPlayer()->Whisper(msg, Language(lang), receiver);
             }
             break;
