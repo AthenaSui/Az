@@ -463,6 +463,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                     }//playerbot->
                     else
                     {
+                        if (lang != LANG_ADDON)
                         sScriptMgr->OnPlayerChat(GetPlayer(), type, lang, msg);
                     }//<-playerbot
                 }

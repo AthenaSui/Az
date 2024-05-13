@@ -516,8 +516,8 @@ public:
     time_t m_muteTime;
 
     // Locales
-    LocaleConstant GetSessionDbcLocale() const { return _isBot? LOCALE_enUS : m_sessionDbcLocale; }//<-playerbot
-    LocaleConstant GetSessionDbLocaleIndex() const { return _isBot? LOCALE_enUS : m_sessionDbLocaleIndex; }//<-playerbot
+    LocaleConstant GetSessionDbcLocale() const { return m_sessionDbcLocale; }//<-playerbot
+    LocaleConstant GetSessionDbLocaleIndex() const { return m_sessionDbLocaleIndex; }//<-playerbot
     char const* GetAcoreString(uint32 entry) const;
 
     uint32 GetLatency() const { return m_latency; }
