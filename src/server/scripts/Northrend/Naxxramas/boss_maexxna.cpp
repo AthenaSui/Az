@@ -26,4 +26,5 @@ void AddSC_boss_maexxna()
 {
     new boss_maexxna();
     new boss_maexxna_webwrap();
+    RegisterSpellScript(spell_web_wrap_damage);
 }
