@@ -41,6 +41,8 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 
+#include "../../Modules/mod-playerbots/src/Playerbots.h"
+
 inline bool isNasty(uint8 c)
 {
     if (c == '\t')
@@ -407,7 +409,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 if (!senderIsPlayer && !sender->isAcceptWhispers() && !sender->IsInWhisperWhiteList(receiver->GetGUID()))
                     sender->AddWhisperWhiteList(receiver->GetGUID());
 //playerbot->
-                if (lang != LANG_ADDON)
+                if (GET_PLAYERBOT_AI(receiver) && lang != LANG_ADDON)
                 {
                     if (!sScriptMgr->CanPlayerUseChat(GetPlayer(), type, lang, msg, receiver))
                     {
