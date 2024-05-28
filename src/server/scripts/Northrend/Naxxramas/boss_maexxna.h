@@ -1,16 +1,18 @@
 #ifndef BOSS_MAEXXNA_H_
 #define BOSS_MAEXXNA_H_
 
+#include "CreatureScript.h"
 #include "Player.h"
 #include "PassiveAI.h"
-#include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "SpellAuraEffects.h"
 #include "SpellScript.h"
 #include "SpellScriptLoader.h"
 #include "naxxramas.h"
 
-enum MaexxnaSpells
+namespace Maexxna {
+    
+enum Spells
 {
     SPELL_WEB_SPRAY_10                  = 29484,
     SPELL_WEB_SPRAY_25                  = 54125,
@@ -26,7 +28,7 @@ enum MaexxnaSpells
     SPELL_WEB_WRAP_PACIFY_5             = 28618 // 5 seconds pacify silence
 };
 
-enum MaexxnaEvents
+enum Events
 {
     EVENT_WEB_SPRAY                     = 1,
     EVENT_POISON_SHOCK                  = 2,
@@ -37,14 +39,14 @@ enum MaexxnaEvents
     EVENT_WEB_WRAP_APPLY_STUN           = 7
 };
 
-enum MaexxnaEmotes
+enum Emotes
 {
     EMOTE_SPIDERS                       = 0,
     EMOTE_WEB_WRAP                      = 1,
     EMOTE_WEB_SPRAY                     = 2
 };
 
-enum MaexxnaMisc
+enum Misc
 {
     NPC_WEB_WRAP                        = 16486,
     NPC_MAEXXNA_SPIDERLING              = 17055
@@ -364,4 +366,5 @@ public:
     }
 };
 
+} // namespace Maexxna
 #endif
