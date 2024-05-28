@@ -41,7 +41,9 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 
+#ifdef MOD_PLAYERBOTS
 #include "../../Modules/mod-playerbots/src/Playerbots.h"
+#endif
 
 inline bool isNasty(uint8 c)
 {
