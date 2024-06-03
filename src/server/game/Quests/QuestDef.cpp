@@ -141,7 +141,7 @@ Quest::Quest(Field* questRecord)
         Flags &= ~QUEST_FLAGS_AUTOCOMPLETE;
     }
 }
-
+/*
 std::string const& Quest::GetLocalizeTitle(LocaleConstant loc) const
 {
     QuestLocale const* questInfo = sObjectMgr->GetQuestLocale(GetQuestId());
@@ -160,7 +160,7 @@ void Quest::GetLocalizeTitle(std::string& questTitle, LocaleConstant loc) const
 {
     questTitle = GetLocalizeTitle(loc);
 }
-
+*/
 
 void Quest::LoadQuestDetails(Field* fields)
 {
