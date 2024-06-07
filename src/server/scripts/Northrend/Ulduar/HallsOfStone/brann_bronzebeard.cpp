@@ -26,7 +26,7 @@
 
 #define GOSSIP_ITEM_1       "布莱恩，为了我们的荣耀！"
 #define GOSSIP_ITEM_2       "让我们移动布莱恩，历史课够多了！"
-#define GOSSIP_ITEM_3       "我们现在没有时间做这个，我们必须继续前进。"
+#define GOSSIP_ITEM_3       "我们现在没有时间做这个，我们必须继续前进！"
 #define GOSSIP_ITEM_4       "来吧，布莱恩！打开它！"
 #define TEXT_ID_START       13100
 
