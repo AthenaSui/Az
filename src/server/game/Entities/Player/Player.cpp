@@ -4375,6 +4375,17 @@ void Player::DeleteFromDB(ObjectGuid::LowType lowGuid, uint32 accountId, bool up
                 //end npcbot
 
                 sScriptMgr->OnDeleteFromDB(trans, lowGuid);
+                /** World of Warcraft Armory-> **/
+                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_ARMORY_STATS);
+                stmt->SetData(0, lowGuid);
+                trans->Append(stmt);
+
+                stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_FEED_LOG);
+                stmt->SetData(0, lowGuid);
+                trans->Append(stmt);
+                trans->Append("DELETE FROM armory_character_stats WHERE guid = '%u'", lowGuid);
+                trans->Append("DELETE FROM character_feed_log WHERE guid = '%u'", lowGuid);
+                /** <-World of Warcraft Armory **/
 
                 CharacterDatabase.CommitTransaction(trans);
                 break;
@@ -15931,6 +15942,51 @@ void Player::_LoadBrewOfTheMonth(PreparedQueryResult result)
         CharacterDatabase.CommitTransaction(trans);
     }
 }
+
+//wow armory->
+ void Player::InitWowarmoryFeeds()
+ {
+    	// Clear feeds
+        m_wowarmory_feeds.clear();
+    }
+
+void Player::CreateWowarmoryFeed(uint32 type, uint32 data, uint32 item_guid, uint32 item_quality) {
+    	/*
+    	1 - TYPE_ACHIEVEMENT_FEED
+    	2 - TYPE_ITEM_FEED
+    	3 - TYPE_BOSS_FEED
+    	*/
+        if (GetGUID().GetCounter() == 0)
+         {
+            LOG_ERROR("entities.player", "[Wowarmory]: player is not initialized, unable to create log entry!");
+        return;
+        }
+    
+        if (type <= 0 || type > 3)
+         {
+            LOG_ERROR("entities.player", "[Wowarmory]: unknown feed type: %d, ignore.", type);
+        return;
+        }
+    
+        if (data == 0)
+         {
+            LOG_ERROR("entities.player", "[Wowarmory]: empty data (GUID: %u), ignore.", GetGUID().GetCounter());
+        return;
+        }
+     WowarmoryFeedEntry feed;
+    feed.guid = GetGUID().GetCounter();
+    feed.type = type;
+    feed.data = data;
+    feed.difficulty = type == 3 ? GetMap()->GetDifficulty() : 0;
+    feed.item_guid = item_guid;
+    feed.item_quality = item_quality;
+    feed.counter = 0;
+    feed.date = time(NULL);
+    LOG_ERROR("entities.unit", "[Wowarmory]: create wowarmory feed (GUID: %u, type: %d, data: %u).", feed.guid, feed.type, feed.data);
+    m_wowarmory_feeds.push_back(feed);
+    
+}
+//<-wow armory
 
 void Player::_LoadPetStable(uint8 petStableSlots, PreparedQueryResult result)
 {

@@ -2241,7 +2241,10 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
 
     if (achievement->flags & ACHIEVEMENT_FLAG_COUNTER || HasAchieved(achievement->ID))
         return;
-
+    //WoW Armory->
+    if (sWorld->getBoolConfig(CONFIG_ARMORY_ENABLE))
+        GetPlayer()->CreateWowarmoryFeed(1, achievement->ID, 0, 0);
+    //<-wow Armory
     LOG_DEBUG("achievement", "AchievementMgr::CompletedAchievement({})", achievement->ID);
 
     SendAchievementEarned(achievement);

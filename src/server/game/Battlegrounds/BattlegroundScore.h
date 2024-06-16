@@ -52,7 +52,10 @@ enum ScoreType
 
     // SOTA
     SCORE_DESTROYED_DEMOLISHER,
-    SCORE_DESTROYED_WALL
+    SCORE_DESTROYED_WALL,
+    /** World of Warcraft Armory **/
+    SCORE_DAMAGE_TAKEN,//<-wow armory
+    SCORE_HEALING_TAKEN//<-wow armory
 };
 
 struct AC_GAME_API BattlegroundScore
@@ -86,6 +89,14 @@ protected:
             case SCORE_HEALING_DONE:    // Healing Done
                 HealingDone += value;
                 break;
+//wow armory->
+            case SCORE_DAMAGE_TAKEN:   // Damage Taken
+                DamageTaken += value;
+                break;
+            case SCORE_HEALING_TAKEN:  // Healing Taken
+                HealingTaken += value;
+                break;
+//<-wow armory
             default:
                 ABORT("Not implemented Battleground score type!");
                 break;
@@ -120,6 +131,8 @@ protected:
     uint32 BonusHonor = 0;
     uint32 DamageDone = 0;
     uint32 HealingDone = 0;
+    uint32 DamageTaken = 0;//<-wow armory
+    uint32 HealingTaken = 0;//<-wow armory
 };
 
 #endif // _BATTLEGROUND_SCORE_H

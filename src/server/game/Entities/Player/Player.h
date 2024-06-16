@@ -1064,6 +1064,22 @@ struct EntryPointData
     [[nodiscard]] bool HasTaxiPath() const { return taxiPath[0] && taxiPath[1]; }
 };
 
+/* World of Warcraft Armory-> */
+struct WowarmoryFeedEntry
+{
+    uint32 guid;         // Player GUID
+    time_t date;         // Log date
+    uint32 type;         // TYPE_ACHIEVEMENT_FEED, TYPE_ITEM_FEED, TYPE_BOSS_FEED
+    uint32 data;         // TYPE_ITEM_FEED: item_entry, TYPE_BOSS_FEED: creature_entry
+    uint32 item_guid;    // Can be 0
+    uint32 item_quality; // Can be 0
+    uint8  difficulty;   // Can be 0
+    int    counter;      // Can be 0
+};
+
+typedef std::vector<WowarmoryFeedEntry> WowarmoryFeeds;
+/* <-World of Warcraft Armory */
+
 class Player : public Unit, public GridObject<Player>
 {
     friend class WorldSession;
@@ -2402,6 +2418,10 @@ public:
     void SendCinematicStart(uint32 CinematicSequenceId) const;
     void SendMovieStart(uint32 MovieId);
 
+	/* World of Warcraft Armory-> */
+    void CreateWowarmoryFeed(uint32 type, uint32 data, uint32 item_guid, uint32 item_quality);
+    void InitWowarmoryFeeds();
+	/* <-World of Warcraft Armory-> */
     uint32 DoRandomRoll(uint32 minimum, uint32 maximum);
 
     [[nodiscard]] uint16 GetMaxSkillValueForLevel() const;
@@ -2983,6 +3003,8 @@ private:
     // duel health and mana reset attributes
     uint32 healthBeforeDuel;
     uint32 manaBeforeDuel;
+
+    WowarmoryFeeds m_wowarmory_feeds;// <-World of Warcraft Armory Feeds
 
     bool m_isInstantFlightOn;
 

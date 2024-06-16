@@ -4994,6 +4994,8 @@ bool Player::LoadFromDB(ObjectGuid playerGuid, CharacterDatabaseQueryHolder cons
         CharacterDatabase.Execute(stmt);
         return false;
     }
+    
+    InitWowarmoryFeeds();// <C-leanup old Wow armory feeds
 
     uint8 Gender = fields[5].Get<uint8>();
     if (!IsValidGender(Gender))
@@ -7137,6 +7139,38 @@ void Player::SaveToDB(CharacterDatabaseTransaction trans, bool create, bool logo
     if (m_session->isLogingOut() || !sWorld->getBoolConfig(CONFIG_STATS_SAVE_ONLY_ON_LOGOUT))
         _SaveStats(trans);
 
+    /* World of Warcraft Armory-> */
+    // Place this code AFTER CharacterDatabase.CommitTransaction(); to avoid some character saving errors.
+    // Wowarmory feeds
+    if (sWorld->getBoolConfig(CONFIG_ARMORY_ENABLE))
+    {
+        if (!m_wowarmory_feeds.empty())
+        {
+            std::ostringstream sWowarmory;
+            sWowarmory << "INSERT IGNORE INTO character_feed_log (guid,type,data,date,counter,difficulty,item_guid,item_quality) VALUES ";
+            for (WowarmoryFeeds::iterator iter = m_wowarmory_feeds.begin(); iter < m_wowarmory_feeds.end(); ++iter)
+            {
+                //                      guid                    type                        data                    date                            counter                   difficulty                        item_guid                      item_quality
+                sWowarmory << "(" << (*iter).guid << ", " << (*iter).type << ", " << (*iter).data << ", " << uint64((*iter).date) << ", " << (*iter).counter << ", " << uint32((*iter).difficulty) << ", " << (*iter).item_guid << ", " << (*iter).item_quality << ")";
+                if (iter != m_wowarmory_feeds.end() - 1)
+                    sWowarmory << ",";
+            }
+            CharacterDatabase.Execute(sWowarmory.str().c_str());
+            // Clear old saved feeds from storage - they are not required for server core.
+            InitWowarmoryFeeds();
+
+            // Character stats
+            std::ostringstream ps;
+            time_t t = time(NULL);
+            CharacterDatabase.Execute("DELETE FROM armory_character_stats WHERE guid = %u", GetGUID().ToString());
+            ps << "INSERT INTO armory_character_stats (guid, data, save_date) VALUES (" << GetGUID().ToString() << ", '";
+            for (uint16 i = 0; i < m_valuesCount; ++i)
+                ps << GetUInt32Value(i) << " ";
+            ps << "', " << uint64(t) << ");";
+            CharacterDatabase.Execute(ps.str().c_str());
+        }
+    }/* <-World of Warcraft Armory */
+	
     // save pet (hunter pet level and experience and all type pets health/mana).
     if (Pet* pet = GetPet())
         pet->SavePetToDB(PET_SAVE_AS_CURRENT);

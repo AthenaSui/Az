@@ -1377,6 +1377,7 @@ void World::LoadConfigSettings(bool reload)
         _timers[WUPDATE_AUTOBROADCAST].SetInterval(_int_configs[CONFIG_AUTOBROADCAST_INTERVAL]);
         _timers[WUPDATE_AUTOBROADCAST].Reset();
     }
+    _bool_configs[CONFIG_ARMORY_ENABLE] = sConfigMgr->GetOption<bool>("Armory.Enable", true);/** <-World of Warcraft Armory **/
 
     // MySQL ping time interval
     _int_configs[CONFIG_DB_PING_INTERVAL] = sConfigMgr->GetOption<int32>("MaxPingTime", 30);

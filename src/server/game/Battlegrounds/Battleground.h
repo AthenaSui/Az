@@ -637,7 +637,11 @@ public:
 
     BattlegroundIC* ToBattlegroundIC() { if (GetBgTypeID(true) == BATTLEGROUND_IC) return reinterpret_cast<BattlegroundIC*>(this); else return nullptr; }
     [[nodiscard]] BattlegroundIC const* ToBattlegroundIC() const { if (GetBgTypeID(true) == BATTLEGROUND_IC) return reinterpret_cast<const BattlegroundIC*>(this); else return nullptr; }
-
+    //wow armory->
+    uint32 m_StartTime;
+    uint32 m_MapId;
+    int32 m_EndTime;
+    //<-wow armory
 protected:
     // this method is called, when BG cannot spawn its own spirit guide, or something is wrong, It correctly ends Battleground
     void EndNow();
@@ -689,10 +693,10 @@ private:
     uint32 m_InstanceID;                                // Battleground Instance's GUID!
     BattlegroundStatus m_Status;
     uint32 m_ClientInstanceID;                          // the instance-id which is sent to the client and without any other internal use
-    uint32 m_StartTime;
+//    uint32 m_StartTime;
     uint32 m_ResetStatTimer;
     uint32 m_ValidStartPositionTimer;
-    int32 m_EndTime;                                    // it is set to 120000 when bg is ending and it decreases itself
+//    int32 m_EndTime;                                    // it is set to 120000 when bg is ending and it decreases itself
     uint32 m_LastResurrectTime;
     BattlegroundBracketId m_BracketId{ BG_BRACKET_ID_FIRST };
     uint8  m_ArenaType;                                 // 2=2v2, 3=3v3, 5=5v5
@@ -765,7 +769,7 @@ private:
     uint32 m_MinPlayersPerTeam;
 
     // Start location
-    uint32 m_MapId;
+//    uint32 m_MapId;
     BattlegroundMap* m_Map;
     float m_StartMaxDist;
     std::array<Position, PVP_TEAMS_COUNT> _startPosition;
