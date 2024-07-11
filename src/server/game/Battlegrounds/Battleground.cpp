@@ -1283,7 +1283,7 @@ void Battleground::Init()
     _InBGFreeSlotQueue = false;
 
     m_Players.clear();
-    m_Bots.clear();
+    m_Bots.clear();//npcbot
 
     for (auto const& itr : PlayerScores)
         delete itr.second;

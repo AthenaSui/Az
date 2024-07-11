@@ -244,15 +244,9 @@ public:
         handler->PSendSysMessage("LoginDatabase queue size: %zu", LoginDatabase.QueueSize());
         handler->PSendSysMessage("CharacterDatabase queue size: %zu", CharacterDatabase.QueueSize());
         handler->PSendSysMessage("WorldDatabase queue size: %zu", WorldDatabase.QueueSize());
-//playerbot->
-        if (Acore::Module::GetEnableModulesList().empty())
-            handler->SendSysMessage("No modules enabled");
-        else
-            handler->SendSysMessage("> List enable modules:");
 #ifdef MOD_PLAYERBOTS
         handler->PSendSysMessage("PlayerbotsDatabase queue size: %zu", PlayerbotsDatabase.QueueSize());
 #endif
-//<-playerbot
         if (Acore::Module::GetEnableModulesList().empty())
             handler->SendSysMessage("No modules are enabled");
         else

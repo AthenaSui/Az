@@ -999,7 +999,7 @@ BG_AV_Nodes BattlegroundAV::GetNodeThroughObject(uint32 object)
 uint32 BattlegroundAV::GetObjectThroughNode(BG_AV_Nodes node)
 //npcbot
 */
-uint32 BattlegroundAV::GetObjectThroughNode(BG_AV_Nodes node, bool log) const
+uint32 BattlegroundAV::GetObjectThroughNode(BG_AV_Nodes node, bool log) const//npcbot bool log
 {
     //this function is the counterpart to GetNodeThroughObject()
     //npcbot
