@@ -1847,7 +1847,8 @@ public:
             }
         }
 
-        ObjectGuid target_guid;
+        ObjectGuid target_guid = ObjectGuid::Empty;
+        bool token_valid = true;
         if (!target_token || target_token == "bot" || target_token == "self" || target_token == "NPCBots" || target_token == "自己")
             target_guid = bot->GetGUID();
         else if (target_token == "me" || target_token == "master" || target_token == "我" || target_token == "主人")
@@ -1860,40 +1861,49 @@ public:
             target_guid = bot->GetTarget();
         else if (target_token == "mytarget" || target_token == "我的目标")
             target_guid = owner->GetTarget();
-        else if (target_token == "star" || target_token == "星星")
-            target_guid = owner->GetGroup()->GetTargetIcons()[0];
-        else if (target_token == "circle" || target_token == "大饼")
-            target_guid = owner->GetGroup()->GetTargetIcons()[1];
-        else if (target_token == "diamond" || target_token == "菱形")
-            target_guid = owner->GetGroup()->GetTargetIcons()[2];
-        else if (target_token == "triangle" || target_token == "三角")
-            target_guid = owner->GetGroup()->GetTargetIcons()[3];
-        else if (target_token == "moon" || target_token == "月亮")
-            target_guid = owner->GetGroup()->GetTargetIcons()[4];
-        else if (target_token == "square" || target_token == "方块")
-            target_guid = owner->GetGroup()->GetTargetIcons()[5];
-        else if (target_token == "cross" || target_token == "红叉")
-            target_guid = owner->GetGroup()->GetTargetIcons()[6];
-        else if (target_token == "skull" || target_token == "骷髅")
-            target_guid = owner->GetGroup()->GetTargetIcons()[7];
-        else if (target_token->size() == 1u && owner->GetGroup() && std::isdigit(target_token->front()))
+        else if (Group const* group = owner->GetGroup())
         {
-            uint8 digit = static_cast<uint8>(std::stoi(std::string(*target_token)));
-            switch (digit)
+            if (target_token == "star" || target_token == "星星")
+                target_guid = group->GetTargetIcons()[0];
+            else if (target_token == "circle" || target_token == "大饼")
+                target_guid = group->GetTargetIcons()[1];
+            else if (target_token == "diamond" || target_token == "菱形")
+                target_guid = group->GetTargetIcons()[2];
+            else if (target_token == "triangle" || target_token == "三角")
+                target_guid = group->GetTargetIcons()[3];
+            else if (target_token == "moon" || target_token == "月亮")
+                target_guid = group->GetTargetIcons()[4];
+            else if (target_token == "square" || target_token == "方块")
+                target_guid = group->GetTargetIcons()[5];
+            else if (target_token == "cross" || target_token == "红叉")
+                target_guid = group->GetTargetIcons()[6];
+            else if (target_token == "skull" || target_token == "骷髅")
+                target_guid = group->GetTargetIcons()[7];
+            else if (target_token->size() == 1u && std::isdigit(target_token->front()))
             {
-                case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
-                    target_guid = owner->GetGroup()->GetTargetIcons()[digit - 1];
-                    break;
-                default:
-                    target_guid = ObjectGuid::Empty;
-                    break;
+                uint8 digit = static_cast<uint8>(std::stoi(std::string(*target_token)));
+                switch (digit)
+                {
+                    case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+                        target_guid = group->GetTargetIcons()[digit - 1];
+                        break;
+                    default:
+                        token_valid = false;
+                        break;
+                }
             }
+            else
+                token_valid = false;
         }
         else
+            token_valid = false;
+
+        if (!token_valid)
         {
             handler->PSendSysMessage("无效的target token '%s'！", *target_token);
             handler->SendSysMessage("可用的target tokens:\n    '','bot','self','NPCBots','自己', 'me','master','我','主人', 'mypet','我的宠物', 'myvehicle','我的载具', 'target','目标', 'mytarget','我的目标'"
-                "'star','1','星星', 'circle','2','大饼', 'diamond','3','菱形', 'triangle','4','三角', 'moon','5','月亮', 'square','6','方块', 'cross','7','红叉', 'skull','8','骷髅'");
+                "'star','1','星星', 'circle','2','大饼', 'diamond','3','菱形', 'triangle','4','三角', 'moon','5','月亮', 'square','6','方块', 'cross','7','红叉', 'skull','8','骷髅'"
+                "\nNote that target icons tokens are only available while in group");
             return true;
         }
 
