@@ -10,7 +10,7 @@ jobs:
   triage:
     runs-on: ubuntu-latest
     name: C++
-    if: github.repository == 'azerothcore/azerothcore-wotlk'
+    if: github.repository == 'AthenaSui/Az/tree/NPbot'
     steps:
       - uses: actions/checkout@v4
       - name: AzerothCore codestyle

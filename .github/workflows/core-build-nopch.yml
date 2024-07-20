@@ -33,8 +33,10 @@ jobs:
               CC: gcc-14
               CXX: g++-14
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }}-${{ matrix.compiler.CC }}-nopch
-    if: github.repository == 'trickerer/AzerothCore-wotlk-with-NPCBots'
+    name: ${{ matrix.os }}-${{ matrix.compiler }}-nopch
+    env:
+      COMPILER: ${{ matrix.compiler }}
+    if: github.repository == 'AthenaSui/Az/tree/NPbot'
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/linux-build
