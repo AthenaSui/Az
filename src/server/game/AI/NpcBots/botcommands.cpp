@@ -1900,10 +1900,10 @@ public:
 
         if (!token_valid)
         {
-            handler->PSendSysMessage("无效的target token '%s'！", *target_token);
-            handler->SendSysMessage("可用的target tokens:\n    '','bot','self','NPCBots','自己', 'me','master','我','主人', 'mypet','我的宠物', 'myvehicle','我的载具', 'target','目标', 'mytarget','我的目标'"
+            handler->PSendSysMessage("无效的目标标志 '%s'！", *target_token);
+            handler->SendSysMessage("可用的目标标志：\n    '','bot','self','NPCBots','自己', 'me','master','我','主人', 'mypet','我的宠物', 'myvehicle','我的载具', 'target','目标', 'mytarget','我的目标'"
                 "'star','1','星星', 'circle','2','大饼', 'diamond','3','菱形', 'triangle','4','三角', 'moon','5','月亮', 'square','6','方块', 'cross','7','红叉', 'skull','8','骷髅'"
-                "\nNote that target icons tokens are only available while in group");
+                "\n请注意，目标图标标志仅在队伍中可用");
             return true;
         }
 
