@@ -28,7 +28,6 @@
 #include "GroupReference.h"
 #include "InstanceSaveMgr.h"
 #include "Item.h"
-#include "KillRewarder.h"
 #include "MapReference.h"
 #include "ObjectMgr.h"
 #include "Optional.h"
@@ -38,7 +37,6 @@
 #include "QuestDef.h"
 #include "SpellAuras.h"
 #include "SpellInfo.h"
-#include "SpellMgr.h"
 #include "TradeData.h"
 #include "Unit.h"
 #include "WorldSession.h"
@@ -2063,6 +2061,7 @@ public:
 
     void JoinedChannel(Channel* c);
     void LeftChannel(Channel* c);
+    bool IsInChannel(const Channel* c);
     void CleanupChannels();
     void ClearChannelWatch();
     void UpdateLocalChannels(uint32 newZone);
