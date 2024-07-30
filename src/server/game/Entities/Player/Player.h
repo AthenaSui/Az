@@ -2061,7 +2061,7 @@ public:
 
     void JoinedChannel(Channel* c);
     void LeftChannel(Channel* c);
-    bool IsInChannel(const Channel* c);
+    bool IsInChannel(const Channel* c);//<-playerbot
     void CleanupChannels();
     void ClearChannelWatch();
     void UpdateLocalChannels(uint32 newZone);

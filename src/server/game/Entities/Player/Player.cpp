@@ -5076,7 +5076,7 @@ bool Player::IsInChannel(const Channel* c)
         return c->GetChannelId() == chan->GetChannelId();
     });
 }
-
+//playerbot end
 void Player::ClearChannelWatch()
 {
     for (JoinedChannelsList::iterator itr = m_channels.begin(); itr != m_channels.end(); ++itr)
