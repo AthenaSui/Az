@@ -52,10 +52,11 @@
 #include "WorldSocket.h"
 #include <zlib.h>
 
+#include "BanMgr.h"
+
 //npcbot
 #include "botmgr.h"
 //end npcbot
-#include "BanMgr.h"
 
 namespace
 {
