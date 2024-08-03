@@ -842,7 +842,7 @@ enum EnviromentalDamage
     DAMAGE_FIRE      = 5,
     DAMAGE_FALL_TO_VOID = 6                                 // custom case for fall without durability loss
 };
-
+/*playerbot
 enum PlayerChatTag
 {
     CHAT_TAG_NONE       = 0x00,
@@ -852,7 +852,7 @@ enum PlayerChatTag
     CHAT_TAG_COM        = 0x08, // Commentator tag. Do not exist in clean client
     CHAT_TAG_DEV        = 0x10,
 };
-
+playerbot end 删除*/
 enum PlayedTimeIndex
 {
     PLAYED_TIME_TOTAL = 0,
