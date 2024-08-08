@@ -47,6 +47,7 @@ enum PlayerChatTag
 };
 typedef uint32 ChatTagFlags;
 //playerbot end
+
 class AC_GAME_API ChatHandler
 {
 public:
