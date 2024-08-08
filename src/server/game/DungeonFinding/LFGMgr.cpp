@@ -669,11 +669,11 @@ namespace lfg
                                 //disabled in config
                                 if (!BotMgr::IsNpcBotDungeonFinderEnabled())
                                 {
-                                    (ChatHandler(plrg->GetSession())).SendSysMessage("Using npcbots in Dungeon Finder is restricted. Contact your administration.");
+                                    (ChatHandler(plrg->GetSession())).SendSysMessage("在地下城查找器中使用NPCBots受到限制，请联系管理员。");
 
                                     if (plrg->GetGUID() != grp->GetLeaderGUID())
                                         if (Player* leader = ObjectAccessor::FindPlayer(grp->GetLeaderGUID()))
-                                            (ChatHandler(leader->GetSession())).PSendSysMessage("There is a npcbot in your group (owner: {}). Using npcbots in Dungeon Finder is restricted. Contact your administration.", plrg->GetName());
+                                            (ChatHandler(leader->GetSession())).PSendSysMessage("在你的队伍中有一个机器人（拥有者：{}）。在地下城查找器中使用NPCBots受到限制，请联系管理员。", plrg->GetName());
 
                                     joinData.result = LFG_JOIN_PARTY_NOT_MEET_REQS;
                                     break;
@@ -684,7 +684,7 @@ namespace lfg
                                     //if (!(bot->GetBotRoles() & ( 1 | 2 | 4 ))) //(BOT_ROLE_TANK | BOT_ROLE_DPS | BOT_ROLE_HEAL)
                                     //{
                                     //    //no valid roles - reqs are not met
-                                    //    (ChatHandler(plrg->GetSession())).PSendSysMessage("Your bot {} does not have any viable roles assigned.", bot->GetName());
+                                    //    (ChatHandler(plrg->GetSession())).PSendSysMessage("你的机器人｛｝没有分配任何可行的职责。", bot->GetName());
                                     //    joinData.result = LFG_JOIN_PARTY_NOT_MEET_REQS;
                                     //    continue;
                                     //}
@@ -1800,7 +1800,7 @@ namespace lfg
                     {
                         //only one player in group
                         ChatHandler ch(player->GetSession());
-                        ch.SendSysMessage("You are the only player in your group, loot method set to Free For All");
+                        ch.SendSysMessage("你是队伍中唯一的玩家，战利品拾取方式设置为“自由拾取”");
                         grp->SetLootMethod(FREE_FOR_ALL);
                     }
                 }

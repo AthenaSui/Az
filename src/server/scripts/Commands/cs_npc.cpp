@@ -210,7 +210,7 @@ public:
         CreatureTemplate const* cinfo = sObjectMgr->GetCreatureTemplate(id);
         if (cinfo && cinfo->IsNPCBotOrPet())
         {
-            handler->PSendSysMessage("You tried to spawn creature {}, which is part of NPCBots mod. To spawn bots use '.npcbot spawn' instead.", uint32(id));
+            handler->PSendSysMessage("你试图生成生物{}，这是NPCBots模块的一部分。要生成机器人，请改用“.npcbot spawn”。", uint32(id));
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -397,7 +397,7 @@ public:
         //npcbot
         if (unit->IsNPCBotOrPet())
         {
-            handler->SendSysMessage("Selected creature has botAI assigned, use '.npcbot delete' instead");
+            handler->SendSysMessage("选定的生物已指定botAI，请使用'.npcbot delete'");
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -755,7 +755,7 @@ public:
         ASSERT(ct);
         if (ct->IsNPCBotOrPet())
         {
-            handler->PSendSysMessage("creature {} (id {}) is a part of NPCBots mod. Use '.npcbot move' instead", lowguid, creature->GetEntry());
+            handler->PSendSysMessage("生物 {} (id {}) 是NPCBots模块一部分。请改用'.npcbot move'", lowguid, creature->GetEntry());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1241,7 +1241,7 @@ public:
         ObjectGuid::LowType lowguid = creature->GetSpawnId();
         if (creature->GetFormation())
         {
-            handler->PSendSysMessage("Selected creature is already member of group {}", creature->GetFormation()->GetId());
+            handler->PSendSysMessage("所选生物已是队伍成员 {}", creature->GetFormation()->GetId());
             return false;
         }
 
@@ -1267,7 +1267,7 @@ public:
 
         WorldDatabase.Execute(stmt);
 
-        handler->PSendSysMessage("Creature {} added to formation with leader {}", lowguid, leaderGUID);
+        handler->PSendSysMessage("生物 {} 已与队长 {} 组成队形", lowguid, leaderGUID);
 
         return true;
     }
@@ -1284,17 +1284,17 @@ public:
 
         if (!creature->GetSpawnId())
         {
-            handler->SendErrorMessage("Selected creature {} isn't in creature table", creature->GetGUID().ToString());
+            handler->SendErrorMessage("选定的生物 {} 不在creature表中", creature->GetGUID().ToString());
             return false;
         }
 
         if (!sObjectMgr->SetCreatureLinkedRespawn(creature->GetSpawnId(), linkguid))
         {
-            handler->SendErrorMessage("Selected creature can't link with guid '%u'", linkguid);
+            handler->SendErrorMessage("选定的生物无法与guid '{}'匹配", linkguid);
             return false;
         }
 
-        handler->PSendSysMessage("LinkGUID '{}' added to creature with DBTableGUID: '{}'", linkguid, creature->GetSpawnId());
+        handler->PSendSysMessage("LinkGUID '{}'已与DBTableGUID: '{}'一起添加到creature中", linkguid, creature->GetSpawnId());
         return true;
     }
 };
