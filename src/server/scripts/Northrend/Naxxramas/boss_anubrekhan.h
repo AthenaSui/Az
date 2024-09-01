@@ -7,7 +7,7 @@
 #include "naxxramas.h"
 
 namespace Anubrekhan {
-
+    
 enum Says
 {
     SAY_AGGRO                       = 0,
