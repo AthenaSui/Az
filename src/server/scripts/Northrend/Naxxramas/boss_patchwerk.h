@@ -7,7 +7,7 @@
 #include "naxxramas.h"
 
 namespace PatchWerk {
-
+    
 enum Yells
 {
     SAY_AGGRO                       = 0,
@@ -67,7 +67,7 @@ public:
 
         void KilledUnit(Unit* who) override
         {
-            if (who->GetTypeId() != TYPEID_PLAYER)
+            if (!who->IsPlayer())
                 return;
 
             if (!urand(0, 3))
