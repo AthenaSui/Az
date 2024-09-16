@@ -76,7 +76,7 @@ struct DefaultTargetSelector : public Acore::unary_function<Unit*, bool>
         if (target == except)
             return false;
 
-        if (m_playerOnly && (target->IsPlayer()))
+        if (m_playerOnly && (!target->IsPlayer()))
             //npcbot: allow to target bots
             //if (!(target->IsNPCBot()))
             //end npcbot

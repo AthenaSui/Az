@@ -275,6 +275,20 @@ struct npc_akama_shade : public ScriptedAI
             _sayLowHealth = true;
             Talk(SAY_LOW_HEALTH);
         }
+        else if (damage >= me->GetHealth() && !_died)
+        {
+            _died = true;
+            damage = me->GetHealth() - 1;
+            Talk(SAY_DEATH);
+            if (Creature* shade = instance->GetCreature(DATA_SHADE_OF_AKAMA))
+            {
+                shade->SetHomePosition(shade->GetHomePosition());
+                shade->AI()->EnterEvadeMode();
+            }
+
+            me->DespawnOrUnsummon();
+            ScriptedAI::EnterEvadeMode(EvadeReason::EVADE_REASON_OTHER);
+        }
     }
 
     void DoAction(int32 param) override
