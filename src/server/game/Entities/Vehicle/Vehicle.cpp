@@ -372,6 +372,10 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
         ASSERT(_usableSeatNum);
         --_usableSeatNum;
         if (!_usableSeatNum)
+            _me->RemoveNpcFlag(_me->IsPlayer() ? UNIT_NPC_FLAG_PLAYER_VEHICLE : UNIT_NPC_FLAG_SPELLCLICK);
+        else
+            _me->SetNpcFlag(_me->IsPlayer() ?  UNIT_NPC_FLAG_PLAYER_VEHICLE : UNIT_NPC_FLAG_SPELLCLICK);
+    }
         //npcbot: do not allow other passengers on bot vehicles
         if (unit->IsNPCBot()/* &&
             (Seat->second.SeatInfo->m_flags & VEHICLE_SEAT_FLAG_CAN_CONTROL)*/)
@@ -382,10 +386,6 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
                 _me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
         }
         //end npcbot
-            _me->RemoveNpcFlag(_me->IsPlayer() ? UNIT_NPC_FLAG_PLAYER_VEHICLE : UNIT_NPC_FLAG_SPELLCLICK);
-        else
-            _me->SetNpcFlag(_me->IsPlayer() ?  UNIT_NPC_FLAG_PLAYER_VEHICLE : UNIT_NPC_FLAG_SPELLCLICK);
-    }
 
     if (!_me || !_me->IsInWorld() || _me->IsDuringRemoveFromWorld())
         return false;

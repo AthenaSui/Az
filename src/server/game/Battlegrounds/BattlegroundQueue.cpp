@@ -32,6 +32,8 @@
 #include <unordered_map>
 #include "BattlegroundUtils.h"
 
+#include "BattlegroundUtils.h"
+
 //npcbot
 //non-PCH
 #include "Creature.h"
@@ -223,7 +225,7 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* group, Battle
         SendMessageBGQueue(leader, bg, bracketEntry);
 
     //npcbot: try to queue wandering bots
-    if (!isRated && !arenaType && !arenaTeamId && !sBattlegroundMgr->isTesting())
+    if (!isRated && !isPremade && !arenaType && !arenaTeamId && !sBattlegroundMgr->isTesting())
     {
         if (!BotDataMgr::GenerateBattlegroundBots(leader, group, this, bracketEntry, ginfo))
         {
