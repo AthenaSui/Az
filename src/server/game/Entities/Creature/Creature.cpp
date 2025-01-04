@@ -33,7 +33,6 @@
 #include "LootMgr.h"
 #include "ObjectMgr.h"
 #include "Opcodes.h"
-#include "OutdoorPvPMgr.h"
 #include "Pet.h"
 #include "Player.h"
 #include "PoolMgr.h"
@@ -1127,7 +1126,7 @@ void Creature::DoFleeToGetAssistance()
     if (!GetVictim())
         return;
 
-    if (HasAuraType(SPELL_AURA_PREVENTS_FLEEING))
+    if (HasPreventsFleeingAura())
         return;
 
     float radius = sWorld->getFloatConfig(CONFIG_CREATURE_FAMILY_FLEE_ASSISTANCE_RADIUS);
@@ -1275,8 +1274,10 @@ bool Creature::Create(ObjectGuid::LowType guidlow, Map* map, uint32 phaseMask, u
         m_serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GHOST, GHOST_VISIBILITY_GHOST);
     }
     else if (cinfo->type_flags & CREATURE_TYPE_FLAG_VISIBLE_TO_GHOSTS) // Xinef: Add ghost visibility for ghost units
+    {
         m_serverSideVisibility.SetValue(SERVERSIDE_VISIBILITY_GHOST, GHOST_VISIBILITY_ALIVE | GHOST_VISIBILITY_GHOST);
-
+        m_serverSideVisibilityDetect.SetValue(SERVERSIDE_VISIBILITY_GHOST, GHOST_VISIBILITY_ALIVE | GHOST_VISIBILITY_GHOST);
+    }
     if (Entry == VISUAL_WAYPOINT)
         SetVisible(false);
 
@@ -1454,6 +1455,11 @@ void Creature::SetLootRecipient(Unit* unit, bool withGroup)
     }
     else
         m_lootRecipientGroup = 0;
+
+    //npcbot: prevent visual tap on owned bots
+    if (IsNPCBotOrPet() && !IsFreeBot())
+        return;
+    //end npcbot
 
     SetDynamicFlag(UNIT_DYNFLAG_TAPPED);
 }
@@ -2236,6 +2242,7 @@ void Creature::Respawn(bool force)
             loot.clear();
             SelectLevel();
 
+            m_respawnedTime = GameTime::GetGameTime().count();
             setDeathState(DeathState::JustRespawned);
 
             // MDic - Acidmanifesto: Do not override transform auras
@@ -2267,7 +2274,6 @@ void Creature::Respawn(bool force)
             //Re-initialize reactstate that could be altered by movementgenerators
             InitializeReactState();
 
-            m_respawnedTime = GameTime::GetGameTime().count();
         }
         m_respawnedTime = GameTime::GetGameTime().count();
         // xinef: relocate notifier, fixes npc appearing in corpse position after forced respawn (instead of spawn)
@@ -2827,7 +2833,7 @@ bool Creature::CanCreatureAttack(Unit const* victim, bool skipDistCheck) const
 
         // pussywizard: don't check distance to home position if recently damaged (allow kiting away from spawnpoint!)
         // xinef: this should include taunt auras
-        if (!isWorldBoss() && (GetLastLeashExtensionTime() + 12 > GameTime::GetGameTime().count() || HasAuraType(SPELL_AURA_MOD_TAUNT)))
+        if (!isWorldBoss() && (GetLastLeashExtensionTime() + 12 > GameTime::GetGameTime().count() || HasTauntAura()))
             return true;
     }
 
@@ -3452,6 +3458,11 @@ bool Creature::CanSwim() const
     if (Unit::CanSwim() || (!Unit::CanSwim() && !CanFly()))
         return true;
 
+    //npcbot
+    if (IsNPCBotOrPet())
+        return true;
+    //end npcbot
+
     if (IsPet())
         return true;
 
@@ -3660,14 +3671,14 @@ void Creature::UpdateMovementFlags()
         else
             SetDisableGravity(true);
 
-        if (!HasAuraType(SPELL_AURA_HOVER))
+        if (!HasHoverAura())
             SetHover(false);
     }
     else
     {
         SetCanFly(false);
         SetDisableGravity(false);
-        if (IsAlive() && (CanHover() || HasAuraType(SPELL_AURA_HOVER)))
+        if (IsAlive() && (CanHover() || HasHoverAura()))
             SetHover(true);
     }
 
@@ -4010,6 +4021,10 @@ void Creature::ModifyThreatPercentTemp(Unit* victim, int32 percent, Milliseconds
 
 bool Creature::IsDamageEnoughForLootingAndReward() const
 {
+    //npcbot
+    if (IsNPCBotOrPet())
+        return (m_creatureInfo->flags_extra & CREATURE_FLAG_EXTRA_NO_PLAYER_DAMAGE_REQ) || _playerDamageReq == 0;
+    //end npcbot
     return (m_creatureInfo->flags_extra & CREATURE_FLAG_EXTRA_NO_PLAYER_DAMAGE_REQ) || (_playerDamageReq == 0 && _damagedByPlayer);
 }
 
@@ -4284,6 +4299,11 @@ void Creature::ApplyCreatureSpellCastTimeMods(SpellInfo const* spellInfo, int32&
 {
     if (bot_AI)
         bot_AI->ApplyBotSpellCastTimeMods(spellInfo, casttime);
+}
+void Creature::ApplyCreatureSpellNotLoseCastTimeMods(SpellInfo const* spellInfo, int32& delayReduce) const
+{
+    if (bot_AI)
+        bot_AI->ApplyBotSpellNotLoseCastTimeMods(spellInfo, delayReduce);
 }
 void Creature::ApplyCreatureSpellRadiusMods(SpellInfo const* spellInfo, float& radius) const
 {

@@ -47,7 +47,6 @@
 #include "SpellScript.h"
 #include "TemporarySummon.h"
 #include "Unit.h"
-#include "UpdateData.h"
 #include "Util.h"
 #include "VMapFactory.h"
 #include "Vehicle.h"
@@ -60,6 +59,8 @@
 //  there is probably some underlying problem with imports which should properly addressed
 //  see: https://github.com/azerothcore/azerothcore-wotlk/issues/9766
 #include "GridNotifiersImpl.h"
+#include "IVMapMgr.h"
+#include "VMapMgr2.h"
 
 //npcbot
 #include "botmgr.h"
@@ -559,7 +560,11 @@ void SpellCastTargets::OutDebug() const
 SpellValue::SpellValue(SpellInfo const* proto)
 {
     for (uint32 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+    {
         EffectBasePoints[i] = proto->Effects[i].BasePoints;
+        MiscVal[i] = 0;
+    }
+
     MaxAffectedTargets = proto->MaxAffectedTargets;
     RadiusMod = 1.0f;
     AuraStackAmount = 1;
@@ -3162,7 +3167,7 @@ SpellMissInfo Spell::DoSpellHitOnUnit(Unit* unit, uint32 effectMask, bool scaleA
     // Xinef: Do not increase diminishing level for self cast
     m_diminishGroup = GetDiminishingReturnsGroupForSpell(m_spellInfo, m_triggeredByAuraSpell.spellInfo);
     // xinef: do not increase diminish level for bosses (eg. Void Reaver silence is never diminished)
-    if (((m_spellFlags & SPELL_FLAG_REFLECTED) && !(unit->HasAuraType(SPELL_AURA_REFLECT_SPELLS))) || (aura_effmask && m_diminishGroup && unit != m_caster && (!m_caster->IsCreature() || !m_caster->ToCreature()->isWorldBoss())))
+    if (((m_spellFlags & SPELL_FLAG_REFLECTED) && !(unit->HasReflectSpellsAura())) || (aura_effmask && m_diminishGroup && unit != m_caster && (!m_caster->IsCreature() || !m_caster->ToCreature()->isWorldBoss())))
     {
         m_diminishLevel = unit->GetDiminishing(m_diminishGroup);
         DiminishingReturnsType type = GetDiminishingReturnsGroupType(m_diminishGroup);
@@ -5989,7 +5994,7 @@ SpellCastResult Spell::CheckCast(bool strict)
             if (effInfo->ApplyAuraName == SPELL_AURA_MOD_SHAPESHIFT)
             {
                 SpellShapeshiftFormEntry const* shapeShiftEntry = sSpellShapeshiftFormStore.LookupEntry(effInfo->MiscValue);
-                if (shapeShiftEntry && (shapeShiftEntry->flags1 & 1) == 0)  // unk flag
+                if (shapeShiftEntry && (shapeShiftEntry->flags1 & SHAPESHIFT_FLAG_STANCE) == 0)
                     checkMask |= VEHICLE_SEAT_FLAG_UNCONTROLLED;
                 break;
             }
@@ -7978,6 +7983,43 @@ SpellCastResult Spell::CheckSpellFocus()
 
 void Spell::Delayed() // only called in DealDamage()
 {
+    //npcbot
+    if (!m_caster)
+        return;
+
+    if (m_caster->IsNPCBot())
+    {
+        if ((m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_PUSH_BACK) && !m_spellInfo->HasAttribute(SPELL_ATTR6_NO_PUSHBACK) && !isDelayableNoMore())
+        {
+            Creature* creature = m_caster->ToCreature();
+            int32 delaytime = 500;
+
+            int32 delayReduce = 100;
+            creature->ApplyCreatureSpellNotLoseCastTimeMods(m_spellInfo, delayReduce);
+            delayReduce += creature->GetTotalAuraModifier(SPELL_AURA_REDUCE_PUSHBACK) - 100;
+            if (delayReduce >= 100)
+                return;
+
+            AddPct(delaytime, -delayReduce);
+
+            if (m_timer + delaytime > m_casttime)
+            {
+                delaytime = m_casttime - m_timer;
+                m_timer = m_casttime;
+            }
+            else
+                m_timer += delaytime;
+
+            WorldPacket data(SMSG_SPELL_DELAYED, 8 + 4);
+            data << creature->GetPackGUID();
+            data << uint32(delaytime);
+
+            creature->SendMessageToSet(&data, true);
+        }
+        return;
+    }
+    //end npcbot
+
     if (!m_caster)// || !m_caster->IsPlayer())
         return;
 
@@ -8023,6 +8065,46 @@ void Spell::Delayed() // only called in DealDamage()
 
 void Spell::DelayedChannel()
 {
+    //npcbot
+    if (!m_caster)
+        return;
+
+    if (m_caster && m_caster->IsNPCBot() && m_spellState == SPELL_STATE_CASTING && (m_spellInfo->ChannelInterruptFlags & CHANNEL_FLAG_DELAY) && !isDelayableNoMore())
+    {
+        Creature* creature = m_caster->ToCreature();
+        int32 duration = ((m_channeledDuration > 0) ? m_channeledDuration : m_spellInfo->GetDuration());
+
+        int32 delaytime = CalculatePct(duration, 25);
+
+        int32 delayReduce = 100;
+        creature->ApplyCreatureSpellNotLoseCastTimeMods(m_spellInfo, delayReduce);
+        delayReduce += creature->GetTotalAuraModifier(SPELL_AURA_REDUCE_PUSHBACK) - 100;
+        if (delayReduce >= 100)
+            return;
+
+        AddPct(delaytime, -delayReduce);
+
+        if (m_timer <= delaytime)
+        {
+            delaytime = m_timer;
+            m_timer = 0;
+        }
+        else
+            m_timer -= delaytime;
+
+        for (TargetInfo const& targetInfo : m_UniqueTargetInfo)
+            if (targetInfo.missCondition == SPELL_MISS_NONE)
+                if (Unit* unit = (creature->GetGUID() == targetInfo.targetGUID) ? creature : ObjectAccessor::GetUnit(*creature, targetInfo.targetGUID))
+                    unit->DelayOwnedAuras(m_spellInfo->Id, m_originalCasterGUID, delaytime);
+
+        if (DynamicObject* dynObj = creature->GetDynObject(m_spellInfo->Id))
+            dynObj->Delay(delaytime);
+
+        SendChannelUpdate(m_timer);
+        return;
+    }
+    //end npcbot
+
     if (!m_caster || !m_caster->IsPlayer() || getState() != SPELL_STATE_CASTING)
         return;
 
@@ -8675,6 +8757,15 @@ void Spell::SetSpellValue(SpellValueMod mod, int32 value)
             break;
         case SPELLVALUE_FORCED_CRIT_RESULT:
             m_spellValue->ForcedCritResult = (bool)value;
+            break;
+        case SPELLVALUE_MISCVALUE0:
+            m_spellValue->MiscVal[0] = value;
+            break;
+        case SPELLVALUE_MISCVALUE1:
+            m_spellValue->MiscVal[1] = value;
+            break;
+        case SPELLVALUE_MISCVALUE2:
+            m_spellValue->MiscVal[2] = value;
             break;
     }
 }

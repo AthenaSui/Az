@@ -450,6 +450,8 @@ bool GameObject::Create(ObjectGuid::LowType guidlow, uint32 name_id, Map* map, u
 
 void GameObject::Update(uint32 diff)
 {
+    WorldObject::Update(diff);
+
     if (AI())
         AI()->UpdateAI(diff);
     else if (!AIM_Initialize())
@@ -734,6 +736,17 @@ void GameObject::Update(uint32 diff)
                             Acore::PlayerSearcher<Acore::AnyPlayerInObjectRangeCheck> searcher(this, player, checker);
                             Cell::VisitWorldObjects(this, searcher, radius);
                             target = player;
+
+                        //npcbot
+                        if (!target)
+                        {
+                            Creature* bot = nullptr;
+                            std::function bot_checker = [=, this](Creature const* c) { return c->IsNPCBot() && c->IsAlive() && IsWithinDistInMap(c, radius); };
+                            Acore::CreatureSearcher searcher(this, bot, bot_checker);
+                            Cell::VisitAllObjects(this, searcher, radius);
+                            target = bot;
+                        }
+                        //end npcbot
                         }
 
                         if (target)
@@ -821,6 +834,12 @@ void GameObject::Update(uint32 diff)
                                 if (Player* player = target->ToPlayer())
                                     if (Battleground* bg = player->GetBattleground())
                                         bg->HandleTriggerBuff(this);
+
+                        //npcbot
+                        if (target->IsNPCBot() && !goInfo->trap.diameter && goInfo->trap.cooldown == 3)
+                            if (Battleground* bg = target->ToCreature()->GetBotBG())
+                                bg->HandleTriggerBuff(this);
+                        //end npcbot
                         }
                         break;
                     }
