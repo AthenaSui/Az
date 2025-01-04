@@ -932,6 +932,16 @@ public:
 
     void SetLastDamagedTargetGuid(ObjectGuid const& guid) { _lastDamagedTargetGuid = guid; }
     [[nodiscard]] ObjectGuid const& GetLastDamagedTargetGuid() const { return _lastDamagedTargetGuid; }
+    //npcbot: compatibility accessors
+    [[nodiscard]] inline uint8 GetRace(bool original = false) const { return getRace(original); }
+    [[nodiscard]] inline uint32 GetRaceMask() const { return getRaceMask(); }
+    [[nodiscard]] inline uint8 GetClass() const { return getClass(); }
+    [[nodiscard]] inline uint32 GetClassMask() const { return getClassMask(); }
+    [[nodiscard]] inline uint8 GetGender() const { return getGender(); }
+    inline void SetPowerType(Powers power) { setPowerType(power); }
+    [[nodiscard]] inline Powers GetPowerType() const { return getPowerType(); }
+    [[nodiscard]] uint8 GetStandState() const { return getStandState(); }
+    //end npcbot
 
     void AttackerStateUpdate (Unit* victim, WeaponAttackType attType = BASE_ATTACK, bool extra = false, bool ignoreCasting = false);
 
@@ -1107,7 +1117,14 @@ public:
 
     // Resilience
     static void ApplyResilience(Unit const* victim, float* crit, int32* damage, bool isCrit, CombatRating type);
+    //npcbot
+    /*
+    //end npcbot
     [[nodiscard]] bool CanApplyResilience() const { return m_applyResilience; }
+    //npcbot
+    */
+    [[nodiscard]] bool CanApplyResilience() const;
+    //end npcbot
 
     // Skills values
     [[nodiscard]] virtual uint32 GetShieldBlockValue() const = 0;
@@ -1212,6 +1229,15 @@ public:
     [[nodiscard]] float GetMeleeCritChanceReduction() const { return GetCombatRatingReduction(CR_CRIT_TAKEN_MELEE); }
     [[nodiscard]] float GetRangedCritChanceReduction() const { return GetCombatRatingReduction(CR_CRIT_TAKEN_RANGED); }
     [[nodiscard]] float GetSpellCritChanceReduction() const { return GetCombatRatingReduction(CR_CRIT_TAKEN_SPELL); }
+
+    //npcbot
+    void SetControlledByPlayer(bool set) { m_ControlledByPlayer = set; }
+    GameObject* GetFirstGameObjectById(uint32 id) const;
+    void SetCreator(Unit* creator);
+    Unit* GetCreator() const { return m_creator; }
+    Unit* m_creator = nullptr;
+    //end npcbot
+
 
     [[nodiscard]] uint32 GetMeleeCritDamageReduction(uint32 damage) const { return GetCombatRatingDamageReduction(CR_CRIT_TAKEN_MELEE, 2.2f, 33.0f, damage); }
     [[nodiscard]] uint32 GetRangedCritDamageReduction(uint32 damage) const { return GetCombatRatingDamageReduction(CR_CRIT_TAKEN_RANGED, 2.2f, 33.0f, damage); }
@@ -1571,7 +1597,12 @@ public:
     // Spells immunities
     void ApplySpellImmune(uint32 spellId, uint32 op, uint32 type, bool apply, SpellImmuneBlockType blockType = SPELL_BLOCK_TYPE_ALL);
     void ApplySpellDispelImmunity(SpellInfo const* spellProto, DispelType type, bool apply);
+    //npcbot
+    /*
     virtual bool IsImmunedToSpell(SpellInfo const* spellInfo, Spell const* spell = nullptr);
+    */
+    virtual bool IsImmunedToSpell(SpellInfo const* spellInfo, Spell const* spell = nullptr) const;
+    //end npcbot
     [[nodiscard]] bool IsImmunedToDamage(SpellSchoolMask meleeSchoolMask) const;
     [[nodiscard]] bool IsImmunedToDamage(SpellInfo const* spellInfo) const;
     [[nodiscard]] bool IsImmunedToDamage(Spell const* spell) const;
@@ -1649,6 +1680,11 @@ public:
     [[nodiscard]] virtual bool CanSwim() const;
     [[nodiscard]] bool CanFreeMove() const
     {
+        //npcbot: skip owner guid condition for bots
+        if (IsNPCBotOrPet())
+            return !HasUnitState(UNIT_STATE_CONFUSED | UNIT_STATE_FLEEING | UNIT_STATE_IN_FLIGHT |
+                                 UNIT_STATE_ROOT | UNIT_STATE_STUNNED | UNIT_STATE_DISTRACTED);
+        //end npcbot
         return !HasUnitState(UNIT_STATE_CONFUSED | UNIT_STATE_FLEEING | UNIT_STATE_IN_FLIGHT |
                              UNIT_STATE_ROOT | UNIT_STATE_STUNNED | UNIT_STATE_DISTRACTED) && !GetOwnerGUID();
     }
@@ -1709,7 +1745,12 @@ public:
     void  RemoveStandFlags(uint8 flags) { RemoveByteFlag(UNIT_FIELD_BYTES_1,  UNIT_BYTES_1_OFFSET_VIS_FLAG, flags); }
 
     // DeathState
+    //npcbot
+    /*
     DeathState getDeathState() { return m_deathState; };
+    */
+    DeathState getDeathState() const { return m_deathState; };
+    //end npcbot
     virtual void setDeathState(DeathState s, bool despawn = false);           // overwrited in Creature/Player/Pet
 
     [[nodiscard]] bool IsAlive() const { return (m_deathState == DeathState::Alive); };
@@ -1973,6 +2014,11 @@ public:
     void SendTameFailure(uint8 result);
 
     void SendTeleportPacket(Position& pos);
+
+    //npcbot: TC method transfer
+    bool IsHighestExclusiveAuraEffect(SpellInfo const* spellInfo, AuraType auraType, int32 effectAmount, uint8 auraEffectMask, bool removeOtherAuraApplications = false);
+    //end npcbot
+
 
     void SendMovementFlagUpdate(bool self = false);
     void SendMovementWaterWalking(Player* sendTo);

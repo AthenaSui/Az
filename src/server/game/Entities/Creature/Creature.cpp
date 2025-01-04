@@ -1456,6 +1456,11 @@ void Creature::SetLootRecipient(Unit* unit, bool withGroup)
     else
         m_lootRecipientGroup = 0;
 
+    //npcbot: prevent visual tap on owned bots
+    if (IsNPCBotOrPet() && !IsFreeBot())
+        return;
+    //end npcbot
+
     SetDynamicFlag(UNIT_DYNFLAG_TAPPED);
 }
 
@@ -3454,6 +3459,11 @@ bool Creature::CanSwim() const
     if (Unit::CanSwim() || (!Unit::CanSwim() && !CanFly()))
         return true;
 
+    //npcbot
+    if (IsNPCBotOrPet())
+        return true;
+    //end npcbot
+
     if (IsPet())
         return true;
 
@@ -4012,6 +4022,10 @@ void Creature::ModifyThreatPercentTemp(Unit* victim, int32 percent, Milliseconds
 
 bool Creature::IsDamageEnoughForLootingAndReward() const
 {
+    //npcbot
+    if (IsNPCBotOrPet())
+        return (m_creatureInfo->flags_extra & CREATURE_FLAG_EXTRA_NO_PLAYER_DAMAGE_REQ) || _playerDamageReq == 0;
+    //end npcbot
     return (m_creatureInfo->flags_extra & CREATURE_FLAG_EXTRA_NO_PLAYER_DAMAGE_REQ) || (_playerDamageReq == 0 && _damagedByPlayer);
 }
 
@@ -4286,6 +4300,11 @@ void Creature::ApplyCreatureSpellCastTimeMods(SpellInfo const* spellInfo, int32&
 {
     if (bot_AI)
         bot_AI->ApplyBotSpellCastTimeMods(spellInfo, casttime);
+}
+void Creature::ApplyCreatureSpellNotLoseCastTimeMods(SpellInfo const* spellInfo, int32& delayReduce) const
+{
+    if (bot_AI)
+        bot_AI->ApplyBotSpellNotLoseCastTimeMods(spellInfo, delayReduce);
 }
 void Creature::ApplyCreatureSpellRadiusMods(SpellInfo const* spellInfo, float& radius) const
 {

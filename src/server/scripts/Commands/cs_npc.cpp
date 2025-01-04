@@ -399,7 +399,7 @@ public:
         }
 
         //npcbot
-        if (unit->IsNPCBotOrPet())
+        if (creature->IsNPCBotOrPet())
         {
             handler->SendSysMessage("选定的生物已指定botAI，请使用'.npcbot delete'");
             handler->SetSentErrorMessage(true);
@@ -766,11 +766,9 @@ public:
         }
 
         //npcbot
-        CreatureTemplate const* ct = sObjectMgr->GetCreatureTemplate(creature->GetEntry());
-        ASSERT(ct);
-        if (ct->IsNPCBotOrPet())
+        if (creature->GetCreatureTemplate()->IsNPCBotOrPet())
         {
-            handler->PSendSysMessage("生物 {} (id {}) 是NPCBots模块一部分。请改用'.npcbot move'", lowguid, creature->GetEntry());
+            handler->PSendSysMessage("生物 {} (id {}) 是NPCBots模块一部分。请改用'.npcbot move'", lowGuid, creature->GetEntry());
             handler->SetSentErrorMessage(true);
             return false;
         }

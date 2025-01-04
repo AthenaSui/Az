@@ -315,6 +315,13 @@ public:
         {
             _botclass = BOT_CLASS_SHAMAN;
 
+            mhEnchantExpireTimer = 1;
+            ohEnchantExpireTimer = 1;
+            mhEnchant = 0;
+            ohEnchant = 0;
+            needChooseMHEnchant = true;
+            needChooseOHEnchant = true;
+
             InitUnitFlags();
         }
 
@@ -447,7 +454,7 @@ public:
                     Unit* to = ObjectAccessor::GetUnit(*me, _totems[i].first);
                     if (!to)
                     {
-                        LOG_ERROR("entities.player", "{} has unexpectingly lost totem in slot {}!", me->GetName().c_str(), i);
+                        BOT_LOG_ERROR("entities.player", "{} has unexpectingly lost totem in slot {}!", me->GetName().c_str(), i);
                         _totems[i].first = ObjectGuid::Empty;
                         continue;
                     }
@@ -1315,7 +1322,7 @@ public:
 
                 if (!tanks.empty())
                 {
-                    Unit* target = tanks.size() == 1 ? *tanks.begin() : Acore::Containers::SelectRandomContainerElement(tanks);
+                    Unit* target = tanks.size() == 1 ? *tanks.begin() : Bcore::Containers::SelectRandomContainerElement(tanks);
                     if (doCast(target, GetSpell(EARTH_SHIELD_1)))
                         return;
                 }
@@ -1678,6 +1685,31 @@ public:
                 timebonus += 400;
 
             casttime = std::max<int32>((float(casttime) * (1.0f - pctbonus)) - timebonus, 0);
+        }
+
+        void ApplyClassSpellNotLoseCastTimeMods(SpellInfo const* spellInfo, int32& delayReduce) const override
+        {
+            uint32 baseId = spellInfo->GetFirstRankSpell()->Id;
+            //SpellSchoolMask schools = spellInfo->GetSchoolMask();
+            uint8 lvl = me->GetLevel();
+            int32 reduceBonus = 0;
+
+            if (lvl >= 20 && (baseId == HEALING_WAVE_1 || baseId == LESSER_HEALING_WAVE_1 || baseId == CHAIN_HEAL_1))
+                reduceBonus += 70;
+
+            if (GetSpec() == BOT_SPEC_SHAMAN_ELEMENTAL && lvl >= 25)
+            {
+                switch (baseId)
+                {
+                    case LIGHTNING_BOLT_1: case CHAIN_LIGHTNING_1: case LAVA_BURST_1: case HEX_1:
+                        reduceBonus += 70;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            delayReduce += reduceBonus;
         }
 
         void ApplyClassSpellCooldownMods(SpellInfo const* spellInfo, uint32& cooldown) const override
@@ -2128,7 +2160,7 @@ public:
                 }
                 if (!found)
                 {
-                    LOG_ERROR("entities.unit", "Shaman_bot:JustSummoned() wolves array is full");
+                    BOT_LOG_ERROR("entities.unit", "Shaman_bot:JustSummoned() wolves array is full");
                     ASSERT(false);
                 }
             }
@@ -2136,7 +2168,7 @@ public:
 
         void SummonedCreatureDespawn(Creature* summon) override
         {
-            //TC_LOG_ERROR("entities.unit", "SummonedCreatureDespawn: %s's %s", me->GetName().c_str(), summon->GetName().c_str());
+            //BOT_LOG_ERROR("entities.unit", "SummonedCreatureDespawn: %s's %s", me->GetName().c_str(), summon->GetName().c_str());
             //if (summon == botPet)
             //    botPet = nullptr;
             if (summon->GetEntry() == BOT_PET_SPIRIT_WOLF)
@@ -2153,7 +2185,7 @@ public:
                 }
                 //if (!found)
                 //{
-                //    LOG_ERROR("entities.unit", "Shaman_bot:SummonedCreatureDespawn() wolf is not found in array");
+                //    BOT_LOG_ERROR("entities.unit", "Shaman_bot:SummonedCreatureDespawn() wolf is not found in array");
                 //    ASSERT(false);
                 //}
             }
@@ -2184,7 +2216,7 @@ public:
                     Unit* to = ObjectAccessor::GetUnit(*me, _totems[i].first);
                     if (!to)
                     {
-                        //TC_LOG_ERROR("entities.player", "%s has no totem in slot %u during remove!", me->GetName().c_str(), i);
+                        //BOT_LOG_ERROR("entities.player", "%s has no totem in slot %u during remove!", me->GetName().c_str(), i);
                         continue;
                     }
                     to->ToTotem()->UnSummon();
@@ -2196,7 +2228,7 @@ public:
         {
             if (!summon)
             {
-                LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} received NULL", me->GetName().c_str());
+                BOT_LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} received NULL", me->GetName().c_str());
                 ASSERT(false);
                 //UnsummonAll(false);
                 return;
@@ -2205,7 +2237,7 @@ public:
             TempSummon const* totem = summon->ToTempSummon();
             if (!totem || !totem->IsTotem())
             {
-                //TC_LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot %s has despawned summon %s which is not a temp summon or not a totem...", me->GetName().c_str(), summon->GetName().c_str());
+                //BOT_LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot %s has despawned summon %s which is not a temp summon or not a totem...", me->GetName().c_str(), summon->GetName().c_str());
                 return;
             }
 
@@ -2217,17 +2249,17 @@ public:
                 case SUMMON_SLOT_TOTEM_WATER:   slot = T_WATER; break;
                 case SUMMON_SLOT_TOTEM_AIR:     slot = T_AIR;   break;
                 default:
-                    LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} has despawned totem {} in unknown slot {}", me->GetName().c_str(), summon->GetName().c_str(), totem->m_Properties->Id);
+                    BOT_LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} has despawned totem {} in unknown slot {}", me->GetName().c_str(), summon->GetName().c_str(), totem->m_Properties->Id);
                     return;
             }
 
             if (_totems[slot].first == ObjectGuid::Empty)
-                LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} has despawned totem {} while not having it registered!", me->GetName().c_str(), summon->GetName().c_str());
+                BOT_LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} has despawned totem {} while not having it registered!", me->GetName().c_str(), summon->GetName().c_str());
             else if (_totems[slot].second._type == BOT_TOTEM_NONE || _totems[slot].second._type >= BOT_TOTEM_END)
-                LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} has despawned totem {} with no type assigned!", me->GetName().c_str(), summon->GetName().c_str());
+                BOT_LOG_ERROR("entities.player", "OnBotDespawn(): Shaman bot {} has despawned totem {} with no type assigned!", me->GetName().c_str(), summon->GetName().c_str());
 
             //here we reset totem category cd (not totem spell cd) if totem is destroyed
-            //TC_LOG_ERROR("entities.player", "OnBotDespawn(): %s despawned (%s : %u)", summon->GetName().c_str(), summon->IsAlive() ? "alive" : summon->isDying() ? "justdied" : "unk", (uint32)summon->getDeathState());
+            //BOT_LOG_ERROR("entities.player", "OnBotDespawn(): %s despawned (%s : %u)", summon->GetName().c_str(), summon->IsAlive() ? "alive" : summon->isDying() ? "justdied" : "unk", (uint32)summon->getDeathState());
             if (!summon->IsAlive()) // alive here means totem is being replaced or unsummoned through other means
                 TotemTimer[slot] = 0;
 
@@ -2241,7 +2273,7 @@ public:
             TempSummon const* totem = summon->ToTempSummon();
             if (!totem || !totem->IsTotem())
             {
-                //TC_LOG_ERROR("entities.player", "OnBotSummon(): Shaman bot %s has summoned creature %s which is not a temp summon or not a totem...", me->GetName().c_str(), summon->GetName().c_str());
+                //BOT_LOG_ERROR("entities.player", "OnBotSummon(): Shaman bot %s has summoned creature %s which is not a temp summon or not a totem...", me->GetName().c_str(), summon->GetName().c_str());
                 return;
             }
 
@@ -2253,7 +2285,7 @@ public:
                 case SUMMON_SLOT_TOTEM_WATER:   slot = T_WATER; break;
                 case SUMMON_SLOT_TOTEM_AIR:     slot = T_AIR;   break;
                 default:
-                    LOG_ERROR("entities.player", "OnBotSummon(): Shaman bot {} has summoned totem {} with unknown type {}", me->GetName().c_str(), summon->GetName().c_str(), totem->m_Properties->Id);
+                    BOT_LOG_ERROR("entities.player", "OnBotSummon(): Shaman bot {} has summoned totem {} with unknown type {}", me->GetName().c_str(), summon->GetName().c_str(), totem->m_Properties->Id);
                     return;
             }
 
@@ -2308,7 +2340,7 @@ public:
                 case TOTEM_OF_WRATH_1:          btype = BOT_TOTEM_WRATH;                break;
                 default:
                 {
-                    LOG_ERROR("scripts", "Unknown totem create spell {}!", createSpell);
+                    BOT_LOG_ERROR("scripts", "Unknown totem create spell {}!", createSpell);
                     btype = BOT_TOTEM_NONE;
                     break;
                 }
@@ -2319,7 +2351,7 @@ public:
             _totems[slot].second._type = btype;
             me->m_SummonSlot[slot+1] = _totems[slot].first; //needed for scripts handlers
 
-            //TC_LOG_ERROR("entities.player", "shaman bot: summoned %s (type %u) at x=%.2f, y=%.2f, z=%.2f",
+            //BOT_LOG_ERROR("entities.player", "shaman bot: summoned %s (type %u) at x=%.2f, y=%.2f, z=%.2f",
             //    summon->GetName().c_str(), slot + 1, _totems[slot].second.pos.GetPositionX(), _totems[slot].second.pos.GetPositionY(), _totems[slot].second.pos.GetPositionZ());
 
             //TODO: gets overriden in Spell::EffectSummonType (end)
@@ -2364,9 +2396,9 @@ public:
                     return needChooseMHEnchant;
                 case BOTAI_MISC_ENCHANT_IS_AUTO_OH:
                     return needChooseOHEnchant;
-                case BOTAI_MISC_ENCHANT_CAN_EXPIRE_MH:
+                case BOTAI_MISC_ENCHANT_TIMER_MH:
                     return mhEnchantExpireTimer;
-                case BOTAI_MISC_ENCHANT_CAN_EXPIRE_OH:
+                case BOTAI_MISC_ENCHANT_TIMER_OH:
                     return ohEnchantExpireTimer;
                 case BOTAI_MISC_ENCHANT_CURRENT_MH:
                     return mhEnchant;
@@ -2393,25 +2425,33 @@ public:
         {
             switch (data)
             {
-                case BOTAI_MISC_ENCHANT_CAN_EXPIRE_MH:
-                    if (value)
-                        mhEnchantExpireTimer = 0;
+                case BOTAI_MISC_ENCHANT_IS_AUTO_MH:
+                    needChooseMHEnchant = bool(value);
                     break;
-                case BOTAI_MISC_ENCHANT_CAN_EXPIRE_OH:
-                    if (value)
-                        ohEnchantExpireTimer = 0;
+                case BOTAI_MISC_ENCHANT_IS_AUTO_OH:
+                    needChooseOHEnchant = bool(value);
+                    break;
+                case BOTAI_MISC_ENCHANT_TIMER_MH:
+                    if (value == 0)
+                        mhEnchantExpireTimer = value;
+                    break;
+                case BOTAI_MISC_ENCHANT_TIMER_OH:
+                    if (value == 0)
+                        ohEnchantExpireTimer = value;
                     break;
                 case BOTAI_MISC_ENCHANT_CURRENT_MH:
                     mhEnchant = value;
-                    needChooseMHEnchant = value ? false : true;
+                    SetAIMiscValue(BOTAI_MISC_ENCHANT_IS_AUTO_MH, value ? false : true);
                     break;
                 case BOTAI_MISC_ENCHANT_CURRENT_OH:
                     ohEnchant = value;
-                    needChooseOHEnchant = value ? false : true;
+                    SetAIMiscValue(BOTAI_MISC_ENCHANT_IS_AUTO_OH, value ? false : true);
                     break;
                 default:
                     break;
             }
+
+            bot_ai::SetAIMiscValue(data, value);
         }
 
         void Reset() override
@@ -2438,15 +2478,10 @@ public:
             Earthy = false;
             maelUseUp = false;
 
-            mhEnchantExpireTimer = 1;
-            ohEnchantExpireTimer = 1;
+            mhEnchantExpireTimer = std::min<uint32>(mhEnchantExpireTimer, 1);
+            ohEnchantExpireTimer = std::min<uint32>(ohEnchantExpireTimer, 1);
 
             DefaultInit();
-
-            mhEnchant = 0;
-            ohEnchant = 0;
-            needChooseMHEnchant = true;
-            needChooseOHEnchant = true;
         }
 
         void ReduceCD(uint32 diff) override
@@ -2788,7 +2823,7 @@ public:
                 //    baseId = sSpellMgr->GetSpellInfo(base)->GetFirstRankSpell()->Id;
                 //if (target->GetEntry() == 70025 && cre->GetGUID() != me->GetGUID())
                 //{
-                //    TC_LOG_ERROR("spells","totemMask: unit %s, %s (%u), owner %s (crSp %u, base %u), istotem %u", target->GetName().c_str(),
+                //    BOT_LOG_ERROR("spells","totemMask: unit %s, %s (%u), owner %s (crSp %u, base %u), istotem %u", target->GetName().c_str(),
                 //        itr->second->GetBase()->GetSpellInfo()->SpellName[0], itr->second->GetBase()->GetId(),
                 //        cre ? cre->GetName().c_str() : "unk", base, baseId, uint32(cre->IsTotem()));
                 //}

@@ -1789,21 +1789,6 @@ namespace lfg
                     grp->SetLfgRoles(bguid, proposal.players.find(bguid)->second.role);
                 }
 
-                if (grp->GetMembersCount() >= 5)
-                {
-                    uint8 pcount = 0;
-                    for (GroupReference const* gitr = grp->GetFirstMember(); gitr != nullptr; gitr = gitr->next())
-                        if (gitr->GetSource())
-                            ++pcount;
-                    if (pcount <= 1)
-                    {
-                        //only one player in group
-                        ChatHandler ch(player->GetSession());
-                        ch.SendSysMessage("你是队伍中唯一的玩家，战利品拾取方式设置为“自由拾取”");
-                        grp->SetLootMethod(FREE_FOR_ALL);
-                    }
-                }
-
                 continue;
             }
             //end npcbot

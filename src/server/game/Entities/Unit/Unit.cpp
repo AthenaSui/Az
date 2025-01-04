@@ -955,6 +955,17 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
             }
         }
 
+        //npcbot
+        if (!damage && damagetype != DOT && cleanDamage && cleanDamage->absorbed_damage && victim->IsNPCBotOrPet() && attacker && victim != attacker &&
+            (attacker->IsNPCBotOrPet() || attacker->IsControlledByPlayer()))
+        {
+            if (Spell* spell = victim->m_currentSpells[CURRENT_GENERIC_SPELL])
+                if (spell->getState() == SPELL_STATE_PREPARING)
+                    if ((spell->m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_ABORT_ON_DMG) != 0)
+                        victim->InterruptNonMeleeSpells(false);
+        }
+        //end npcbot
+
         // We're going to call functions which can modify content of the list during iteration over it's elements
         // Let's copy the list so we can prevent iterator invalidation
         AuraEffectList vCopyDamageCopy(victim->GetAuraEffectsByType(SPELL_AURA_SHARE_DAMAGE_PCT));
@@ -1118,6 +1129,23 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
 
     if (victim->IsPlayer())
         ;//victim->ToPlayer()->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HIGHEST_HIT_RECEIVED, damage); // pussywizard: optimization
+    //npcbot
+    else if (victim->IsNPCBotOrPet())
+    {
+        if (attacker && !victim->ToCreature()->hasLootRecipient())
+            victim->ToCreature()->SetLootRecipient(attacker);
+        if (victim->ToCreature()->GetPlayerDamageReq())
+        {
+            if (!attacker || attacker->IsControlledByPlayer() || (attacker->ToTempSummon() && attacker->ToTempSummon()->GetSummonerUnit() && attacker->ToTempSummon()->GetSummonerUnit()->IsPlayer()) ||
+                (attacker->IsNPCBotOrPet() && !attacker->ToCreature()->IsFreeBot()) || (attacker->GetCreator() && attacker->GetCreator()->IsPlayer()))
+            {
+                uint32 unDamage = health < damage ? health : damage;
+                bool damagedByPlayer = unDamage && attacker && (attacker->IsPlayer() || attacker->IsNPCBotOrPet() || attacker->m_movedByPlayer != nullptr);
+                victim->ToCreature()->LowerPlayerDamageReq(unDamage, damagedByPlayer);
+            }
+        }
+    }
+    //end npcbot
     else if (!victim->IsControlledByPlayer() || victim->IsVehicle())
     {
         if (!victim->ToCreature()->hasLootRecipient())
@@ -1230,6 +1258,28 @@ uint32 Unit::DealDamage(Unit* attacker, Unit* victim, uint32 damage, CleanDamage
                 }
             }
         }
+
+        //npcbot
+        if (victim->IsNPCBot() && attacker && victim != attacker && damagetype != NODAMAGE && damagetype != DOT && damage &&
+            (attacker->IsNPCBotOrPet() || attacker->IsControlledByPlayer()) &&
+            (!spellProto || !(spellProto->HasAttribute(SPELL_ATTR7_DONT_CAUSE_SPELL_PUSHBACK) || spellProto->HasAttribute(SPELL_ATTR3_TREAT_AS_PERIODIC))))
+        {
+            if (Spell* spell = victim->m_currentSpells[CURRENT_GENERIC_SPELL])
+            {
+                if (spell->getState() == SPELL_STATE_PREPARING)
+                {
+                    if (spell->m_spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_ABORT_ON_DMG)
+                        victim->InterruptNonMeleeSpells(false);
+                    else
+                        spell->Delayed();
+                }
+            }
+
+            if (Spell* spell = victim->m_currentSpells[CURRENT_CHANNELED_SPELL])
+                if (spell->getState() == SPELL_STATE_CASTING)
+                    spell->DelayedChannel();
+        }
+        //end npcbot
 
         // last damage from duel opponent
         if (duel_hasEnded)
@@ -11145,6 +11195,10 @@ void Unit::RemoveAllAttackers()
     while (!m_attackers.empty())
     {
         AttackerSet::iterator iter = m_attackers.begin();
+        //npcbot
+        if ((*iter)->IsNPCBotOrPet())
+            BotMgr::OnBotAttackStop((*iter)->ToCreature(), this);
+        //end npcbot
         if (!(*iter)->AttackStop())
         {
             LOG_ERROR("entities.unit", "WORLD: Unit has an attacker that isn't attacking it!");
@@ -14846,8 +14900,12 @@ bool Unit::_IsValidAttackTarget(Unit const* target, SpellInfo const* bySpell, Wo
     }
     //end npcbot
 
-    //npcbot
+    //npcbot: allow bots and their summons to ignore this rule
     if (IsNPCBotOrPet() || target->IsNPCBotOrPet())
+    {}
+    else if (GetOwnerGUID() && GetOwnerGUID().IsCreature() && sObjectMgr->GetCreatureTemplate(GetOwnerGUID().GetEntry())->IsNPCBotOrPet())
+    {}
+    else if (target->GetOwnerGUID() && target->GetOwnerGUID().IsCreature() && sObjectMgr->GetCreatureTemplate(target->GetOwnerGUID().GetEntry())->IsNPCBotOrPet())
     {}
     else
     //end npcbot
@@ -15191,7 +15249,7 @@ bool Unit::IsAlwaysVisibleFor(WorldObject const* seer) const
                     return true;
 
     //npcbot - bots are always visible for owner
-    if (GetCreator() && seer->GetGUID() == GetCreator()->GetGUID())
+    if (GetCreator() && (seer->GetGUID() == GetCreator()->GetGUID() || (seer->IsCreature() && seer->ToCreature()->GetCreator() == GetCreator())))
         return true;
     //end npcbot
 
@@ -20023,6 +20081,8 @@ bool Unit::IsInPartyWith(Unit const* unit) const
         return (pla->GetGroup() && pla->GetGroup() == bot->GetBotGroup()) ? pla->GetSubGroup() == bot->GetSubGroup() : !!pla->GetBotMgr()->GetBot(bot->GetGUID());
     if (u1->IsNPCBot() && u2->IsNPCBot() && u1->ToCreature()->GetBotGroup() && u1->ToCreature()->GetBotGroup() == u2->ToCreature()->GetBotGroup())
         return u1->ToCreature()->GetSubGroup() == u2->ToCreature()->GetSubGroup();
+    if (u1->IsNPCBot() && u2->IsNPCBot() && u1->IsFFAPvP() && u2->IsFFAPvP())
+        return false;
     //end npcbot
 
     if (u1->IsPlayer() && u2->IsPlayer())
@@ -20055,6 +20115,8 @@ bool Unit::IsInRaidWith(Unit const* unit) const
         return (pla->GetGroup() && pla->GetGroup() == bot->GetBotGroup()) ? true : !!pla->GetBotMgr()->GetBot(bot->GetGUID());
     if (u1->IsNPCBot() && u2->IsNPCBot() && u1->ToCreature()->GetBotGroup())
         return  u1->ToCreature()->GetBotGroup() == u2->ToCreature()->GetBotGroup();
+    if (u1->IsNPCBot() && u2->IsNPCBot() && u1->IsFFAPvP() && u2->IsFFAPvP())
+        return false;
     //end npcbot
 
     if (u1->IsPlayer() && u2->IsPlayer())
@@ -21482,10 +21544,6 @@ bool Unit::CanSwim() const
         return false;
     if (HasUnitFlag(UNIT_FLAG_PET_IN_COMBAT))
         return true;
-    //npcbot
-    if (IsNPCBotOrPet())
-        return true;
-    //end npcbot
     return HasUnitFlag(UNIT_FLAG_RENAME | UNIT_FLAG_SWIMMING);
 }
 

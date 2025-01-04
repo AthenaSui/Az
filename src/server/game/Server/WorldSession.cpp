@@ -54,7 +54,6 @@
 #include "WorldState.h"
 #include <zlib.h>
 
-
 //npcbot
 #include "botmgr.h"
 //end npcbot
