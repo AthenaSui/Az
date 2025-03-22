@@ -37,3 +37,5 @@ jobs:
           CXX: clang++-15
           modules: true
           pch: false
+          maxerrors: 0
+          keepgoing: true
