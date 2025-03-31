@@ -52,7 +52,7 @@ protected:
     void AddPlayer(Player* player) override;
     void RemovePlayer(Player* /*player*/) override;
 
-    void FillInitialWorldStates(WorldPacket& data) override;
+    void FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet) override;
 
     //npcbot
     void AddBot(Creature* bot) override;
@@ -62,7 +62,7 @@ protected:
     void HandleBotKillBot(Creature* killer, Creature* victim) override;
     void HandlePlayerKillBot(Creature* victim, Player* killer) override;
     //end npcbot
-
+    
     void UpdateArenaWorldState();
 
     void HandleKillPlayer(Player* player, Player* killer) override;
