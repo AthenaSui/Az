@@ -1439,8 +1439,7 @@ void BattlegroundAV::EventBotAssaultsPoint(Creature* bot, uint32 object)
     PlaySoundToAll((teamId == TEAM_ALLIANCE) ? AV_SOUND_ALLIANCE_ASSAULTS : AV_SOUND_HORDE_ASSAULTS);
 }
 
-void BattlegroundAV::FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet)
-{
+void BattlegroundAV::FillInitialWorldStates(WorldPackets::WorldState::InitWorldStates& packet){
     bool stateok;
     packet.Worldstates.reserve(7*2*2 + 8*2*2 + 5);
     //graveyards

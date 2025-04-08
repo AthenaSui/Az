@@ -1547,6 +1547,8 @@ private:
     PageTextContainer _pageTextStore;
     InstanceTemplateContainer _instanceTemplateStore;
 
+    CreatureOutfitContainer _creatureOutfitStore;
+
     CreatureSparringContainer _creatureSparringStore;
 
 private:

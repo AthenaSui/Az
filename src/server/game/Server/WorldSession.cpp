@@ -1431,17 +1431,6 @@ WorldSession::DosProtection::Policy WorldSession::DosProtection::EvaluateOpcode(
             break;
         }
         default: // invalid policy
-        //npcbot: prevent kicks when too many bots spawned in one spot
-        case CMSG_GET_MIRRORIMAGE_DATA:
-        {
-            if (BotMgr::GetBotInfoPacketsLimit() > -1)
-                maxPacketCounterAllowed = BotMgr::GetBotInfoPacketsLimit();
-            else
-                maxPacketCounterAllowed = 100;
-            break;
-        }
-        //end npcbot
-
             break;
     }
 
