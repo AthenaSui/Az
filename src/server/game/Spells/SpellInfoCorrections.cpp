@@ -4810,6 +4810,12 @@ void SpellMgr::LoadSpellInfoCorrections()
     });
 
     // Fatal Attraction
+    ApplySpellFix({ 40869 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_1].TargetB = SpellImplicitTargetInfo(TARGET_DEST_CASTER); // target set by script
+    });
+
+    // Fatal Attraction
     ApplySpellFix({ 40870 }, [](SpellInfo* spellInfo)
     {
         spellInfo->MaxAffectedTargets = 1;
@@ -4883,6 +4889,25 @@ void SpellMgr::LoadSpellInfoCorrections()
     ApplySpellFix({ 52825 }, [](SpellInfo* spellInfo)
     {
         spellInfo->Effects[EFFECT_2].TargetA = SpellImplicitTargetInfo(TARGET_UNIT_TARGET_ENEMY);
+    });
+
+    // Felmyst Strafe (Top)
+    ApplySpellFix({ 45585 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->MaxAffectedTargets = 3;
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_70_YARDS);
+    });
+
+    // Felmyst Strafe (Middle, Bottom)
+    ApplySpellFix({ 45633, 45635 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->Effects[EFFECT_0].RadiusEntry = sSpellRadiusStore.LookupEntry(EFFECT_RADIUS_70_YARDS);
+    });
+
+    // Encapsulate
+    ApplySpellFix({ 45662 }, [](SpellInfo* spellInfo)
+    {
+        spellInfo->AttributesEx7 |= SPELL_ATTR7_TREAT_AS_NPC_AOE;
     });
 
     for (uint32 i = 0; i < GetSpellInfoStoreSize(); ++i)

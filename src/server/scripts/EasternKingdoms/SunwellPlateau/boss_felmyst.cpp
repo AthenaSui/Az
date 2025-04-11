@@ -49,6 +49,12 @@ enum Spells
     SPELL_ENCAPSULATE_CHANNEL                   = 45661,
 
     //Flight phase
+    SPELL_TRIGGER_TOP_STRAFE                    = 45586,
+    SPELL_TRIGGER_MIDDLE_STRAFE                 = 45622,
+    SPELL_TRIGGER_BOTTOM_STRAFE                 = 45623,
+    SPELL_STRAFE_TOP                            = 45585,
+    SPELL_STRAFE_MIDDLE                         = 45633,
+    SPELL_STRAFE_BOTTOM                         = 45635,
     SPELL_SUMMON_DEMONIC_VAPOR                  = 45391,
     SPELL_DEMONIC_VAPOR_SPAWN_TRIGGER           = 45388, // Triggers visual beam
     SPELL_DEMONIC_VAPOR_PERIODIC                = 45411, // Spawns cloud and deals damage
@@ -101,7 +107,8 @@ const Position RightSideLanes[3] =
 
 const Position RightSide = { 1458.5555f, 502.1995f, 59.899513f, 1.605702f };
 const Position LeftSide = { 1469.0642f, 729.5854f, 59.823853f, 4.6774f };
-const Position LandingPos = { 1476.77f, 665.094f, 20.6423f };
+const Position LandingRightPos = { 1476.77f, 665.094f, 20.6423f };
+const Position LandingLeftPos = { 1469.93f, 557.009f, 22.631699f };
 
 class CorruptTriggers : public BasicEvent
 {
@@ -110,18 +117,17 @@ public:
 
     bool Execute(uint64 /*execTime*/, uint32 /*diff*/) override
     {
-        std::list<Creature*> creatureList;
-        _caster->GetCreaturesWithEntryInRange(creatureList, 70.0f, NPC_FOG_TRIGGER);
-        for (auto const& creature : creatureList)
+        switch (_currentLane)
         {
-            if (_caster->GetExactDist2d(creature) <= 11.0f)
-            {
-                creature->CastSpell(creature, SPELL_FOG_OF_CORRUPTION, true);
-                continue;
-            }
-
-            if (!_currentLane && creature->GetPositionX() > 1510.0f)
-                creature->CastSpell(creature, SPELL_FOG_OF_CORRUPTION, true);
+            case 0: // top
+                _caster->CastSpell(_caster, SPELL_STRAFE_TOP, true);
+                break;
+            case 1: // middle
+                _caster->CastSpell(_caster, SPELL_STRAFE_MIDDLE, true);
+                break;
+            case 2: // bottom
+                _caster->CastSpell(_caster, SPELL_STRAFE_BOTTOM, true);
+                break;
         }
         return true;
     }
@@ -183,6 +189,12 @@ struct boss_felmyst : public BossAI
             Talk(YELL_KILL);
     }
 
+    void SpellHitTarget(Unit* target, const SpellInfo* spell) override
+    {
+        if (spell->Id == SPELL_STRAFE_TOP || spell->Id == SPELL_STRAFE_MIDDLE || spell->Id == SPELL_STRAFE_BOTTOM)
+            target->CastSpell(target, SPELL_FOG_OF_CORRUPTION, true);
+    }
+
     void JustDied(Unit* killer) override
     {
         BossAI::JustDied(killer);
@@ -201,18 +213,18 @@ struct boss_felmyst : public BossAI
             DoCastVictim(SPELL_CLEAVE);
         }, 7500ms);
 
-        ScheduleTimedEvent(12s, [&] {
-            DoCastVictim(SPELL_CORROSION);
-        }, 20s);
-
-        ScheduleTimedEvent(18s, [&] {
+        ScheduleTimedEvent(13s, 30s, [&] {
             Talk(YELL_BREATH);
-            DoCastSelf(SPELL_GAS_NOVA);
-        }, 20s);
+            DoCastVictim(SPELL_CORROSION);
+        }, 30s, 39s);
 
-        ScheduleTimedEvent(25s, [&] {
+        ScheduleTimedEvent(18s, 43s, [&] {
+            DoCastSelf(SPELL_GAS_NOVA);
+        }, 18s, 43s);
+
+        ScheduleTimedEvent(26s, 53s, [&] {
             DoCastRandomTarget(SPELL_ENCAPSULATE_CHANNEL, 0, 50.0f);
-        }, 25s);
+        }, 26s, 53s);
 
         me->m_Events.AddEventAtOffset([&] {
             Talk(YELL_TAKEOFF);
@@ -274,21 +286,25 @@ struct boss_felmyst : public BossAI
 
                 scheduler.Schedule(27s, GROUP_BREATH, [this](TaskContext)
                 {
-                    me->GetMotionMaster()->MovePoint(POINT_AIR_UP, RightSide);
+                    if (me->GetDistance(LeftSide) < me->GetDistance(RightSide))
+                        me->GetMotionMaster()->MovePoint(POINT_AIR_UP, LeftSide);
+                    else
+                        me->GetMotionMaster()->MovePoint(POINT_AIR_UP, RightSide);
                 });
                 break;
             case POINT_AIR_UP:
                 me->m_Events.AddEventAtOffset([&] {
+                    bool isRightSide = me->FindNearestCreature(NPC_WORLD_TRIGGER_RIGHT, 30.0f);
                     if (_strafeCount >= 3)
                     {
                         _strafeCount = 0;
-                        me->GetMotionMaster()->MoveLand(POINT_GROUND, LandingPos);
+                        me->GetMotionMaster()->MoveLand(POINT_GROUND, isRightSide ? LandingRightPos : LandingLeftPos);
                         return;
                     }
 
                     ++_strafeCount;
                     _currentLane = urand(0, 2);
-                    if (me->FindNearestCreature(NPC_WORLD_TRIGGER_RIGHT, 30.0f))
+                    if (isRightSide)
                         me->GetMotionMaster()->MovePoint(POINT_LANE, RightSideLanes[_currentLane], false);
                     else
                         me->GetMotionMaster()->MovePoint(POINT_LANE, LeftSideLanes[_currentLane], false);
@@ -297,15 +313,8 @@ struct boss_felmyst : public BossAI
             case POINT_LANE:
                 Talk(EMOTE_BREATH);
                 me->m_Events.AddEventAtOffset([&] {
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(0));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(500));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(1000));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(1500));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(2000));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(2500));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(3000));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(3500));
-                    me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(4000));
+                    for (uint8 i = 0; i < 16; ++i)
+                        me->m_Events.AddEvent(new CorruptTriggers(me, _currentLane), me->m_Events.CalculateTime(i*250));
                 }, 5s);
 
                 me->m_Events.AddEventAtOffset([&] {
