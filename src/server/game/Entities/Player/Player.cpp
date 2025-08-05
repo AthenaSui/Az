@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "AccountMgr.h"
 #include "AchievementMgr.h"
+#include "AreaDefines.h"
 #include "ArenaSpectator.h"
 #include "ArenaTeam.h"
 #include "ArenaTeamMgr.h"
@@ -105,7 +106,7 @@ enum CharacterFlags
 {
     CHARACTER_FLAG_NONE                 = 0x00000000,
     CHARACTER_FLAG_UNK1                 = 0x00000001,
-    CHARACTER_FLAG_UNK2                 = 0x00000002,
+    CHARACTER_FLAG_RESTING              = 0x00000002,
     CHARACTER_LOCKED_FOR_TRANSFER       = 0x00000004,
     CHARACTER_FLAG_UNK4                 = 0x00000008,
     CHARACTER_FLAG_UNK5                 = 0x00000010,
@@ -322,6 +323,8 @@ Player::Player(WorldSession* session): Unit(true), m_mover(this)
         m_baseRatingValue[i] = 0;
 
     m_baseSpellPower = 0;
+    m_baseSpellDamage = 0;
+    m_baseSpellHealing = 0;
     m_baseFeralAP = 0;
     m_baseManaRegen = 0;
     m_baseHealthRegen = 0;
@@ -401,7 +404,6 @@ Player::Player(WorldSession* session): Unit(true), m_mover(this)
     _botMgr = new BotMgr(this);
     ///////////// End NPCBot System ////////////////
 
-    // Ours
     m_NeedToSaveGlyphs = false;
     m_MountBlockId = 0;
     m_realDodge = 0.0f;
@@ -810,8 +812,8 @@ uint32 Player::EnvironmentalDamage(EnviromentalDamage type, uint32 damage)
         if (type == DAMAGE_FALL)                               // DealDamage not apply item durability loss at self damage
         {
             LOG_DEBUG("entities.player", "Player::EnvironmentalDamage: Player '{}' ({}) fall to death, losing {} durability",
-                GetName(), GetGUID().ToString(), sWorld->getRate(RATE_DURABILITY_LOSS_ON_DEATH));
-            DurabilityLossAll(sWorld->getRate(RATE_DURABILITY_LOSS_ON_DEATH), false);
+                GetName(), GetGUID().ToString(), sWorld->getRate(RATE_DURABILITY_LOSS_ON_DEATH) / 100.0f);
+            DurabilityLossAll(sWorld->getRate(RATE_DURABILITY_LOSS_ON_DEATH) / 100.0f, false);
             // durability lost message
             SendDurabilityLoss();
         }
@@ -1169,6 +1171,8 @@ bool Player::BuildEnumData(PreparedQueryResult result, WorldPacket* data)
 
     *data << uint32(fields[16].Get<uint32>());                 // guild id
 
+    if (playerFlags & PLAYER_FLAGS_RESTING)
+        playerFlags |= CHARACTER_FLAG_RESTING;
     if (atLoginFlags & AT_LOGIN_RESURRECT)
         playerFlags &= ~PLAYER_FLAGS_GHOST;
     if (playerFlags & PLAYER_FLAGS_HIDE_HELM)
@@ -1498,7 +1502,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     }
     else
     {
-        if (IsClass(CLASS_DEATH_KNIGHT, CLASS_CONTEXT_TELEPORT) && GetMapId() == 609 && !IsGameMaster() && !HasSpell(50977))
+        if (IsClass(CLASS_DEATH_KNIGHT, CLASS_CONTEXT_TELEPORT) && GetMapId() == MAP_EBON_HOLD && !IsGameMaster() && !HasSpell(50977))
         {
             SendTransferAborted(mapid, TRANSFER_ABORT_UNIQUE_MESSAGE, 1);
             return false;
@@ -1748,7 +1752,7 @@ void Player::RemoveFromWorld()
             m_session->DoLootRelease(lguid);
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
         sBattlefieldMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
-        sWorldState->HandlePlayerLeaveZone(this, static_cast<WorldStateZoneId>(m_zoneUpdateId));
+        sWorldState->HandlePlayerLeaveZone(this, static_cast<AreaTableIDs>(m_zoneUpdateId));
     }
 
     // Remove items from world before self - player must be found in Item::RemoveFromObjectUpdate
@@ -1919,9 +1923,9 @@ void Player::Regenerate(Powers power)
                     ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (GetLevel() * 0.066f));
 
                 if (recentCast) // Trinity Updates Mana in intervals of 2s, which is correct
-                    addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ManaIncreaseRate * 0.001f * m_regenTimer;
+                    addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER + AsUnderlyingType(POWER_MANA)) *  ManaIncreaseRate * 0.001f * m_regenTimer;
                 else
-                    addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) * ManaIncreaseRate * 0.001f * m_regenTimer;
+                    addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER + AsUnderlyingType(POWER_MANA)) * ManaIncreaseRate * 0.001f * m_regenTimer;
             }
             break;
         case POWER_RAGE:                                    // Regenerate rage
@@ -1934,7 +1938,14 @@ void Player::Regenerate(Powers power)
             }
             break;
         case POWER_ENERGY:                                  // Regenerate energy (rogue)
-            addvalue += 0.01f * m_regenTimer * sWorld->getRate(RATE_POWER_ENERGY);
+            // Regen per second
+            addvalue += (GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER + AsUnderlyingType(POWER_ENERGY)) + 10.f);
+            // Regen per millisecond
+            addvalue *= 0.001f;
+            // Milliseconds passed
+            addvalue *= m_regenTimer;
+            // Rate
+            addvalue *= sWorld->getRate(RATE_POWER_ENERGY);
             break;
         case POWER_RUNIC_POWER:
             {
@@ -1955,8 +1966,8 @@ void Player::Regenerate(Powers power)
             break;
     }
 
-    // Mana regen calculated in Player::UpdateManaRegen()
-    if (power != POWER_MANA)
+    // Mana regen calculated in Player::UpdateManaRegen(), energy regen calculated in Player::UpdateEnergyRegen()
+    if (power != POWER_MANA && power != POWER_ENERGY)
     {
         AuraEffectList const& ModPowerRegenPCTAuras = GetAuraEffectsByType(SPELL_AURA_MOD_POWER_REGEN_PERCENT);
         for (AuraEffectList::const_iterator i = ModPowerRegenPCTAuras.begin(); i != ModPowerRegenPCTAuras.end(); ++i)
@@ -1984,7 +1995,6 @@ void Player::Regenerate(Powers power)
     addvalue += m_powerFraction[power];
     uint32 integerValue = uint32(std::fabs(addvalue));
 
-    bool forcedUpdate = false;
     if (addvalue < 0.0f)
     {
         if (curValue > integerValue)
@@ -1996,7 +2006,6 @@ void Player::Regenerate(Powers power)
         {
             curValue = 0;
             m_powerFraction[power] = 0;
-            forcedUpdate = true;
         }
     }
     else
@@ -2007,22 +2016,15 @@ void Player::Regenerate(Powers power)
         {
             curValue = maxValue;
             m_powerFraction[power] = 0;
-            forcedUpdate = true;
         }
         else
-        {
             m_powerFraction[power] = addvalue - integerValue;
-        }
     }
 
-    if (m_regenTimerCount >= 2000 || forcedUpdate)
-    {
+    if (m_regenTimerCount >= 2000 || curValue == 0 || curValue == maxValue)
         SetPower(power, curValue, true, true);
-    }
     else
-    {
-        UpdateUInt32Value(static_cast<uint16>(UNIT_FIELD_POWER1) + power, curValue);
-    }
+        UpdateUInt32Value(UNIT_FIELD_POWER1 + AsUnderlyingType(power), curValue);
 }
 
 void Player::RegenerateHealth()
@@ -2499,7 +2501,7 @@ void Player::GiveXP(uint32 xp, Unit* victim, float group_rate, bool isLFGReward)
     // Favored experience increase START
     uint32 zone = GetZoneId();
     float favored_exp_mult = 0;
-    if ((zone == 3483 || zone == 3562 || zone == 3836 || zone == 3713 || zone == 3714) && HasAnyAuras(32096 /*Thrallmar's Favor*/, 32098 /*Honor Hold's Favor*/))
+    if ((zone == AREA_HELLFIRE_PENINSULA || zone == AREA_HELLFIRE_RAMPARTS || zone == AREA_MAGTHERIDONS_LAIR || zone == AREA_THE_BLOOD_FURNACE || zone == AREA_THE_SHATTERED_HALLS) && HasAnyAuras(32096 /*Thrallmar's Favor*/, 32098 /*Honor Hold's Favor*/))
         favored_exp_mult = 0.05f; // Thrallmar's Favor and Honor Hold's Favor
 
     xp = uint32(xp * (1 + favored_exp_mult));
@@ -3200,6 +3202,35 @@ bool Player::addSpell(uint32 spellId, uint8 addSpecMask, bool updateActive, bool
     return true;
 }
 
+bool Player::CheckSkillLearnedBySpell(uint32 spellId)
+{
+    if (!sWorld->getBoolConfig(CONFIG_VALIDATE_SKILL_LEARNED_BY_SPELLS))
+        return true;
+
+    SkillLineAbilityMapBounds skill_bounds = sSpellMgr->GetSkillLineAbilityMapBounds(spellId);
+    uint32 errorSkill = 0;
+    for (SkillLineAbilityMap::const_iterator sla = skill_bounds.first; sla != skill_bounds.second; ++sla)
+    {
+        SkillLineEntry const* pSkill = sSkillLineStore.LookupEntry(sla->second->SkillLine);
+        if (!pSkill)
+            continue;
+
+        if (GetSkillRaceClassInfo(pSkill->id, getRace(), getClass()))
+            return true;
+        else
+            errorSkill = pSkill->id;
+    }
+
+    if (errorSkill)
+    {
+        LOG_ERROR("entities.player", "Player {} (GUID: {}), has spell ({}) that teach skill ({}) which is invalid for the race/class combination (Race: {}, Class: {}). Will be deleted.",
+            GetName(), GetGUID().GetCounter(), spellId, errorSkill, getRace(), getClass());
+
+        return false;
+    }
+    return true;
+}
+
 bool Player::_addSpell(uint32 spellId, uint8 addSpecMask, bool temporary, bool learnFromSkill /*= false*/)
 {
     // pussywizard: this can be called to OVERWRITE currently existing spell params! usually to set active = false for lower ranks of a spell
@@ -3341,27 +3372,17 @@ bool Player::_addSpell(uint32 spellId, uint8 addSpecMask, bool temporary, bool l
         {
             SkillLineEntry const* pSkill = sSkillLineStore.LookupEntry(_spell_idx->second->SkillLine);
             if (!pSkill)
-            {
                 continue;
-            }
 
-           /// @todo confirm if rogues start wth lockpicking skill at level 1 but only recieve the spell to use it at level 16
+            /// @todo confirm if rogues start wth lockpicking skill at level 1 but only recieve the spell to use it at level 16
             // Added for runeforging, it is confirmed via sniff that this happens when death knights learn the spell, not on character creation.
             if ((_spell_idx->second->AcquireMethod == SKILL_LINE_ABILITY_LEARNED_ON_SKILL_LEARN && !HasSkill(pSkill->id)) || ((pSkill->id == SKILL_LOCKPICKING || pSkill->id == SKILL_RUNEFORGING) && _spell_idx->second->TrivialSkillLineRankHigh == 0))
-            {
                 LearnDefaultSkill(pSkill->id, 0);
-            }
 
             if (pSkill->id == SKILL_MOUNTS && !Has310Flyer(false))
-            {
                 for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
-                {
                     if (spellInfo->Effects[i].ApplyAuraName == SPELL_AURA_MOD_INCREASE_MOUNTED_FLIGHT_SPEED && spellInfo->Effects[i].CalcValue() == 310)
-                    {
                         SetHas310Flyer(true);
-                    }
-                }
-            }
         }
     }
 
@@ -6965,7 +6986,10 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
                 break;
             /// @deprecated item mods
             case ITEM_MOD_SPELL_HEALING_DONE:
+                ApplySpellHealingBonus(int32(val), apply);
+                break;
             case ITEM_MOD_SPELL_DAMAGE_DONE:
+                ApplySpellDamageBonus(int32(val), apply);
                 break;
         }
     }
@@ -7274,37 +7298,26 @@ void Player::ApplyItemEquipSpell(Item* item, bool apply, bool form_change)
     if (!proto)
         return;
 
-    for (uint8 i = 0; i < MAX_ITEM_PROTO_SPELLS; ++i)
+    for (auto const& spellData : proto->Spells)
     {
-        _Spell const& spellData = proto->Spells[i];
-
-        // no spell
+         // no spell
         if (!spellData.SpellId)
             continue;
-
-        // Spells that should stay on the caster after removing the item.
-        constexpr std::array<int32, 2> spellExceptions =
-        {
-            11826,  //Electromagnetic Gigaflux Reactivator
-            17490   //Book of the Dead - Summon Skeleton
-        };
-        const auto found = std::find(std::begin(spellExceptions), std::end(spellExceptions), spellData.SpellId);
 
         // wrong triggering type
         if (apply)
         {
+            // Only apply "On Equip" spells
             if (spellData.SpellTrigger != ITEM_SPELLTRIGGER_ON_EQUIP)
-            {
                 continue;
-            }
         }
         else
         {
-            // If the spell is an exception do not remove it.
-            if (found != std::end(spellExceptions))
-            {
+            // Do not remove "Use" spells in these special cases:
+            // 1. During form changes (e.g., druid shapeshifting)
+            // 2. When the spell comes from an item with negative charges, which means its effect should persist after the item is consumed or removed.
+            if (spellData.SpellTrigger == ITEM_SPELLTRIGGER_ON_USE && (form_change || spellData.SpellCharges < 0))
                 continue;
-            }
         }
 
         // check if it is valid spell
@@ -7337,8 +7350,7 @@ void Player::ApplyEquipSpell(SpellInfo const* spellInfo, Item* item, bool apply,
 
         LOG_DEBUG("entities.player", "WORLD: cast {} Equip spellId - {}", (item ? "item" : "itemset"), spellInfo->Id);
 
-        //Ignore spellInfo->DurationEntry, cast with -1 duration
-        CastCustomSpell(spellInfo->Id, SPELLVALUE_AURA_DURATION, -1, this, true, item);
+        CastSpell(this, spellInfo, true, item);
     }
     else
     {
@@ -7353,18 +7365,6 @@ void Player::ApplyEquipSpell(SpellInfo const* spellInfo, Item* item, bool apply,
             RemoveAurasDueToItemSpell(spellInfo->Id, item->GetGUID());  // un-apply all spells, not only at-equipped
         else
             RemoveAurasDueToSpell(spellInfo->Id);           // un-apply spell (item set case)
-
-        // Xinef: Remove Proc Spells and Summons
-        for (uint8 i = EFFECT_0; i < MAX_SPELL_EFFECTS; ++i)
-        {
-            // Xinef: Remove procs
-            if (spellInfo->Effects[i].TriggerSpell)
-                RemoveAurasDueToSpell(spellInfo->Effects[i].TriggerSpell);
-
-            // Xinef: remove minions summoned by item
-            if (spellInfo->Effects[i].Effect == SPELL_EFFECT_SUMMON)
-                RemoveAllMinionsByEntry(spellInfo->Effects[i].MiscValue);
-        }
     }
 }
 
@@ -8394,7 +8394,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
     // 8 Arena season id
     packet.Worldstates.emplace_back(WORLD_STATE_ARENA_SEASON_ID, sArenaSeasonMgr->GetCurrentSeason());
 
-    if (mapId == 530) // Outland
+    if (mapId == MAP_OUTLAND)
     {
         packet.Worldstates.reserve(3);
         packet.Worldstates.emplace_back(WORLD_STATE_OPVP_NA_UI_TOWER_SLIDER_DISPLAY, 0);
@@ -8411,18 +8411,18 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
         // insert <field> <value>
         switch (zoneId)
         {
-            case 1: // Dun Morogh
-            case 11: // Wetlands
-            case 12: // Elwynn Forest
-            case 38: // Loch Modan
-            case 40: // Westfall
-            case 51: // Searing Gorge
-            case 1519: // Stormwind City
-            case 1537: // Ironforge
-            case 2257: // Deeprun Tram
-            case 3703: // Shattrath City
+            case AREA_DUN_MOROGH:
+            case AREA_WETLANDS:
+            case AREA_ELWYNN_FOREST:
+            case AREA_LOCH_MODAN:
+            case AREA_WESTFALL:
+            case AREA_SEARING_GORGE:
+            case AREA_STORMWIND_CITY:
+            case AREA_IRONFORGE:
+            case AREA_DEEPRUN_TRAM:
+            case AREA_SHATTRATH_CITY:
                 break;
-            case 139: // Eastern Plaguelands
+            case AREA_EASTERN_PLAGUELANDS:
                 if (outdoorPvP && outdoorPvP->GetTypeId() == OUTDOOR_PVP_EP)
                     outdoorPvP->FillInitialWorldStates(packet);
                 else
@@ -8463,7 +8463,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_OPVP_EP_PLAGUEWOODTOWER_H, 0);
 
                 break;
-            case 1377: // Silithus
+            case AREA_SILITHUS:
                 if (outdoorPvP && outdoorPvP->GetTypeId() == OUTDOOR_PVP_SI)
                     outdoorPvP->FillInitialWorldStates(packet);
                 else
@@ -8480,7 +8480,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                 packet.Worldstates.emplace_back(WORLD_STATE_AHNQIRAJ_SANDWORM_SW, 0);
                 packet.Worldstates.emplace_back(WORLD_STATE_AHNQIRAJ_SANDWORM_E, 0);
                 break;
-            case 2597: // Alterac Valley
+            case AREA_ALTERAC_VALLEY:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_AV)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8563,7 +8563,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_AV_AID_A_C, 1);
                 }
                 break;
-            case 3277: // Warsong Gulch
+            case AREA_WARSONG_GULCH:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_WS)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8579,7 +8579,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_WS_FLAG_STATE_ALLIANCE, 1);
                 }
                 break;
-            case 3358: // Arathi Basin
+            case AREA_ARATHI_BASIN:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_AB)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8619,7 +8619,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_AB_RESOURCES_WARNING, 1400); // warning limit (1400)
                 }
                 break;
-            case 3820: // Eye of the Storm
+            case AREA_EYE_OF_THE_STORM:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_EY)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8662,7 +8662,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                 break;
             // any of these needs change! the client remembers the prev setting!
             // ON EVERY ZONE LEAVE, RESET THE OLD ZONE'S WORLD STATE, BUT AT LEAST THE UI STUFF!
-            case 3483: // Hellfire Peninsula
+            case AREA_HELLFIRE_PENINSULA:
                 if (outdoorPvP && outdoorPvP->GetTypeId() == OUTDOOR_PVP_HP)
                     outdoorPvP->FillInitialWorldStates(packet);
                 else
@@ -8686,7 +8686,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_OPVP_HP_STADIUM_H, 1);
                 }
                 break;
-        case 3518: // Nagrand
+        case AREA_NAGRAND:
             if (outdoorPvP && outdoorPvP->GetTypeId() == OUTDOOR_PVP_NA)
                 outdoorPvP->FillInitialWorldStates(packet);
             else
@@ -8722,7 +8722,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                 packet.Worldstates.emplace_back(WORLD_STATE_OPVP_NA_MAP_HALAA_ALLIANCE, 0);
             }
                 break;
-            case 3519: // Terokkar Forest
+            case AREA_TEROKKAR_FOREST:
                 if (outdoorPvP && outdoorPvP->GetTypeId() == OUTDOOR_PVP_TF)
                     outdoorPvP->FillInitialWorldStates(packet);
                 else
@@ -8758,7 +8758,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_OPVP_TF_UI_LOCKED_DISPLAY_ALLIANCE, 1);
                 }
                 break;
-            case 3521: // Zangarmarsh
+            case AREA_ZANGARMARSH:
                 if (outdoorPvP && outdoorPvP->GetTypeId() == OUTDOOR_PVP_ZM)
                     outdoorPvP->FillInitialWorldStates(packet);
                 else
@@ -8792,7 +8792,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_OPVP_ZM_MAP_ALLIANCE_FLAG_READY, 0);
                 }
                 break;
-            case 3698: // Nagrand Arena
+            case AREA_NAGRAND_ARENA:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_NA)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8803,7 +8803,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_NA_ARENA_SHOW, 0);
                 }
                 break;
-            case 3702: // Blade's Edge Arena
+            case AREA_BLADES_EDGE_ARENA:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_BE)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8814,7 +8814,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_BE_ARENA_SHOW, 0);
                 }
                 break;
-            case 3968: // Ruins of Lordaeron
+            case AREA_RUINS_OF_LORDAERON:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_RL)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8825,7 +8825,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_RL_ARENA_SHOW, 0);
                 }
                 break;
-            case 4378: // Dalaran Sewers
+            case AREA_DALARAN_ARENA:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_DS)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8836,7 +8836,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_DS_ARENA_SHOW, 0);
                 }
                 break;
-            case 4384: // Strand of the Ancients
+            case AREA_STRAND_OF_THE_ANCIENTS:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_SA)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8872,7 +8872,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     // missing unknowns
                 }
                 break;
-            case 4406: // Ring of Valor
+            case ARENA_THE_RING_OF_VALOR:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_RV)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8883,7 +8883,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_RV_ARENA_SHOW, 0);
                 }
                 break;
-            case 4710: // Isle of Conquest
+            case AREA_ISLE_OF_CONQUEST:
                 if (battleground && battleground->GetBgTypeID(true) == BATTLEGROUND_IC)
                     battleground->FillInitialWorldStates(packet);
                 else
@@ -8909,7 +8909,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_BATTLEGROUND_IC_HORDE_KEEP_CONTROLLED_H, 1);
                 }
                 break;
-            case 4987: // The Ruby Sanctum
+            case AREA_THE_RUBY_SANCTUM:
                 if (instance)
                     instance->FillInitialWorldStates(packet);
                 else
@@ -8920,8 +8920,8 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_RUBY_SANCTUM_CORPOREALITY_TOGGLE, 0);
                 }
                 break;
-            case 4812: // Icecrown Citadel
-                if (instance && mapId == 631)
+            case AREA_ICECROWN_CITADEL:
+                if (instance && mapId == MAP_ICECROWN_CITADEL)
                     instance->FillInitialWorldStates(packet);
                 else
                 {
@@ -8933,8 +8933,8 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_ICECROWN_CITADEL_ATTEMPTS_MAX, 50);
                 }
                 break;
-            case 4100: // The Culling of Stratholme
-                if (instance && mapId == 595)
+            case AREA_THE_CULLING_OF_STRATHOLME:
+                if (instance && mapId == MAP_THE_CULLING_OF_STRATHOLME)
                     instance->FillInitialWorldStates(packet);
                 else
                 {
@@ -8946,8 +8946,8 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_CULLING_OF_STRATHOLME_TIME_GUARDIAN_SHOW, 0);
                 }
                 break;
-            case 4228: // The Oculus
-                if (instance && mapId == 578)
+            case AREA_THE_OCULUS:
+                if (instance && mapId == MAP_THE_OCULUS)
                     instance->FillInitialWorldStates(packet);
                 else
                 {
@@ -8956,8 +8956,8 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_OCULUS_CENTRIFUGE_CONSTRUCT_AMOUNT, 0);
                 }
                 break;
-            case 4273: // Ulduar
-                if (instance && mapId == 603)
+            case AREA_ULDUAR:
+                if (instance && mapId == MAP_ULDUAR)
                     instance->FillInitialWorldStates(packet);
                 else
                 {
@@ -8966,7 +8966,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_ULDUAR_ALGALON_DESPAWN_TIMER, 0);
                 }
                 break;
-            case 4415: // Violet Hold
+            case AREA_THE_VIOLET_HOLD:
                 if (instance)
                     instance->FillInitialWorldStates(packet);
                 else
@@ -8977,8 +8977,8 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_VIOLET_HOLD_WAVE_COUNT, 0);
                 }
                 break;
-            case 4820: // Halls of Refection
-                if (instance && mapId == 668)
+            case AREA_HALLS_OF_REFLECTION:
+                if (instance && mapId == MAP_HALLS_OF_REFLECTION)
                     instance->FillInitialWorldStates(packet);
                 else
                 {
@@ -8987,7 +8987,7 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     packet.Worldstates.emplace_back(WORLD_STATE_HALLS_OF_REFLECTION_WAVE_COUNT, 0);
                 }
                 break;
-            case 4298: // Scarlet Enclave (DK starting zone)
+            case AREA_PLAGUELANDS_THE_SCARLET_ENCLAVE: // (DK starting zone)
                 // Get Mograine, GUID and ENTRY should NEVER change
                 if (Creature* mograine = ObjectAccessor::GetCreature(*this, ObjectGuid::Create<HighGuid::Unit>(29173, 130956)))
                 {
@@ -9003,19 +9003,13 @@ void Player::SendInitWorldStates(uint32 zoneId, uint32 areaId)
                     }
                 }
                 break;
-            case 4197: // Wintergrasp
+            case AREA_WINTERGRASP:
                 if (battlefield && battlefield->GetTypeId() == BATTLEFIELD_WG)
                 {
                     battlefield->FillInitialWorldStates(packet);
                     break;
                 }
-                [[fallthrough]];
             default:
-                packet.Worldstates.reserve(4);
-                packet.Worldstates.emplace_back(WORLD_STATE_GENERIC_UNK_2, 0);
-                packet.Worldstates.emplace_back(WORLD_STATE_GENERIC_UNK_1, 0);
-                packet.Worldstates.emplace_back(WORLD_STATE_GENERIC_UNK_0, 0);
-                packet.Worldstates.emplace_back(WORLD_STATE_GENERIC_UNK_3, 0);
                 break;
             }
         }
@@ -10189,6 +10183,16 @@ void Player::RemoveSpellMods(Spell* spell)
                             mod->charges = 1;
                             continue;
                         }
+            }
+            // ROGUE MUTILATE WITH COLD BLOOD
+            if (spellInfo->Id == 5374)
+            {
+                SpellInfo const* sp = mod->ownerAura->GetSpellInfo();
+                if (sp->Id == 14177) // Cold Blood
+                {
+                    mod->charges = 1;
+                    continue;
+                }
             }
 
             if (mod->ownerAura->DropCharge(AURA_REMOVE_BY_EXPIRE))
@@ -13767,7 +13771,7 @@ uint32 Player::CalculateTalentsPoints() const
     uint32 base_talent = GetLevel() < 10 ? 0 : GetLevel() - 9;
 
     uint32 talentPointsForLevel = 0;
-    if (!IsClass(CLASS_DEATH_KNIGHT, CLASS_CONTEXT_TALENT_POINT_CALC) || GetMapId() != 609)
+    if (!IsClass(CLASS_DEATH_KNIGHT, CLASS_CONTEXT_TALENT_POINT_CALC) || GetMapId() != MAP_EBON_HOLD)
     {
         talentPointsForLevel = base_talent;
     }
@@ -13796,7 +13800,7 @@ bool Player::canFlyInZone(uint32 mapid, uint32 zone, SpellInfo const* bySpell)
 
     // continent checked in SpellInfo::CheckLocation at cast and area update
     uint32 v_map = GetVirtualMapForMapAndZone(mapid, zone);
-    if (v_map == 571 && !bySpell->HasAttribute(SPELL_ATTR7_IGNORES_COLD_WEATHER_FLYING_REQUIREMENT))
+    if (v_map == MAP_NORTHREND && !bySpell->HasAttribute(SPELL_ATTR7_IGNORES_COLD_WEATHER_FLYING_REQUIREMENT))
     {
         if (!HasSpell(54197)) // 54197 = Cold Weather Flying
         {
@@ -13834,7 +13838,11 @@ void Player::_LoadSkills(PreparedQueryResult result)
             SkillRaceClassInfoEntry const* rcEntry = GetSkillRaceClassInfo(skill, getRace(), getClass());
             if (!rcEntry)
             {
-                LOG_ERROR("entities.player", "Character {} has skill {} that does not exist.", GetGUID().ToString(), skill);
+                LOG_ERROR("entities.player", "Player {} (GUID: {}), has skill ({}) that is invalid for the race/class combination (Race: {}, Class: {}). Will be deleted.",
+                    GetName(), GetGUID().GetCounter(), skill, getRace(), getClass());
+
+                // Mark skill for deletion in the database
+                mSkillStatus.insert(SkillStatusMap::value_type(skill, SkillStatusData(0, SKILL_DELETED)));
                 continue;
             }
 
@@ -13855,7 +13863,8 @@ void Player::_LoadSkills(PreparedQueryResult result)
 
             if (value == 0)
             {
-                LOG_ERROR("entities.player", "Character {} has skill {} with value 0. Will be deleted.", GetGUID().ToString(), skill);
+                LOG_ERROR("entities.player", "Player {} (GUID: {}), has skill ({}) with value 0. Will be deleted.",
+                    GetName(), GetGUID().GetCounter(), skill);
 
                 CharacterDatabasePreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_CHARACTER_SKILL);
 
